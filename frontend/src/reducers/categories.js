@@ -55,8 +55,7 @@ export default function (state = initialState, action) {
                         return cat
                     else
                         return {
-                            nume_categorie:
-                                payload.category[0].nume_categoriein,
+                            nume_categorie: payload.category[0].nume_categorie,
                             descriere_categorie:
                                 payload.category[0].descriere_categorie,
                         }
