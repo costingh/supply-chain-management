@@ -853,9 +853,49 @@ input::placeholder {
 .produse {
     width: 100%;
     height: 100%;
+}
+
+.produse .nav {
+    width: 90%;
+    height: 70px;
+    background: #1e2835;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    border: 0 !important;
+}
+
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+    color: #e1e1e1 !important;
+}
+
+.produse .nav .submit {
+    width: calc(25% - 1px);
+    height: 100%;
+    color: #e1e1e1;
+    background: #273444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.produse .nav form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+}
+
+.produse .inner {
+    width: 100%;
+    /* height: 100%; */
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: 25% 25% 25% 25%;
     overflow: auto;
+    overflow-x: hidden;
     position: relative;
     padding: 60px;
 }
