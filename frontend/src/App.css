@@ -853,6 +853,7 @@ input::placeholder {
 .produse {
     width: 100%;
     height: 100%;
+    position: relative;
 }
 
 .produse .nav {
@@ -861,6 +862,7 @@ input::placeholder {
     background: #1e2835;
     margin: 0 auto;
     padding: 0;
+    margin-bottom: 50px;
 }
 
 .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
@@ -886,24 +888,181 @@ input::placeholder {
     height: 100%;
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
 }
 
 .produse .inner {
     width: 100%;
-    /* height: 100%; */
-    display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
+    /* display: grid;
+    grid-template-columns: 25% 25% 25% 25%; */
     overflow: auto;
     overflow-x: hidden;
     position: relative;
-    padding: 60px;
+    /* padding: 60px; */
 }
 
 .produse .produs {
+    width: 90%;
+    height: 250px;
+    background: #273444;
+    margin: 20px auto;
+    overflow: hidden;
+    display: flex;
+}
+
+.produse .produs .image {
+    width: 250px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 30px;
+    /*  background: #19212c; */
+}
+
+.produse .produs .image img {
+    width: 100%;
+
+    object-fit: cover;
+}
+
+.produse .produs .text {
+    width: calc(100% - 250px);
+    height: 100%;
+    display: flex;
+}
+
+.produse .produs .text .textLeft {
+    width: 80%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 20px 40px;
+}
+
+.produse .produs .text .textRight {
+    width: 20%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 20px 40px;
+}
+
+.produse .produs .text .textLeft .numeProdus {
+    font-size: 30px;
+    color: #e1e1e1;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.produse .produs .text .textLeft .categorie {
+    color: #ccc;
+    font-size: 16px;
+}
+
+.produse .produs .text .textLeft .descriere {
+    color: #8491a2;
+    font-size: 13px;
+}
+
+.produse .produs .text .textLeft .dataCreare {
+    color: #8491a2;
+    font-size: 12px;
+}
+
+.produse .produs .text .textLeft .actions {
+    display: flex;
+    align-items: center;
+}
+
+.produse .produs .text .textLeft .edit,
+.produse .produs .text .textLeft .delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 7px 15px;
+    color: #19212c;
+    fill: #19212c;
+}
+
+.produse .produs .text .textLeft .edit svg,
+.produse .produs .text .textLeft .delete svg {
+    margin-right: 10px;
+}
+
+.produse .produs .text .textLeft .edit {
+    border: 1px solid rgb(206, 128, 25);
+    background: rgb(206, 128, 25);
+    margin-right: 20px;
+}
+
+.produse .produs .text .textLeft .delete {
+    border: 1px solid rgb(206, 76, 25);
+    background: rgb(206, 76, 25);
+}
+
+.produse .produs .text .textLeft .edit:hover,
+.produse .produs .text .textLeft .delete:hover {
+    background: transparent;
+    color: #ccc;
+    fill: #ccc;
+}
+
+.produse .produs .text .textRight .pret {
+    font-size: 30px;
+    color: #cccccc;
+    font-weight: 600;
+}
+
+.produse .produs .text .textRight .stoc {
+    font-size: 16px;
+    color: rgb(72, 155, 72);
+    font-weight: 500;
+}
+
+.produse .produs .text .textRight .factura {
+    border-radius: 50%;
+    background-color: rgb(72, 155, 72);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.produse .produs .text .textRight .factura img {
+    width: 30px;
+}
+
+.produse .produs .text .textRight .buttonsContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.produse .produs .text .textRight .comanda {
+    border-radius: 50%;
+    background-color: rgb(204, 79, 58);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.produse .produs .text .textRight .comanda img {
+    width: 30px;
+}
+
+/* .produse .produs {
     height: 500px;
     border-radius: 20px;
-    /* background: #273444; */
     border: 1px solid #455261;
     padding: 10px 60px;
     position: relative;
@@ -934,7 +1093,7 @@ input::placeholder {
 }
 
 .produse .produs .text .pret {
-    margin-top: 40px;
+    margin-top: 0px;
     font-size: 30px;
     color: #cccccc;
     font-weight: 600;
@@ -966,13 +1125,19 @@ input::placeholder {
     font-weight: 500;
 }
 
+.produs .descriere {
+    text-align: justify;
+    font-size: 13px;
+    color: #455261;
+}
+
 .productBtns {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-top: 15px;
-}
+} */
 
 /* .productBtns .factura {
     border-radius: 50%;
@@ -984,11 +1149,11 @@ input::placeholder {
     justify-content: center;
 } */
 
-.productBtns .factura img {
+/* .productBtns .factura img {
     width: 30px;
-}
+} */
 
-.productBtns .comanda {
+/* .productBtns .comanda {
     border-radius: 50%;
     background-color: rgb(204, 79, 58);
     width: 60px;
@@ -1000,7 +1165,7 @@ input::placeholder {
 
 .productBtns .comanda img {
     width: 30px;
-}
+} */
 /* 
 .produse .inner .row {
     width: 100%;
