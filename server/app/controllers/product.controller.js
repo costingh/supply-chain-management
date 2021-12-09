@@ -15,7 +15,7 @@ exports.addProduct = (req, res) => {
   } = req.body;
 
   db.query(
-    "SELECT nume_produs, nume_categorie FROM produse WHERE nume_produs = ?",
+    "SELECT nume_produs FROM produse WHERE nume_produs = ?",
     [nume_produs],
     async (error, results) => {
       if (error) {

@@ -881,6 +881,12 @@ input::placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.produse .nav .submit:hover {
+    background: #3c42b9;
 }
 
 .produse .nav form {
