@@ -1481,3 +1481,208 @@ input::placeholder {
     width: 100%;
     padding-right: 15px;
 }
+
+/* #########################################
+################# COMENZI ##################
+############################################ */
+.ordersContainer {
+    width: 100%;
+    height: 100%;
+    padding: 0px 40px;
+}
+
+.ordersContainer .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+}
+
+.ordersContainer .nav h1 {
+    font-weight: 500;
+    font-size: 25px;
+    color: #ccc;
+}
+
+.ordersContainer .nav .addNewOrder {
+    font-weight: 400;
+    font-size: 14px;
+    color: #ccc;
+    border: 1px soldid #111;
+    background-color: #111;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ordersContainer .nav .addNewOrder:hover {
+    color: #e1e1e1;
+}
+
+.ordersContainer .ordersInner {
+    width: 100%;
+    height: calc(100vh - 80px);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.ordersInner::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.ordersInner {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.ordersContainer .order {
+    width: 100%;
+    border: 1px solid #455261;
+    margin-bottom: 40px;
+}
+
+.ordersContainer .topOrderContainer {
+    width: 100%;
+    border-bottom: 1px solid #455261;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: #4552612c;
+}
+
+.ordersContainer .topOrderContainer .topOrderLeft {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.ordersContainer .topOrderContainer .topOrderLeft .box,
+.ordersContainer .topOrderContainer .topOrderRight .box {
+    display: block;
+    text-align: left;
+    margin: 0px 20px;
+}
+
+.ordersContainer .topOrderContainer .topOrderLeft .box .heading,
+.ordersContainer .topOrderContainer .topOrderRight .box .heading {
+    color: #8491a2;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.ordersContainer .topOrderContainer .topOrderLeft .box .subheading,
+.ordersContainer .topOrderContainer .topOrderRight .box .subheading {
+    color: #ccc;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.ordersContainer .middleOrderContainer {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ordersContainer .middleOrderContainer .middleLeft {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 80%;
+}
+
+.ordersContainer .middleOrderContainer .middleLeft .image {
+    height: 100%;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ordersContainer .middleOrderContainer .middleLeft .image svg {
+    transform: scale(10);
+    fill: #111;
+}
+
+.ordersContainer .middleOrderContainer .middleLeft .text {
+    height: 100%;
+    padding: 40px 0px;
+}
+
+.ordersContainer .middleOrderContainer .middleLeft .text h1 {
+    font-size: 23px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #ccc;
+}
+
+.ordersContainer .middleOrderContainer .middleLeft .text p {
+    color: #8491a2;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.ordersContainer .middleOrderContainer .middleRight {
+    height: 100%;
+    width: 20%;
+    padding: 40px 20px;
+}
+
+.ordersContainer .middleOrderContainer .middleRight .btn-solid {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    color: #e1e1e1;
+    border: 1px solid #5150ff;
+    background-color: #5150ff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ordersContainer .middleOrderContainer .middleRight .btn-outlined {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    color: #e1e1e1;
+    border: 1px solid #111;
+    background-color: #111;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ordersContainer .middleOrderContainer .middleRight .btn-solid:hover {
+    background-color: transparent;
+    color: #5150ff;
+}
+
+.ordersContainer .middleOrderContainer .middleRight .btn-outlined:hover {
+    background-color: transparent;
+}
+
+.ordersContainer .bottomOrderContainer {
+    width: 100%;
+    border-top: 1px solid #455261;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+}
+
+.ordersContainer .bottomOrderContainer p {
+    color: #8491a2;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.ordersContainer .bottomOrderContainer p span {
+    color: #ccc;
+    font-weight: 400;
+    font-size: 15px;
+    text-transform: capitalize;
+}
