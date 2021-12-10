@@ -1,19 +1,20 @@
-import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import UserService from '../../services/user.service'
 import EventBus from '../../common/EventBus'
 import Sidebar from '../../components/Sidebar'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import Furnizori from '../dashboardRoutes/Furnizori'
-import Facturi from '../dashboardRoutes/Facturi'
-import { listItems } from '../../utils/sidebarConfig'
-import Angajati from '../dashboardRoutes/Angajati'
-import { Link } from 'react-router-dom'
 import Profile from '../../components/Profile'
+import Comanda from '../../components/Comanda'
 import Produse from '../dashboardRoutes/Produse'
-import Categorii from '../dashboardRoutes/Categorii'
 import Comenzi from '../dashboardRoutes/Comenzi'
+import Facturi from '../dashboardRoutes/Facturi'
+import Angajati from '../dashboardRoutes/Angajati'
+import Furnizori from '../dashboardRoutes/Furnizori'
+import Categorii from '../dashboardRoutes/Categorii'
+import UserService from '../../services/user.service'
+import { listItems } from '../../utils/sidebarConfig'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 function AdminDashobard() {
     const { user: currentUser } = useSelector((state) => state.auth)
@@ -46,38 +47,6 @@ function AdminDashobard() {
     if (redirect) {
         return <Redirect to="/employee/dashboard" />
     }
-
-    /* 
-    user = {
-        CNP: null
-        administrator: "D"
-        data_nastere: null      ​
-        email: "popescu.ion@admin.com"      ​
-        id_angajat: 4      ​
-        id_departament: null    ​
-        judet: null       ​
-        numar: null   ​
-        numar_telefon: null    ​
-        nume: "Popescu"  ​
-        oras: null    ​
-        parola: "$2a$10$d7NWdX0W9S5XabGxkFOdauYvws61jnfwVpzz2YIDj00VlzD1DF.p6"    ​
-        prenume: "Ion"  ​
-        salariu: null  ​
-        sex: "M"   ​
-        strada: null
-    } */
-
-    /* 
-    
-    furnizor = {
-        nume_furnizor: 'asdasd',
-        strada: 'Fermei',
-        numar: '33',
-        oras: 'Bucuresti',
-        judet: 'Bucuresti',
-        nr_telefon: '0987654321',
-    }
-    */
 
     return (
         <Router>
@@ -122,6 +91,9 @@ function AdminDashobard() {
                             </Route>
                             <Route path="/admin/dashboard/facturi">
                                 <Facturi />
+                            </Route>
+                            <Route path="/admin/dashboard/comenzi/comanda/">
+                                <Comanda />
                             </Route>
                             <Route path="/admin/dashboard/comenzi">
                                 <Comenzi />
