@@ -64,27 +64,30 @@ exports.getAllProducts = (req, res) => {
     }
 
     if (results.length > 0) {
-      return res.json({
-        message: "Products fetched successfully!",
-        status: 200,
-        products: results,
-      });
-    } else {
+      console.log(results);
       let productsList = [];
       results.map((prod) => {
         productsList.push({
-          nume_produs: prod.nume_produs,
-          descriere_produs: prod.descriere_produs,
-          unitate_masura: prod.unitate_masura,
-          stoc_initial: prod.stoc_initial,
-          pret: prod.pret,
+          id_categorie: prod.id_categorie,
           categorie: prod.nume_categorie,
           descriere_categorie: prod.descriere_categorie,
+          cod_produs: prod.cod_produs,
           data_creare: prod.data_creare,
+          nume_produs: prod.nume_produs,
+          descriere_produs: prod.descriere_produs,
+          pret: prod.pret,
+          unitate_masura: prod.unitate_masura,
+          stoc_initial: prod.stoc_initial,
           imagine_produs: prod.imagine_produs,
+          cantitate: 0,
         });
       });
-
+      return res.json({
+        message: "Products fetched successfully!",
+        status: 200,
+        products: productsList,
+      });
+    } else {
       return res.send({
         message: "No products in database!",
         status: 409,

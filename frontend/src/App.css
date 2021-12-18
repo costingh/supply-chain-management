@@ -411,7 +411,7 @@ input::placeholder {
 
 .dashboard .innerContent {
     width: 100%;
-    height: calc(100vh - 80px);
+    height: 100vh;
     position: relative;
     display: flex;
 }
@@ -867,9 +867,10 @@ input::placeholder {
     margin: 0 auto;
     padding: 0;
     margin-bottom: 50px;
+    margin-top: 10px;
 }
 
-.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+.nav .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
     border: 0 !important;
 }
 
@@ -907,6 +908,9 @@ input::placeholder {
     overflow: auto;
     overflow-x: hidden;
     position: relative;
+    height: calc(100vh - 130px);
+    overflow-x: hidden;
+    overflow-y: auto;
     /* padding: 60px; */
 }
 
@@ -977,14 +981,24 @@ input::placeholder {
     font-size: 13px;
 }
 
+.produse .produs .text .textLeft .descriereProd {
+    color: #e1e1e1;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
 .produse .produs .text .textLeft .dataCreare {
     color: #8491a2;
     font-size: 12px;
 }
 
 .produse .produs .text .textLeft .actions {
-    display: flex;
-    align-items: center;
+    /* display: flex;
+    align-items: center; */
+    margin: 0;
+    padding: 0 !important;
+    display: block;
+    width: 100%;
 }
 
 .produse .produs .text .textLeft .edit,
@@ -1035,7 +1049,40 @@ input::placeholder {
     font-weight: 500;
 }
 
-.produse .produs .text .textRight .factura {
+.produse .produs .text .textRight .orderQuantity {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    color: #ccc;
+    fill: #ccc;
+    column-gap: 15px;
+    margin-top: 20px;
+}
+
+.produse .produs .text .textRight .orderQuantity svg {
+    transform: scale(0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.produse .produs .text .textRight .orderQuantity svg:hover {
+    fill: #455261;
+}
+
+.produse .produs .text .textRight .orderQuantity input {
+    appearance: none;
+    border: 1px solid #8491a2;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    text-align: center;
+    outline: none;
+    background: transparent;
+    color: #ccc;
+}
+
+.produse .produs .text .textRight .comanda {
     border-radius: 50%;
     background-color: rgb(72, 155, 72);
     width: 60px;
@@ -1043,9 +1090,26 @@ input::placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgb(72, 155, 72);
 }
 
-.produse .produs .text .textRight .factura img {
+.produse .produs .text .textRight .comanda.disabled {
+    background-color: #8491a2;
+    transition: none;
+    border-color: #8491a2;
+}
+
+.produse .produs .text .textRight .comanda.disabled:hover {
+    background-color: #8491a2;
+}
+
+.produse .produs .text .textRight .comanda:hover {
+    background: transparent;
+}
+
+.produse .produs .text .textRight .comanda img {
     width: 30px;
 }
 
@@ -1056,7 +1120,7 @@ input::placeholder {
     justify-content: space-between;
 }
 
-.produse .produs .text .textRight .comanda {
+.produse .produs .text .textRight .factura {
     border-radius: 50%;
     background-color: rgb(204, 79, 58);
     width: 60px;
@@ -1066,7 +1130,7 @@ input::placeholder {
     justify-content: center;
 }
 
-.produse .produs .text .textRight .comanda img {
+.produse .produs .text .textRight .factura img {
     width: 30px;
 }
 
@@ -1183,6 +1247,119 @@ input::placeholder {
     align-items: center;
     justify-content: space-between;
 } */
+
+.produse .inner .comandaSlide {
+    position: fixed;
+    /* height: 30px; */
+    overflow: hidden;
+    width: 400px;
+    bottom: 0;
+    right: 200px;
+    background-color: #ccc;
+    padding: 5px 30px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    transition: height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 20;
+}
+
+.produse .inner .comandaSlide .flexCont {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.produse .inner .comandaSlide h3 {
+    color: #1e2835;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.produse .inner .comandaSlide h3 span {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    margin-left: 7px;
+    display: inline-block;
+    border-radius: 50%;
+    background: rgb(204, 79, 58);
+    color: #ccc;
+}
+
+.produse .inner .comandaSlide .flexCont svg {
+    transform: scale(0.5);
+    fill: #1e2835;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.produse .inner .comandaSlide .flexCont svg:hover {
+    fill: #8491a2;
+    transform: scale(0.7);
+}
+
+.produse .inner .comandaSlide .innerOrderCont .orderListItem,
+.produse .inner .comandaSlide .innerOrderCont .orderListItemHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.produse .inner .comandaSlide .innerOrderCont .orderListItemHeader {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #455261;
+    margin-top: 20px;
+}
+
+.produse .inner .comandaSlide .innerOrderCont .orderListItem p,
+.produse .inner .comandaSlide .innerOrderCont .orderListItemHeader p {
+    width: calc(340px / 3);
+}
+
+.orderListContainer {
+    width: 100%;
+    height: 285px;
+    overflow-y: auto;
+}
+
+.orderTotalContainer {
+    width: 100%;
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.buttonRemoveOrder {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    color: #ccc;
+    background: rgb(206, 76, 25);
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.buttonPlaceOrder {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    color: #ccc;
+    background: rgb(85, 161, 65);
+    cursor: pointer;
+}
+
+.addAndRemoveProduct {
+    transform: scale(0.4);
+    fill: #455261;
+    cursor: pointer;
+}
 
 /* #########################################
 ############### CATEGORIES #################
@@ -2041,4 +2218,43 @@ input::placeholder {
 .ordersContainer .productsTableFromOrderInner .tr {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+}
+
+/* #########################################
+############## PLACE ORDER #################
+############################################ */
+.createOrder {
+    width: 100%;
+    height: calc(100vh - 80px);
+    display: flex;
+    padding: 30px 0px;
+}
+
+.createOrderLeft {
+    width: 60%;
+    height: 100%;
+    border-right: 1px solid #455261;
+}
+
+.createOrderRight {
+    width: 40%;
+    height: 100%;
+}
+
+.createOrderRow {
+    width: 100%;
+    margin: 15px 0px;
+}
+
+.createOrderRow .label {
+    margin-bottom: 15px;
+    color: #3c42b9;
+    font-size: 15px;
+    font-size: 400;
+    letter-spacing: 0.4px;
+}
+
+.flex {
+    display: flex;
+    column-gap: 30px;
 }

@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 function Comenzi() {
@@ -8,7 +7,15 @@ function Comenzi() {
         <div className="ordersContainer">
             <div className="nav">
                 <h1>6 Comenzi</h1>
-                <div className="addNewOrder">Plasati Comanda</div>
+                <Link
+                    to={`/${
+                        currentUser && currentUser.administrator === 'N'
+                            ? 'angajat'
+                            : 'admin'
+                    }/dashboard/comenzi/creare`}
+                >
+                    <div className="addNewOrder">Plasati Comanda</div>
+                </Link>
             </div>
             <div className="ordersInner" style={{ display: 'block' }}>
                 <div className="order">

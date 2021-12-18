@@ -15,6 +15,7 @@ import Categorii from '../dashboardRoutes/Categorii'
 import UserService from '../../services/user.service'
 import { listItems } from '../../utils/sidebarConfig'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import CreareComanda from '../../components/CreareComanda'
 
 function AdminDashobard() {
     const { user: currentUser } = useSelector((state) => state.auth)
@@ -57,7 +58,7 @@ function AdminDashobard() {
                     admin={true}
                 />
                 <div className="content">
-                    {activeTabName === 'Profil' && (
+                    {/* {activeTabName === 'Profil' && (
                         <div className="nav">
                             <div className="departament">
                                 Departamentul de Achizitii
@@ -82,7 +83,7 @@ function AdminDashobard() {
                                 </div>
                             </Link>
                         </div>
-                    )}
+                    )} */}
 
                     <div className="innerContent">
                         <Switch>
@@ -91,6 +92,9 @@ function AdminDashobard() {
                             </Route>
                             <Route path="/admin/dashboard/facturi">
                                 <Facturi />
+                            </Route>
+                            <Route path="/admin/dashboard/comenzi/creare">
+                                <CreareComanda />
                             </Route>
                             <Route path="/admin/dashboard/comenzi/comanda/">
                                 <Comanda />

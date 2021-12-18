@@ -32,10 +32,13 @@ function ListaProduseInStoc() {
     const [searchCategory, setSearchCategory] = useState('')
     const [searchProduct, setSearchProduct] = useState('')
     const [data, setData] = useState(null)
+    const [height, setHeight] = useState('30px')
+    const [opened, setOpened] = useState(false)
+    const [ordersList, setOrdersList] = useState([])
+    const [orderPrice, setOrderPrice] = useState(0)
 
     const productNameSearchRef = useRef()
     const categoryNameSearchRef = useRef()
-
     // set Redux state (state.products)
     useEffect(() => {
         dispatch(getAllProducts()).then((data) => {})
@@ -54,7 +57,6 @@ function ListaProduseInStoc() {
             setProductsListSelect(list)
             setFilteredProducts(products)
         }
-        /* console.log(products) */
     }, [products])
 
     // if state.categories changes, also change the category select options
@@ -83,13 +85,13 @@ function ListaProduseInStoc() {
         document.querySelector('.overlay').classList.remove('open')
     }
 
-    const handleEditProduct = (product) => {}
+    /* const handleEditProduct = (product) => {}
 
     const handleDeleteProduct = (product) => {
         dispatch(deleteProduct(product.nume_produs)).then((data) => {
             setData(data)
         })
-    }
+    } */
 
     const handleCategoryNameSearch = (e) => setSearchCategory(e.target.value)
     const handleProductNameSearch = (e) => setSearchProduct(e.target.value)
@@ -97,6 +99,10 @@ function ListaProduseInStoc() {
     useEffect(() => {
         search(searchProduct, searchCategory)
     }, [searchProduct, searchCategory, products])
+
+    useEffect(() => {
+        caculateTotalPrice()
+    }, [ordersList])
 
     const handleSearch = () => {
         search(
@@ -115,7 +121,7 @@ function ListaProduseInStoc() {
                         .toLowerCase()
                         .includes(productName.toLowerCase()) &&
                     categoryName &&
-                    p.nume_categorie
+                    p.categorie
                         .toLowerCase()
                         .includes(categoryName.toLowerCase())
                 )
@@ -141,7 +147,7 @@ function ListaProduseInStoc() {
             products.map((p) => {
                 if (
                     categoryName &&
-                    p.nume_categorie
+                    p.categorie
                         .toLowerCase()
                         .includes(categoryName.toLowerCase())
                 )
@@ -150,6 +156,180 @@ function ListaProduseInStoc() {
 
             setFilteredProducts(productsFilteredByName)
         } else setFilteredProducts(products)
+    }
+
+    const handleOpenSlide = () => {
+        if (!opened) {
+            setOpened(true)
+            setHeight('500px')
+        } else {
+            setHeight('30px')
+            setOpened(false)
+        }
+    }
+
+    const handleAddOnOrderList = (e, product) => {
+        const cantitate = document.querySelector(
+            `#cantitate-${product.cod_produs}`
+        ).value
+
+        if (parseInt(cantitate) >= 1) {
+            if (
+                !ordersList.filter((e) => e.cod_produs === product.cod_produs)
+                    .length > 0
+            ) {
+                product.cantitate = parseInt(cantitate)
+                setOrdersList((ordersList) => [...ordersList, product])
+                if (e.target.children.length === 0) {
+                    e.target.parentNode.classList.add('disabled')
+                } else e.target.classList.add('disabled')
+            } else alert('Produsul este deja in lista!')
+        } else alert('Cantitatea trebuie sa fie pozitiva!')
+    }
+
+    const increaseQuantity = (cod_produs) => {
+        const cantitate = document.querySelector(
+            `#cantitate-${cod_produs}`
+        ).value
+        const arr = document.querySelectorAll(`#cantitate-${cod_produs}`)
+        arr[0].value = parseInt(cantitate) + 1
+        if (arr.length === 2) {
+            arr[1].value = parseInt(cantitate) + 1
+            let list = []
+            ordersList.map((o) => {
+                if (o.cod_produs !== cod_produs) list.push(o)
+                else
+                    list.push({
+                        cantitate: o.cantitate + 1,
+                        categorie: o.categorie,
+                        cod_produs: o.cod_produs,
+                        data_creare: o.data_creare,
+                        descriere_categorie: o.descriere_categorie,
+                        descriere_produs: o.descriere_produs,
+                        id_categorie: o.id_categorie,
+                        imagine_produs: o.imagine_produs,
+                        nume_produs: o.nume_produs,
+                        pret: o.pret,
+                        stoc_initial: o.stoc_initial,
+                        unitate_masura: o.unitate_masura,
+                    })
+            })
+            setOrdersList(list)
+        }
+    }
+
+    const decreaseQuantity = (cod_produs) => {
+        const cantitate = document.querySelector(
+            `#cantitate-${cod_produs}`
+        ).value
+        if (parseInt(cantitate) > 1) {
+            const arr = document.querySelectorAll(`#cantitate-${cod_produs}`)
+            arr[0].value = parseInt(cantitate) - 1
+            if (arr.length === 2) {
+                arr[1].value = parseInt(cantitate) - 1
+                let list = []
+                ordersList.map((o) => {
+                    if (o.cod_produs !== cod_produs) list.push(o)
+                    else
+                        list.push({
+                            cantitate: o.cantitate - 1,
+                            categorie: o.categorie,
+                            cod_produs: o.cod_produs,
+                            data_creare: o.data_creare,
+                            descriere_categorie: o.descriere_categorie,
+                            descriere_produs: o.descriere_produs,
+                            id_categorie: o.id_categorie,
+                            imagine_produs: o.imagine_produs,
+                            nume_produs: o.nume_produs,
+                            pret: o.pret,
+                            stoc_initial: o.stoc_initial,
+                            unitate_masura: o.unitate_masura,
+                        })
+                })
+                setOrdersList(list)
+            }
+        } else if (parseInt(cantitate) === 1) {
+            const list = ordersList.filter(
+                (order) => order.cod_produs !== cod_produs
+            )
+            setOrdersList(list)
+            document
+                .querySelector(`#cantitate-${cod_produs}`)
+                .parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
+                    '.comanda'
+                )
+                .classList.remove('disabled')
+        }
+    }
+
+    const handleChange = (e, product) => {
+        if (e.target.value === '') e.target.value = 0
+        const arr = document.querySelectorAll(
+            `#cantitate-${product.cod_produs}`
+        )
+        arr[0].value = parseInt(e.target.value)
+        if (arr.length === 2) {
+            arr[1].value = parseInt(e.target.value)
+
+            let list = []
+            ordersList.map((order) => {
+                list.push({
+                    cantitate: e.target.value,
+                    categorie: order.categorie,
+                    cod_produs: order.cod_produs,
+                    data_creare: order.data_creare,
+                    descriere_categorie: order.descriere_categorie,
+                    descriere_produs: order.descriere_produs,
+                    id_categorie: order.id_categorie,
+                    imagine_produs: order.imagine_produs,
+                    nume_produs: order.nume_produs,
+                    pret: order.pret,
+                    stoc_initial: order.stoc_initial,
+                    unitate_masura: order.unitate_masura,
+                })
+            })
+            setOrdersList(list)
+        }
+    }
+
+    const handleClearOrder = () => {
+        const btns = document.querySelectorAll('.comanda.disabled')
+        for (let i = 0; i < btns.length; i++) {
+            btns[i].classList.remove('disabled')
+        }
+        let list = []
+
+        ordersList.map((order) => {
+            list.push({
+                cantitate: 0,
+                categorie: order.categorie,
+                cod_produs: order.cod_produs,
+                data_creare: order.data_creare,
+                descriere_categorie: order.descriere_categorie,
+                descriere_produs: order.descriere_produs,
+                id_categorie: order.id_categorie,
+                imagine_produs: order.imagine_produs,
+                nume_produs: order.nume_produs,
+                pret: order.pret,
+                stoc_initial: order.stoc_initial,
+                unitate_masura: order.unitate_masura,
+            })
+        })
+        setOrdersList([])
+
+        list.map((item) => {
+            const arr = document.querySelectorAll(
+                `#cantitate-${item.cod_produs}`
+            )
+            arr[0].value = 0
+            if (arr.length === 2) arr[1].value = 0
+        })
+    }
+
+    const caculateTotalPrice = () => {
+        let price = 0
+        ordersList.map((o) => (price += o.cantitate * o.pret))
+        setOrderPrice((Math.round(price * 100) / 100).toFixed(2))
     }
 
     return (
@@ -208,6 +388,117 @@ function ListaProduseInStoc() {
                 </Box>
             </div>
             <div className="inner">
+                <div className="comandaSlide" style={{ height: `${height}` }}>
+                    <div className="flexCont">
+                        <h3>
+                            Produse Comandate <span>{ordersList.length}</span>
+                        </h3>
+                        {opened ? (
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                onClick={handleOpenSlide}
+                            >
+                                <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
+                            </svg>
+                        ) : (
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                onClick={handleOpenSlide}
+                            >
+                                <path d="M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z" />
+                            </svg>
+                        )}
+                    </div>
+                    <div className="innerOrderCont">
+                        <div className="orderListItemHeader">
+                            <p>Denumire Produs</p>
+                            <p style={{ textAlign: 'center' }}>Cantitate</p>
+                            <p style={{ textAlign: 'right' }}>Pret/Unitate</p>
+                        </div>
+                        <div className="orderListContainer">
+                            {ordersList.map((item) => (
+                                <div
+                                    className="orderListItem"
+                                    key={item.cod_produs}
+                                >
+                                    <p>{item.nume_produs}</p>
+                                    <div
+                                        style={{
+                                            textAlign: 'center',
+                                            display: 'flex',
+                                        }}
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            onClick={() =>
+                                                decreaseQuantity(
+                                                    item.cod_produs
+                                                )
+                                            }
+                                            className="addAndRemoveProduct"
+                                        >
+                                            <path d="M0 10h24v4h-24z" />
+                                        </svg>
+                                        <input
+                                            type="text"
+                                            defaultValue={item.cantitate}
+                                            id={`cantitate-${item.cod_produs}`}
+                                            style={{
+                                                width: '30px',
+                                                textAlign: 'center',
+                                                appearance: 'none',
+                                                background: 'transparent',
+                                                border: '1px solid #8491a2',
+                                                outline: 'none',
+                                                borderRadius: '5px',
+                                            }}
+                                            onChange={(e) =>
+                                                handleChange(e, item)
+                                            }
+                                        />
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            onClick={() =>
+                                                increaseQuantity(
+                                                    item.cod_produs
+                                                )
+                                            }
+                                            className="addAndRemoveProduct"
+                                        >
+                                            <path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z" />
+                                        </svg>
+                                    </div>
+                                    <p style={{ textAlign: 'right' }}>
+                                        {item.pret}/{item.unitate_masura}{' '}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="orderTotalContainer">
+                            <p>Total</p>
+                            <p>{orderPrice} RON</p>
+                        </div>
+                        <div
+                            className="buttonRemoveOrder"
+                            onClick={handleClearOrder}
+                        >
+                            Goliti
+                        </div>
+                        <div className="buttonPlaceOrder">Comandati</div>
+                    </div>
+                </div>
                 {filteredProducts &&
                     filteredProducts.map((product) => (
                         <div className="produs" key={product.cod_produs}>
@@ -241,14 +532,17 @@ function ListaProduseInStoc() {
                                         </p>
 
                                         <p className="categorie">
-                                            {product.nume_categorie}
+                                            {product.categorie}
                                         </p>
                                         <p className="descriere">
                                             {product.descriere_categorie}
                                         </p>
+                                        <p className="descriereProd">
+                                            {product.descriere_produs}
+                                        </p>
                                     </div>
                                     <div>
-                                        <div className="actions">
+                                        {/* <div className="actions">
                                             <div
                                                 className="edit"
                                                 onClick={() =>
@@ -283,7 +577,8 @@ function ListaProduseInStoc() {
                                                 </svg>
                                                 <p>Stergeti</p>
                                             </div>
-                                        </div>
+                                        </div> */}
+
                                         <p className="dataCreare">
                                             {moment(product.data_creare)
                                                 .add(10, 'days')
@@ -297,15 +592,56 @@ function ListaProduseInStoc() {
                                             {product.pret} Lei
                                         </p>
                                         <p className="stoc">In stoc</p>
+                                        <div className="orderQuantity">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                onClick={() =>
+                                                    decreaseQuantity(
+                                                        product.cod_produs
+                                                    )
+                                                }
+                                            >
+                                                <path d="M0 10h24v4h-24z" />
+                                            </svg>
+                                            <input
+                                                type="text"
+                                                defaultValue="0"
+                                                id={`cantitate-${product.cod_produs}`}
+                                                onChange={(e) =>
+                                                    handleChange(e, product)
+                                                }
+                                            />
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                onClick={() =>
+                                                    increaseQuantity(
+                                                        product.cod_produs
+                                                    )
+                                                }
+                                            >
+                                                <path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z" />
+                                            </svg>
+                                        </div>
                                     </div>
                                     <div className="buttonsContainer">
-                                        <div className="factura">
+                                        <div
+                                            className="comanda"
+                                            onClick={(e) =>
+                                                handleAddOnOrderList(e, product)
+                                            }
+                                        >
                                             <img
                                                 src="/images/factura.svg"
                                                 alt=""
                                             />
                                         </div>
-                                        <div className="comanda">
+                                        <div className="factura">
                                             <img
                                                 src="/images/comanda.svg"
                                                 alt=""
