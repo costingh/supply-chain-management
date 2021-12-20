@@ -1,43 +1,18 @@
 import * as React from 'react'
 import moment from 'moment'
 import { useState, useEffect } from 'react'
-import Alert from '../../components/Alert'
-import DataTable from '../../components/DataTable'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllEmployees } from '../../actions/employees'
 import TextField from '@mui/material/TextField'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 
-const coloaneAngajati = [
-    { field: 'id', headerName: 'Email', width: 200 },
-    { field: 'nume', headerName: 'Nume', width: 200 },
-    { field: 'prenume', headerName: 'Prenume', width: 200 },
-    { field: 'cnp', headerName: 'CNP', width: 200 },
-    { field: 'oras', headerName: 'Oras', width: 200 },
-    { field: 'judet', headerName: 'Judet', width: 200 },
-    { field: 'strada', headerName: 'Strada', width: 200 },
-    { field: 'numar', headerName: 'Nr.', width: 200 },
-    { field: 'salariu', headerName: 'Salariu', width: 200 },
-    { field: 'numar_telefon', headerName: 'Telefon', width: 200 },
-    { field: 'administrator', headerName: 'Rol', width: 200 },
-    { field: 'data_nastere', headerName: 'Data nastere', width: 300 },
-    { field: 'sex', headerName: 'Sex', width: 200 },
-]
-
-const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-]
-
 const filter = createFilterOptions()
 
 function Angajati() {
     const { employees } = useSelector((state) => state.employees)
-    const [selectionModel, setSelectionModel] = useState([])
-    const [randAngajati, setRandAngajati] = useState([])
     const [data, setData] = useState(null)
-    const [value, setValue] = React.useState(null)
+    const [options, setOptions] = useState([])
+    const [filteredListOfEmp, setFilteredListOfEmp] = useState([])
 
     const dispatch = useDispatch()
 
@@ -46,54 +21,50 @@ function Angajati() {
     }, [])
 
     useEffect(() => {
-        /* let employeesArray = []
         if (employees) {
-            if (employees.length > 0) {
-                employees.map((emp) => {
-                    employeesArray.push({
-                        id: emp.email,
-                        nume: emp.nume,
-                        prenume: emp.prenume,
-                        cnp: emp.cnp ? emp.cnp : '-',
-                        oras: emp.oras ? emp.oras : '-',
-                        judet: emp.judet ? emp.judet : '-',
-                        strada: emp.strada ? emp.strada : '-',
-                        numar: emp.numar ? emp.numar : '-',
-                        salariu: emp.salariu ? emp.salariu : '-',
-                        numar_telefon: emp.numar_telefon
-                            ? emp.numar_telefon
-                            : '-',
-                        administrator:
-                            emp.administrator === 'D' ? 'ADMIN' : 'Angajat',
-                        sex: emp.sex === 'B' ? 'Masculin' : 'Feminin',
-                        data_nastere: emp.data_nastere
-                            ? moment(emp.data_nastere).format('LLL')
-                            : '-', 
-                    })
+            let employeesArray = []
+            employees.map((emp) =>
+                employeesArray.push({
+                    label: emp.nume + ' ' + emp.prenume,
+                    age: moment(emp.data_nastere, 'YYYYMMDD')
+                        .fromNow()
+                        .substring(0, 2),
                 })
-
-                setRandAngajati(employeesArray)
-            }
-        } */
-        console.log(employees)
+            )
+            setOptions(employeesArray)
+            setFilteredListOfEmp(employees)
+        }
     }, [employees])
 
     useEffect(() => {
         if (data) document.querySelector('.overlay').classList.add('open')
     }, [data])
 
+    const handleSearchChange = (e) => {
+        setFilteredListOfEmp(
+            employees.filter(
+                (emp) =>
+                    emp.nume
+                        .toLowerCase()
+                        .startsWith(e.target.value.toLowerCase()) ||
+                    emp.prenume
+                        .toLowerCase()
+                        .startsWith(e.target.value.toLowerCase())
+            )
+        )
+    }
+
     const closeAlert = () => {
         document.querySelector('.overlay').classList.remove('open')
     }
-
     return (
         <div className="angajatiContainer">
             <div className="navAngajati">
                 <h1>
-                    {employees &&
-                        (employees.length === 1
+                    {filteredListOfEmp &&
+                        (filteredListOfEmp.length === 1
                             ? '1 Angajat'
-                            : employees.length + ' Angajati')}
+                            : filteredListOfEmp.length + ' Angajati')}
                 </h1>
             </div>
             <div className="searchAngajatiContainer">
@@ -102,79 +73,31 @@ function Angajati() {
                         width="24"
                         height="24"
                         xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                     >
                         <path d="M15.853 16.56c-1.683 1.517-3.911 2.44-6.353 2.44-5.243 0-9.5-4.257-9.5-9.5s4.257-9.5 9.5-9.5 9.5 4.257 9.5 9.5c0 2.442-.923 4.67-2.44 6.353l7.44 7.44-.707.707-7.44-7.44zm-6.353-15.56c4.691 0 8.5 3.809 8.5 8.5s-3.809 8.5-8.5 8.5-8.5-3.809-8.5-8.5 3.809-8.5 8.5-8.5z" />
                     </svg>
                     <Autocomplete
-                        value={value}
-                        onChange={(event, newValue) => {
-                            if (typeof newValue === 'string') {
-                                setValue({
-                                    title: newValue,
-                                })
-                            } else if (newValue && newValue.inputValue) {
-                                // Create a new value from the user input
-                                setValue({
-                                    title: newValue.inputValue,
-                                })
-                            } else {
-                                setValue(newValue)
-                            }
-                        }}
-                        filterOptions={(options, params) => {
-                            const filtered = filter(options, params)
-
-                            const { inputValue } = params
-                            // Suggest the creation of a new value
-                            const isExisting = options.some(
-                                (option) => inputValue === option.title
-                            )
-                            if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                    inputValue,
-                                    title: `Add "${inputValue}"`,
-                                })
-                            }
-
-                            return filtered
-                        }}
-                        selectOnFocus
-                        clearOnBlur
-                        handleHomeEndKeys
-                        id="free-solo-with-text-demo"
-                        options={top100Films}
-                        getOptionLabel={(option) => {
-                            // Value selected with enter, right from the input
-                            if (typeof option === 'string') {
-                                return option
-                            }
-                            // Add "xxx" option created dynamically
-                            if (option.inputValue) {
-                                return option.inputValue
-                            }
-                            // Regular option
-                            return option.title
-                        }}
-                        renderOption={(props, option) => (
-                            <li {...props}>{option.title}</li>
-                        )}
-                        sx={{ width: 300 }}
                         freeSolo
+                        disableClearable
+                        id="search-employers"
+                        options={options}
+                        style={{ width: '300px' }}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                label="Free solo with text demo"
+                                label="Cautati Angajati"
+                                onChange={handleSearchChange}
                             />
                         )}
                     />
                 </div>
             </div>
             <div className="gridAngajati">
-                {employees &&
-                    employees.map((emp) => (
-                        <div className="innerGridAngajat">
+                {filteredListOfEmp &&
+                    filteredListOfEmp.map((emp) => (
+                        <div className="innerGridAngajat" key={emp.id_angajat}>
                             <div className="cardAngajat">
                                 <div>
                                     <div className="angajatTop">
@@ -215,8 +138,8 @@ function Angajati() {
                                                 <div
                                                     className="angajatRol"
                                                     style={{
-                                                        background: '##172439',
-                                                        color: '##172439',
+                                                        background: '#172439',
+                                                        color: '#1b55a9',
                                                         textAlign: 'center',
                                                     }}
                                                 >
@@ -250,9 +173,17 @@ function Angajati() {
                                             </span>
                                         </h2>
                                         <p className="telefon">
-                                            {emp.nr_telefon}
+                                            {emp.numar_telefon
+                                                ? emp.numar_telefon
+                                                : '-'}
                                         </p>
-                                        <p className="adresa">{`${emp.oras}, Str. ${emp.strada}, nr. ${emp.numar}`}</p>
+                                        <p className="adresa">{`${
+                                            emp.oras ? emp.oras : '-'
+                                        }, Str. ${
+                                            emp.strada ? emp.strada : '-'
+                                        }, nr. ${
+                                            emp.numar ? emp.numar : '-'
+                                        }`}</p>
                                         <p className="cnp">CNP: {emp.CNP}</p>
                                         <div className="email">
                                             <svg

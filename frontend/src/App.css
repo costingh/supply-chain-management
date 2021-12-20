@@ -2457,6 +2457,11 @@ input::placeholder {
     color: #8491a2;
 }
 
+.cardAngajat .text p.telefon {
+    font-size: 13px;
+    color: #43a088;
+}
+
 .cardAngajat .text .email {
     font-size: 14px;
     letter-spacing: 0.5px;

@@ -57,7 +57,6 @@ function ListaProduseInStoc() {
             setProductsListSelect(list)
             setFilteredProducts(products)
         }
-        console.log(products)
     }, [products])
 
     // if state.categories changes, also change the category select options
