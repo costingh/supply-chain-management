@@ -56,7 +56,7 @@ function Comenzi() {
                         currentUser && currentUser.administrator === 'N'
                             ? 'angajat'
                             : 'admin'
-                    }/dashboard/comenzi/creare`}
+                    }/dashboard/produse`}
                 >
                     <div className="addNewOrder">Plasati Comanda</div>
                 </Link>

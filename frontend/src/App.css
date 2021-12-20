@@ -2335,3 +2335,152 @@ input::placeholder {
 .genereazaFacturaContainer .button:hover {
     background: #5150ff;
 }
+
+/* ##############################################
+#################### ANGAJATI ###################
+################################################# */
+.angajatiContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.navAngajati {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 60px;
+}
+
+.navAngajati h1 {
+    color: #e1e1e1;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.searchAngajatiContainer {
+    width: 100%;
+    height: 60px;
+    padding: 0px 60px;
+}
+
+.searchAngajatiContainer .searchBox {
+    display: inline-flex;
+    column-gap: 10px;
+    align-items: center;
+    /* border: 1px solid #ccc; */
+    background: #1e2835;
+    padding-left: 20px;
+    border-radius: 10px;
+}
+
+.searchAngajatiContainer .searchBox svg {
+    fill: #ccc;
+}
+
+.searchAngajatiContainer .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    border-color: transparent !important;
+}
+
+.gridAngajati {
+    width: 100%;
+    height: calc(100% - 60px - 80px);
+    padding: 20px 40px;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 50% 50%;
+    overflow-y: auto;
+}
+
+.innerGridAngajat {
+    padding: 15px;
+}
+
+.cardAngajat {
+    background: #19212c;
+    height: 100%;
+    border-radius: 15px;
+    padding: 30px;
+    /* border: 1px solid #455261; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cardAngajat .angajatTop {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.cardAngajat .angajatTop .angajatImg {
+    width: 70px;
+    height: 70px;
+    background: #455261;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardAngajat .angajatTop .angajatImg svg {
+    fill: #19212c;
+}
+
+.cardAngajat .angajatTop .angajatRol {
+    font-size: 13px;
+    font-weight: 400;
+    padding: 3px 9px;
+    /* background: #35291f;
+    color: #9a5f1e; */
+    border-radius: 5px;
+}
+
+.cardAngajat .text {
+    margin-top: 10px;
+}
+
+.cardAngajat .text h2 {
+    font-size: 19px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    color: #e1e1e1;
+}
+
+.cardAngajat .text h2 span,
+.cardAngajat .text p.adresa,
+.cardAngajat .text p.cnp {
+    font-size: 13px;
+    color: #8491a2;
+}
+
+.cardAngajat .text .email {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+    color: #e1e1e1;
+    display: inline-flex;
+    row-gap: 10px;
+    padding: 4px 8px;
+    background: #273444;
+    color: #ccc;
+    align-items: center;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.cardAngajat .text .email svg {
+    fill: #43a088;
+}
+
+.angajatiActions .update {
+    padding: 8px 16px;
+    background: #9a5f1e;
+    color: #3a3229;
+    font-size: 15px;
+    display: inline-block;
+    border-radius: 7px;
+}
