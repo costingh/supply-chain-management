@@ -1917,6 +1917,7 @@ input::placeholder {
     p.date {
     font-size: 16px;
     color: #ccc;
+    width: 190px;
 }
 
 .ordersContainer
@@ -1943,24 +1944,19 @@ input::placeholder {
     color: #455261;
 }
 
-.ordersContainer .ordersInner .ordersColumn .rowRight .invoiceContainer {
+.invoiceContainer {
     width: 100%;
     padding: 20px 40px;
 }
 
-.ordersContainer .ordersInner .ordersColumn .rowRight .invoiceContainer .title {
+.invoiceContainer .title {
     text-align: center;
     font-size: 18px;
     font-weight: 500;
     color: #e1e1e1;
 }
 
-.ordersContainer
-    .ordersInner
-    .ordersColumn
-    .rowRight
-    .invoiceContainer
-    .dateFacturare {
+.invoiceContainer .dateFacturare {
     width: 100%;
     display: flex;
     align-items: center;
@@ -1970,48 +1966,23 @@ input::placeholder {
     margin-bottom: 50px;
 }
 
-.ordersContainer
-    .ordersInner
-    .ordersColumn
-    .rowRight
-    .invoiceContainer
-    .dateFacturare
-    .data
-    span {
+.invoiceContainer .dateFacturare .data span {
     font-size: 13px;
     text-transform: uppercase;
     color: #455261;
     margin-bottom: 5px;
 }
 
-.ordersContainer
-    .ordersInner
-    .ordersColumn
-    .rowRight
-    .invoiceContainer
-    .dateFacturare
-    .data
-    p {
+.invoiceContainer .dateFacturare .data p {
     font-size: 15px;
     color: #ccc;
 }
 
-.ordersContainer
-    .ordersInner
-    .ordersColumn
-    .rowRight
-    .invoiceContainer
-    .listaProduseDePeComanda {
+.listaProduseDePeComanda {
     width: 100%;
 }
 
-.ordersContainer
-    .ordersInner
-    .ordersColumn
-    .rowRight
-    .invoiceContainer
-    .listaProduseDePeComanda
-    .produsLista {
+.listaProduseDePeComanda .produsLista {
     width: 90%;
     margin: 10px auto;
     display: flex;
@@ -2019,54 +1990,32 @@ input::placeholder {
     justify-content: space-between;
 }
 
-.ordersContainer
-    .invoiceContainer
-    .listaProduseDePeComanda
-    .produsLista
-    .numeProdus {
+.listaProduseDePeComanda .produsLista .numeProdus {
     width: 90%;
     font-size: 17px;
     color: #e1e1e1;
 }
 
-.ordersContainer
-    .invoiceContainer
-    .listaProduseDePeComanda
-    .produsLista
-    .numbers {
+.listaProduseDePeComanda .produsLista .numbers {
     width: 30%;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.ordersContainer
-    .invoiceContainer
-    .listaProduseDePeComanda
-    .produsLista
-    .numbers
-    .quantity {
+.listaProduseDePeComanda .produsLista .numbers .quantity {
     font-size: 14px;
     color: #455261;
 }
 
-.ordersContainer
-    .invoiceContainer
-    .listaProduseDePeComanda
-    .produsLista
-    .numbers
-    .price {
+.listaProduseDePeComanda .produsLista .numbers .price {
     font-size: 16px;
     color: #e1e1e1;
+    width: 170px;
+    text-align: right;
 }
 
-.ordersContainer
-    .invoiceContainer
-    .listaProduseDePeComanda
-    .produsLista
-    .numbers
-    .price
-    span {
+.listaProduseDePeComanda .produsLista .numbers .price span {
     font-size: 12px;
     color: #ccc;
 }
@@ -2257,4 +2206,132 @@ input::placeholder {
 .flex {
     display: flex;
     column-gap: 30px;
+}
+
+/* ##############################################
+############### GENERARE FACTURA ################
+################################################# */
+.genereazaFacturaContainer {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+}
+
+.genereazaFacturaContainer > div {
+    width: 600px;
+    max-width: 100%;
+    height: 700px;
+    max-height: 100%;
+    background: #21242d;
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.genereazaFacturaContainer h1 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    color: #e1e1e1;
+    margin: 0;
+}
+
+.genereazaFacturaContainerDetalii {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 30px;
+    overflow-y: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.genereazaFacturaContainerDetalii::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.genereazaFacturaContainerDetalii {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.genereazaFacturaContainerBtns {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.genereazaFacturaContainerBtns div:first-child {
+    width: 47%;
+    padding: 15px;
+    background: #111;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #111;
+    transition: all 0.2s ease;
+}
+
+.genereazaFacturaContainerBtns div:last-child {
+    width: 47%;
+    padding: 15px;
+    background: #3c42b9;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #3c42b9;
+    transition: all 0.2s ease;
+}
+
+.genereazaFacturaContainerBtns div:first-child:hover,
+.genereazaFacturaContainerBtns div:last-child:hover {
+    background: transparent;
+}
+
+.invoiceContainer.respMsg {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.genereazaFacturaContainer .icon {
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.genereazaFacturaContainer .responseMessage {
+    color: #e0e6f0;
+    font-size: 25px;
+    margin-bottom: 30px;
+    font-weight: 800;
+}
+
+.genereazaFacturaContainer .button {
+    color: #e0e6f0;
+    background: #3c42b9;
+    padding: 20px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 80%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.genereazaFacturaContainer .button:hover {
+    background: #5150ff;
 }

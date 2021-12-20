@@ -1,9 +1,31 @@
+// react
 import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+// redux
+import { useDispatch, useSelector } from 'react-redux'
+// components
+import GenerareFactura from './GenerareFactura'
+// router
+import { useLocation, Link } from 'react-router-dom'
+// services
+import OrdersService from '../services/orders.service'
+// moment js for date formatting
+import moment from 'moment'
+import 'moment/locale/ro'
+moment.locale('ro')
 
 export default function Comanda() {
+    const { user: currentUser } = useSelector((state) => state.auth)
+
     const location = useLocation()
     const [orderNumber, setOrderNumber] = useState(null)
+    const [detaliiComanda, setDetaliiComanda] = useState(null)
+    const [produseComanda, setProduseComanda] = useState([])
+    const [totalPriceTabel, setTotalPriceTabel] = useState(0)
+    const [generateInvoiceOpened, setGenerateInvoiceOpened] = useState(false)
+
+    // generare factura
+    const [detaliiComandaFactura, setDetaliiComandaFactura] = useState(null)
+    const [produseComandaFactura, setProduseComandaFactura] = useState([])
 
     useEffect(() => {
         setOrderNumber(location.pathname.split('/')[5])
@@ -13,11 +35,63 @@ export default function Comanda() {
         return text.length > 17 ? text.substring(0, 17 - 3) + '...' : text
     }
 
+    useEffect(() => {
+        if (orderNumber)
+            OrdersService.getOrderByNumber(orderNumber)
+                .then((resp) => {
+                    setDetaliiComanda(resp.comanda[0][0])
+                    setProduseComanda(resp.comanda[1])
+                })
+                .catch((err) => console.log(err))
+    }, [orderNumber])
+
+    useEffect(() => {
+        let pret = 0
+
+        if (produseComanda.length > 0) {
+            produseComanda.map((pc) => {
+                pret += pc.cantitate * pc.pret
+            })
+        }
+        setTotalPriceTabel((Math.round(pret * 100) / 100).toFixed(2))
+    }, [produseComanda])
+
+    const handleGenerateInvoice = (nr_comanda) => {
+        console.log(nr_comanda)
+        setGenerateInvoiceOpened(true)
+        if (nr_comanda > 0)
+            OrdersService.getOrderByNumber(nr_comanda)
+                .then((resp) => {
+                    setDetaliiComandaFactura(resp.comanda[0][0])
+                    setProduseComandaFactura(resp.comanda[1])
+                })
+                .catch((err) => console.log(err))
+    }
+
     return (
         <div className="ordersContainer">
+            {generateInvoiceOpened && (
+                <GenerareFactura
+                    setGenerateInvoiceOpened={setGenerateInvoiceOpened}
+                    detaliiComanda={detaliiComandaFactura}
+                    produseComanda={produseComandaFactura}
+                    nrComanda={orderNumber}
+                />
+            )}
             <div className="nav">
                 <h1>Comanda #{orderNumber}</h1>
-                <div className="addNewOrder">Editati</div>
+                <div style={{ display: 'flex', columnGap: '20px' }}>
+                    <Link
+                        to={`/${
+                            currentUser && currentUser.administrator === 'N'
+                                ? 'angajat'
+                                : 'admin'
+                        }/dashboard/comenzi`}
+                    >
+                        <div className="addNewOrder">Inapoi</div>
+                    </Link>
+                    <div className="addNewOrder">Editati</div>
+                </div>
             </div>
             <div className="ordersInner">
                 <div className="ordersColumn" style={{ width: '60%' }}>
@@ -28,22 +102,56 @@ export default function Comanda() {
                                 className="historyTableRow"
                                 style={{ background: '#4552613a' }}
                             >
-                                <p className="date">13.08.2021, 11:57</p>
+                                <p className="date">
+                                    {detaliiComanda &&
+                                    detaliiComanda.data_comanda
+                                        ? moment(
+                                              detaliiComanda.data_comanda
+                                          ).format('llll')
+                                        : '-'}
+                                </p>
                                 <p className="desc">Comanda plasata</p>
-                                <p className="suppName">Doraly</p>
+                                <p className="suppName">
+                                    {detaliiComanda &&
+                                        detaliiComanda.nume_furnizor}
+                                </p>
                             </div>
                             <div className="historyTableRow">
-                                <p className="date">13.08.2021, 11:57</p>
+                                <p className="date">
+                                    {detaliiComanda &&
+                                    detaliiComanda.data_comanda
+                                        ? moment(
+                                              detaliiComanda.data_comanda
+                                          ).format('llll')
+                                        : '-'}
+                                </p>
                                 <p className="desc">Preluata de curier</p>
-                                <p className="suppName">Doraly</p>
+                                <p className="suppName">
+                                    {detaliiComanda &&
+                                        detaliiComanda.nume_furnizor}
+                                </p>
                             </div>
                             <div
                                 className="historyTableRow"
                                 style={{ background: '#4552613a' }}
                             >
-                                <p className="date">13.08.2021, 11:57</p>
-                                <p className="desc">Comanda livrata</p>
-                                <p className="suppName">Doraly</p>
+                                <p className="date">
+                                    {detaliiComanda &&
+                                    detaliiComanda.data_livrare
+                                        ? moment(
+                                              detaliiComanda.data_livrare
+                                          ).format('llll')
+                                        : '-'}
+                                </p>
+                                <p className="desc">
+                                    {detaliiComanda &&
+                                    detaliiComanda.data_livrare
+                                        ? 'Comanda livrata'
+                                        : 'Comanda in tranzit'}
+                                </p>
+                                <p className="suppName">
+                                    {detaliiComanda?.nume_furnizor}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -58,38 +166,47 @@ export default function Comanda() {
                                 <div style={{ width: '15%' }}>Pret</div>
                             </div>
                             <div className="tr">
-                                <div>
-                                    <div className="trProductName">
-                                        <img
-                                            src="/images/banane.png"
-                                            alt=""
-                                            style={{ width: '50px' }}
-                                        />
-                                        <p>Banane</p>
-                                    </div>
-                                    <div>2.12 kg</div>
-                                    <div>{ellipsis('Banane din Ecuador')}</div>
-                                    <div>{ellipsis('Fructe si Legume')}</div>
-                                    <div style={{ width: '15%' }}>
-                                        15.07{' '}
-                                        <span
-                                            style={{
-                                                fontSize: '12px',
-                                                color: '#e1e1e1',
-                                            }}
-                                        >
-                                            RON
-                                        </span>
-                                    </div>
-                                </div>
+                                {produseComanda &&
+                                    produseComanda.map((pc) => (
+                                        <div key={pc.nume_produs}>
+                                            <div className="trProductName">
+                                                <img
+                                                    src={pc.imagine_produs}
+                                                    alt=""
+                                                    style={{ width: '50px' }}
+                                                />
+                                                <p>{pc.nume_produs}</p>
+                                            </div>
+                                            <div>
+                                                {pc.cantitate}{' '}
+                                                {pc.unitate_masura}
+                                            </div>
+                                            <div>
+                                                {ellipsis(pc.descriere_produs)}
+                                            </div>
+                                            <div>
+                                                {ellipsis(pc.nume_categorie)}
+                                            </div>
+                                            <div style={{ width: '15%' }}>
+                                                {pc.pret}{' '}
+                                                <span
+                                                    style={{
+                                                        fontSize: '12px',
+                                                        color: '#e1e1e1',
+                                                    }}
+                                                >
+                                                    RON
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
                             </div>
                             <div className="tf">
                                 <div>Produs</div>
-
                                 <div>
                                     Total{' '}
                                     <span>
-                                        1,800.00{' '}
+                                        {totalPriceTabel}{' '}
                                         <span
                                             style={{
                                                 fontSize: '12px',
@@ -112,91 +229,65 @@ export default function Comanda() {
                             <div className="dateFacturare">
                                 <div className="data">
                                     <span>data comanda</span>
-                                    <p>12/12/2020</p>
+
+                                    <p style={{ textAlign: 'center' }}>
+                                        {detaliiComanda &&
+                                        detaliiComanda.data_comanda
+                                            ? moment(
+                                                  detaliiComanda.data_comanda
+                                              ).format('L')
+                                            : '-'}
+                                    </p>
                                 </div>
                                 <div className="data">
                                     <span>data livrare</span>
-                                    <p>12/12/2020</p>
+                                    <p style={{ textAlign: 'center' }}>
+                                        {detaliiComanda &&
+                                        detaliiComanda.data_livrare
+                                            ? moment(
+                                                  detaliiComanda.data_livrare
+                                              ).format('L')
+                                            : '-'}
+                                    </p>
                                 </div>
                             </div>
                             <div className="listaProduseDePeComanda">
-                                <div className="produsLista">
-                                    <div className="numeProdus">
-                                        1. Buty Nike
-                                    </div>
-                                    <div className="numbers">
-                                        <div className="quantity">1x</div>
-                                        <div className="price">
-                                            99.00 <span>RON</span>
+                                {produseComanda &&
+                                    produseComanda.map((pc, index) => (
+                                        <div
+                                            className="produsLista"
+                                            key={pc.nume_produs}
+                                        >
+                                            <div className="numeProdus">
+                                                {index + 1}. {pc.nume_produs}
+                                            </div>
+                                            <div className="numbers">
+                                                <div className="quantity">
+                                                    {pc.cantitate}x
+                                                </div>
+                                                <div className="price">
+                                                    {(
+                                                        Math.round(
+                                                            pc.pret * 100
+                                                        ) / 100
+                                                    ).toFixed(2)}{' '}
+                                                    <span>RON</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="produsLista">
-                                    <div className="numeProdus">
-                                        1. Buty Nike
-                                    </div>
-                                    <div className="numbers">
-                                        <div className="quantity">1x</div>
-                                        <div className="price">
-                                            99.00 <span>RON</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="produsLista">
-                                    <div className="numeProdus">
-                                        1. Buty Nike
-                                    </div>
-                                    <div className="numbers">
-                                        <div className="quantity">1x</div>
-                                        <div className="price">
-                                            99.00 <span>RON</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="produsLista">
-                                    <div className="numeProdus">
-                                        1. Buty Nike
-                                    </div>
-                                    <div className="numbers">
-                                        <div className="quantity">1x</div>
-                                        <div className="price">
-                                            99.00 <span>RON</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="produsLista">
-                                    <div className="numeProdus">
-                                        1. Buty Nike
-                                    </div>
-                                    <div className="numbers">
-                                        <div className="quantity">1x</div>
-                                        <div className="price">
-                                            99.00 <span>RON</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="produsLista">
-                                    <div className="numeProdus">
-                                        1. Buty Nike
-                                    </div>
-                                    <div className="numbers">
-                                        <div className="quantity">1x</div>
-                                        <div className="price">
-                                            99.00 <span>RON</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                    ))}
+
                                 <div className="separator"></div>
                                 <div className="pretContainer">
-                                    <p className="heading">Pret</p>
+                                    <p className="heading">Cost</p>
                                     <p className="price">
-                                        298.00 <span>RON</span>
+                                        {totalPriceTabel} <span>RON</span>
                                     </p>
                                 </div>
                                 <div className="pretContainer">
-                                    <p className="heading">Pret</p>
+                                    <p className="heading">Livrare</p>
                                     <p className="price">
-                                        298.00 <span>RON</span>
+                                        0.00 <span>RON</span>
                                     </p>
                                 </div>
                                 <div
@@ -205,7 +296,7 @@ export default function Comanda() {
                                 >
                                     <p className="headingBold">Total</p>
                                     <p className="priceBold">
-                                        298.00 <span>RON</span>
+                                        {totalPriceTabel} <span>RON</span>
                                     </p>
                                 </div>
                                 <div
@@ -219,7 +310,42 @@ export default function Comanda() {
                                         cursor: 'pointer',
                                     }}
                                 >
-                                    <p>Vezi Factura</p>
+                                    {detaliiComanda &&
+                                    detaliiComanda.nr_factura ? (
+                                        <Link
+                                            to={`/${
+                                                currentUser &&
+                                                currentUser.administrator ===
+                                                    'N'
+                                                    ? 'angajat'
+                                                    : 'admin'
+                                            }/dashboard/${
+                                                detaliiComanda.nr_factura
+                                                    ? 'facturi/' +
+                                                      detaliiComanda.nr_factura
+                                                    : 'facturi/generare/' +
+                                                      orderNumber
+                                            }`}
+                                        >
+                                            <div
+                                                className="btn-outlined"
+                                                style={{ color: '#e1e1e1' }}
+                                            >
+                                                Vezi Factura
+                                            </div>
+                                        </Link>
+                                    ) : (
+                                        <div
+                                            className="btn-outlined"
+                                            onClick={() =>
+                                                handleGenerateInvoice(
+                                                    orderNumber
+                                                )
+                                            }
+                                        >
+                                            Genereaza Factura
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

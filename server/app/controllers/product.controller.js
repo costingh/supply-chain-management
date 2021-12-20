@@ -55,8 +55,9 @@ exports.addProduct = (req, res) => {
 
 exports.getAllProducts = (req, res) => {
   const queryString =
-    "SELECT * " +
-    "FROM categorii inner join produse on categorii.id_categorie = produse.categorie";
+    "SELECT produse.*, categorii.*, furnizori.nume_furnizor " +
+    "FROM categorii inner join produse on categorii.id_categorie = produse.categorie " +
+    "inner join furnizori on furnizori.cod_furnizor = produse.cod_furnizor";
 
   db.query(queryString, async (error, results) => {
     if (error) {
@@ -64,22 +65,23 @@ exports.getAllProducts = (req, res) => {
     }
 
     if (results.length > 0) {
-      console.log(results);
       let productsList = [];
       results.map((prod) => {
         productsList.push({
-          id_categorie: prod.id_categorie,
-          categorie: prod.nume_categorie,
-          descriere_categorie: prod.descriere_categorie,
           cod_produs: prod.cod_produs,
-          data_creare: prod.data_creare,
           nume_produs: prod.nume_produs,
           descriere_produs: prod.descriere_produs,
-          pret: prod.pret,
           unitate_masura: prod.unitate_masura,
           stoc_initial: prod.stoc_initial,
+          pret: prod.pret,
+          categorie: prod.nume_categorie,
+          data_creare: prod.data_creare,
           imagine_produs: prod.imagine_produs,
+          cod_furnizor: prod.cod_furnizor,
+          id_categorie: prod.id_categorie,
+          descriere_categorie: prod.descriere_categorie,
           cantitate: 0,
+          nume_furnizor: prod.nume_furnizor,
         });
       });
       return res.json({

@@ -6,6 +6,7 @@ import invoices from './invoices'
 import employees from './employees'
 import categories from './categories'
 import products from './products'
+import orders from './orders'
 
 export default combineReducers({
     auth,
@@ -15,4 +16,5 @@ export default combineReducers({
     employees,
     categories,
     products,
+    orders,
 })

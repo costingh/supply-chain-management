@@ -3,20 +3,15 @@ import authHeader from './auth-header'
 
 const API_URL = `${process.env.REACT_APP_BASE_URL}api/facturi/`
 
-/* const addSupplier = (nume_furnizor, strada, numar, oras, judet, nr_telefon) => {
+const generateInvoice = (nrComanda) => {
     return axios.post(
         API_URL + 'add',
         {
-            nume_furnizor,
-            strada,
-            numar,
-            oras,
-            judet,
-            nr_telefon,
+            nrComanda,
         },
         { headers: authHeader() }
     )
-} */
+}
 
 const getAllInvoices = () => {
     return axios.get(API_URL + 'all', { headers: authHeader() })
@@ -29,6 +24,7 @@ const deleteInvoice = (invoiceNumber) => {
 }
 
 export default {
+    generateInvoice,
     getAllInvoices,
     deleteInvoice,
 }
