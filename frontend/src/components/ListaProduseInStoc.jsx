@@ -610,7 +610,7 @@ function ListaProduseInStoc() {
                                             }
                                         >
                                             <img
-                                                src="/images/factura.svg"
+                                                src="/images/shopping-cart.svg"
                                                 alt=""
                                             />
                                             {/* <svg
