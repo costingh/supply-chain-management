@@ -5,6 +5,8 @@ import {
     FETCH_PROFILE_FAIL,
     UPDATE_PROFILE_SUCCESS,
     UPDATE_PROFILE_FAIL,
+    UPDATE_SALARY_SUCCESS,
+    UPDATE_SALARY_FAIL,
 } from './types'
 import EmployeesService from '../services/employees.service'
 
@@ -92,3 +94,25 @@ export const updateProfile =
             }
         })
     }
+
+export const updateSalary = (email, salary) => (dispatch) => {
+    return EmployeesService.updateSalary(email, salary).then((response) => {
+        if (response.data.status === 200) {
+            dispatch({
+                type: UPDATE_SALARY_SUCCESS,
+                payload: {
+                    salary: response.data.salary,
+                    email: response.data.email,
+                },
+            })
+
+            return response.data
+        } else {
+            dispatch({
+                type: UPDATE_SALARY_FAIL,
+            })
+
+            return response.data
+        }
+    })
+}

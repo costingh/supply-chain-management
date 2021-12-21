@@ -41,9 +41,20 @@ const updateProfile = (
         { headers: authHeader() }
     )
 }
+const updateSalary = (email, salary) => {
+    return axios.post(
+        API_URL + `profil/update-salary/${email}`,
+        {
+            email,
+            salary,
+        },
+        { headers: authHeader() }
+    )
+}
 
 export default {
     getAllEmployees,
     getProfile,
     updateProfile,
+    updateSalary,
 }

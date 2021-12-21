@@ -27,4 +27,10 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.updateProfile
   );
+
+  app.post(
+    "/api/angajati/profil/update-salary/:email",
+    [authJwt.verifyToken],
+    controller.updateSalary
+  );
 };

@@ -54,7 +54,7 @@ function Comenzi() {
                 <Link
                     to={`/${
                         currentUser && currentUser.administrator === 'N'
-                            ? 'angajat'
+                            ? 'employee'
                             : 'admin'
                     }/dashboard/produse`}
                 >
@@ -133,7 +133,7 @@ function Comenzi() {
                                         to={`/${
                                             currentUser &&
                                             currentUser.administrator === 'N'
-                                                ? 'angajat'
+                                                ? 'employee'
                                                 : 'admin'
                                         }/dashboard/comenzi/comanda/${
                                             o.nr_comanda
@@ -149,7 +149,7 @@ function Comenzi() {
                                                 currentUser &&
                                                 currentUser.administrator ===
                                                     'N'
-                                                    ? 'angajat'
+                                                    ? 'employee'
                                                     : 'admin'
                                             }/dashboard/${
                                                 o.nr_factura

@@ -29,19 +29,25 @@ function Alert({ data, closeAlert, goToLoginPage, redirect }) {
                         : 'Ooops...'}
                 </h1>
                 <p className="social-text">{data && data.message}</p>
-                <div className="button">
-                    {redirect === 'no' ? (
-                        data && data.status === 200 ? (
+                {redirect === 'no' ? (
+                    data && data.status === 200 ? (
+                        <div className="button">
                             <p onClick={closeAlert}>Done</p>
-                        ) : (
-                            <p onClick={closeAlert}>Try Again</p>
-                        )
-                    ) : data && data.status === 200 ? (
-                        <p onClick={goToLoginPage}>Login</p>
+                        </div>
                     ) : (
+                        <div className="button">
+                            <p onClick={closeAlert}>Try Again</p>
+                        </div>
+                    )
+                ) : data && data.status === 200 ? (
+                    <div className="button">
+                        <p onClick={goToLoginPage}>Login</p>
+                    </div>
+                ) : (
+                    <div className="button">
                         <p onClick={closeAlert}>Try Again</p>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     )

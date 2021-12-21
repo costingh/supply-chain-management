@@ -1,20 +1,27 @@
-import * as React from 'react'
-import moment from 'moment'
+// react
 import { useState, useEffect } from 'react'
+// redux
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllEmployees } from '../../actions/employees'
+// components
 import TextField from '@mui/material/TextField'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
+// router
+import { Link } from 'react-router-dom'
+// actions
+import { getAllEmployees, updateSalary } from '../../actions/employees'
+// date formatting
+import moment from 'moment'
 
-const filter = createFilterOptions()
-
-function Angajati() {
-    const { employees } = useSelector((state) => state.employees)
-    const [data, setData] = useState(null)
-    const [options, setOptions] = useState([])
-    const [filteredListOfEmp, setFilteredListOfEmp] = useState([])
+function Angajati({ setData }) {
+    const { user: currentUser } = useSelector((state) => state.auth)
 
     const dispatch = useDispatch()
+
+    const { employees } = useSelector((state) => state.employees)
+    const [options, setOptions] = useState([])
+    const [filteredListOfEmp, setFilteredListOfEmp] = useState([])
+    const [updateSalaryOpened, setUpdateSalaryOpened] = useState(false)
+    const [newSalary, setNewSalary] = useState(0)
 
     useEffect(() => {
         dispatch(getAllEmployees()).then((data) => {})
@@ -36,10 +43,6 @@ function Angajati() {
         }
     }, [employees])
 
-    useEffect(() => {
-        if (data) document.querySelector('.overlay').classList.add('open')
-    }, [data])
-
     const handleSearchChange = (e) => {
         setFilteredListOfEmp(
             employees.filter(
@@ -54,9 +57,25 @@ function Angajati() {
         )
     }
 
-    const closeAlert = () => {
-        document.querySelector('.overlay').classList.remove('open')
+    const handleUpdateSalary = () => {
+        setUpdateSalaryOpened(true)
     }
+
+    const handleSalaryChange = (e) => {
+        setNewSalary(e.target.value)
+    }
+
+    const handleSubmit = (email) => {
+        const num = parseFloat(newSalary, 10)
+
+        if (!isNaN(num))
+            dispatch(updateSalary(email, num)).then((data) => {
+                setData(data)
+                setUpdateSalaryOpened(false)
+            })
+        else alert('Salariul trebuie sa fie un numar!')
+    }
+
     return (
         <div className="angajatiContainer">
             <div className="navAngajati">
@@ -184,7 +203,10 @@ function Angajati() {
                                         }, nr. ${
                                             emp.numar ? emp.numar : '-'
                                         }`}</p>
-                                        <p className="cnp">CNP: {emp.CNP}</p>
+                                        <p className="cnp">
+                                            CNP:{' '}
+                                            {emp.CNP ? emp.CNP : 'nespecificat'}
+                                        </p>
                                         <div className="email">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -199,13 +221,167 @@ function Angajati() {
                                     </div>
                                 </div>
                                 <div className="angajatiActions">
-                                    <div className="update">Update</div>
+                                    {/* if this user is the current one, go to dashboard/profile
+                                        else if it is not -> 
+                                            if its admin -> update salary
+                                            else no update access
+                                     */}
+                                    {currentUser &&
+                                    currentUser.nume === emp.nume &&
+                                    emp.prenume === currentUser.prenume ? (
+                                        <Link
+                                            to={`/${
+                                                currentUser &&
+                                                currentUser.administrator ===
+                                                    'N'
+                                                    ? 'employee'
+                                                    : 'admin'
+                                            }/dashboard/profile`}
+                                        >
+                                            <div className="update">
+                                                Actualizati Profilul
+                                            </div>
+                                        </Link>
+                                    ) : currentUser.administrator === 'D' ? (
+                                        <div
+                                            className="update"
+                                            onClick={handleUpdateSalary}
+                                        >
+                                            Modificare Salariu
+                                        </div>
+                                    ) : (
+                                        <div className="alertUpdate">
+                                            <svg
+                                                width="24"
+                                                height="24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                            >
+                                                <path d="M24 23h-24l12-22 12 22zm-22.315-1h20.63l-10.315-18.912-10.315 18.912zm10.315-2c.466 0 .845-.378.845-.845 0-.466-.379-.844-.845-.844-.466 0-.845.378-.845.844 0 .467.379.845.845.845zm.5-11v8h-1v-8h1z" />
+                                            </svg>{' '}
+                                            <p>Nu aveti drept de actualizare</p>
+                                        </div>
+                                    )}
+                                    {updateSalaryOpened && (
+                                        <div className="updateSalary">
+                                            <div>
+                                                <h1>Modificati Salariul</h1>
+                                                <div className="flex">
+                                                    <div className="flexInner">
+                                                        <p className="bold">
+                                                            Nume:{' '}
+                                                        </p>
+                                                        <p className="muted">
+                                                            {emp.nume}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flexInner">
+                                                        <p className="bold">
+                                                            Preume:{' '}
+                                                        </p>
+                                                        <p className="muted">
+                                                            {emp.prenume}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex">
+                                                    <div className="flexInner">
+                                                        <p className="bold">
+                                                            CNP:{' '}
+                                                        </p>
+                                                        <p className="muted">
+                                                            {emp.CNP
+                                                                ? emp.CNP
+                                                                : '-'}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flexInner">
+                                                        <p className="bold">
+                                                            Varsta:{' '}
+                                                        </p>
+                                                        <p className="muted">
+                                                            {moment(
+                                                                emp.data_nastere,
+                                                                'YYYYMMDD'
+                                                            )
+                                                                .fromNow()
+                                                                .substring(
+                                                                    0,
+                                                                    2
+                                                                )}{' '}
+                                                            de ani
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex">
+                                                    <div className="flexInner">
+                                                        <p className="bold">
+                                                            Telefon:{' '}
+                                                        </p>
+                                                        <p className="muted">
+                                                            {emp.numar_telefon
+                                                                ? emp.numar_telefon
+                                                                : '-'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    className="line"
+                                                    style={{
+                                                        marginBottom: '20px',
+                                                    }}
+                                                >
+                                                    <p className="bold">
+                                                        Email:{' '}
+                                                    </p>
+                                                    <p className="muted">
+                                                        {emp.email}
+                                                    </p>
+                                                </div>
+                                                <span>Salariu Lunar</span>
+                                                <input
+                                                    type="text"
+                                                    defaultValue={
+                                                        emp.salariu
+                                                            ? emp.salariu
+                                                            : '0.00'
+                                                    }
+                                                    onChange={
+                                                        handleSalaryChange
+                                                    }
+                                                />
+
+                                                <div className="flex">
+                                                    <div
+                                                        className="closeBtn"
+                                                        onClick={() =>
+                                                            setUpdateSalaryOpened(
+                                                                false
+                                                            )
+                                                        }
+                                                    >
+                                                        Anulati
+                                                    </div>
+                                                    <div
+                                                        className="submitBtn"
+                                                        onClick={() =>
+                                                            handleSubmit(
+                                                                emp.email
+                                                            )
+                                                        }
+                                                    >
+                                                        Modificati
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     ))}
             </div>
-            {/* <Alert data={data} closeAlert={closeAlert} redirect={'no'} /> */}
         </div>
     )
 }

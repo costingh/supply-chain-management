@@ -137,3 +137,29 @@ exports.updateProfile = (req, res) => {
     }
   );
 };
+
+exports.updateSalary = (req, res) => {
+  const newSalary = req.body.salary;
+  const email = req.params.email;
+
+  db.query(
+    "update angajati set salariu = ? where email = ?",
+    [newSalary, email],
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+        return res.send({
+          message: "Salariul nu a putut fi modificat!",
+          status: 409,
+        });
+      } else {
+        return res.json({
+          message: "Salariu modificat!",
+          status: 200,
+          salary: newSalary,
+          email: email,
+        });
+      }
+    }
+  );
+};

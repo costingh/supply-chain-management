@@ -294,7 +294,9 @@ input::placeholder {
 
 .overlay {
     background: rgba(0, 0, 0, 0.6);
-    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
     z-index: 10;
@@ -2342,6 +2344,7 @@ input::placeholder {
 .angajatiContainer {
     width: 100%;
     height: 100%;
+    position: relative;
 }
 
 .navAngajati {
@@ -2402,7 +2405,6 @@ input::placeholder {
     height: 100%;
     border-radius: 15px;
     padding: 30px;
-    /* border: 1px solid #455261; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -2418,7 +2420,7 @@ input::placeholder {
 .cardAngajat .angajatTop .angajatImg {
     width: 70px;
     height: 70px;
-    background: #455261;
+    background: #273444;
     border-radius: 10px;
     overflow: hidden;
     display: flex;
@@ -2488,4 +2490,167 @@ input::placeholder {
     font-size: 15px;
     display: inline-block;
     border-radius: 7px;
+    transition: all 0.2s ease;
+    border: 1px solid #9a5f1e;
+    cursor: pointer;
+}
+
+.angajatiActions .update:hover {
+    background-color: transparent;
+    color: #9a5f1e;
+}
+
+.angajatiActions .alertUpdate {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 10px;
+    padding: 8px 16px;
+    border-radius: 7px;
+    border: 1px solid #1b55a9;
+    background: #172439;
+    color: #1b55a9;
+    fill: #1b55a9;
+    font-size: 15px;
+}
+
+.updateSalary {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.updateSalary > div {
+    width: 450px;
+    height: 500px;
+    overflow-y: auto;
+    max-width: 100%;
+    max-height: 100%;
+    background-color: #19212c;
+    padding: 40px;
+    border-radius: 30px;
+}
+
+.updateSalary > div h1 {
+    color: #e1e1e1;
+    font-size: 25px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.updateSalary > div input {
+    width: 100%;
+    height: 50px;
+    appearance: none;
+    outline: none;
+    border-radius: 10px;
+    border: 1px solid #455261;
+    background-color: #455261;
+    padding: 10px 30px;
+}
+
+.updateSalary .flex {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+}
+
+.updateSalary .flex .flexInner {
+    flex: 0.5;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.updateSalary .flex .flexInner .bold {
+    color: #455261;
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.updateSalary .flex .flexInner .muted {
+    color: #ccc;
+    font-size: 17px;
+    font-weight: 400;
+    margin-right: 5px;
+}
+
+.updateSalary .line {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.updateSalary .line .bold {
+    color: #455261;
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.updateSalary .line .muted {
+    color: #ccc;
+    font-size: 17px;
+    font-weight: 400;
+    margin-right: 5px;
+}
+
+.updateSalary span {
+    color: #455261;
+    font-size: 14px;
+}
+
+.updateSalary .flex {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.updateSalary .flex .closeBtn,
+.updateSalary .flex .submitBtn {
+    flex: 0.5;
+    padding: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+}
+
+.updateSalary .flex .closeBtn {
+    background-color: #111;
+    color: #e1e1e1;
+}
+
+.updateSalary .flex .closeBtn:hover {
+    color: #333;
+}
+
+.updateSalary .flex .submitBtn {
+    background-color: rgb(206, 128, 25);
+    color: #111;
+}
+
+.updateSalary .flex .submitBtn:hover {
+    color: #ccc;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.updateSalary > div::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.updateSalary > div {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }

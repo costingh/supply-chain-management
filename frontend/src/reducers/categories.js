@@ -49,7 +49,6 @@ export default function (state = initialState, action) {
         case UPDATE_CATEGORY_SUCCESS:
             return {
                 ...state,
-                //  category: payload.category, // aici trebuie modificat
                 categories: state.categories.map((cat) => {
                     if (cat.nume_categorie !== payload.category[0].identifier)
                         return cat

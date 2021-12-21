@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
+import Alert from '../../components/Alert'
 import EventBus from '../../common/EventBus'
 import Sidebar from '../../components/Sidebar'
 import Profile from '../../components/Profile'
@@ -16,11 +17,11 @@ import UserService from '../../services/user.service'
 import { listItems } from '../../utils/sidebarConfig'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import CreareComanda from '../../components/CreareComanda'
-
 function AdminDashobard() {
     const { user: currentUser } = useSelector((state) => state.auth)
     const [redirect, setRedirect] = useState(false)
     const [activeTabName, setActiveTabName] = useState(listItems[0].name)
+    const [data, setData] = useState(null)
 
     useEffect(() => {
         UserService.getAdminBoard().then(
@@ -41,12 +42,20 @@ function AdminDashobard() {
         )
     }, [])
 
+    useEffect(() => {
+        if (data) document.querySelector('.overlay').classList.add('open')
+    }, [data])
+
     if (!currentUser) {
         return <Redirect to="/login" />
     }
 
     if (redirect) {
         return <Redirect to="/employee/dashboard" />
+    }
+
+    const closeAlert = () => {
+        document.querySelector('.overlay').classList.remove('open')
     }
 
     return (
@@ -86,6 +95,11 @@ function AdminDashobard() {
                     )} */}
 
                     <div className="innerContent">
+                        <Alert
+                            data={data}
+                            closeAlert={closeAlert}
+                            redirect={'no'}
+                        />
                         <Switch>
                             <Route path="/admin/dashboard/furnizori">
                                 <Furnizori />
@@ -103,7 +117,7 @@ function AdminDashobard() {
                                 <Comenzi />
                             </Route>
                             <Route path="/admin/dashboard/angajati">
-                                <Angajati />
+                                <Angajati setData={setData} />
                             </Route>
                             <Route path="/admin/dashboard/produse">
                                 <Produse />
