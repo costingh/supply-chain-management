@@ -4,6 +4,69 @@ const dbConfig = require("../config/db.config");
 // connect to database
 const db = mysql.createConnection(dbConfig);
 
+exports.addOrder = (req, res) => {
+  const { cod_furnizor, data_livrare, listaProduse } = req.body;
+
+  const Order = {
+    cod_furnizor: cod_furnizor,
+    data_livrare: new Date(data_livrare),
+  };
+
+  let query = "INSERT INTO comenzi SET ?";
+
+  db.query(query, Order, async (error, results) => {
+    if (error) {
+      console.log(error);
+      return res.send({
+        message: "Eroare la plasarea comenzii!",
+        status: 500,
+      });
+    } else {
+      const nr_comanda = results.insertId;
+      let success = true;
+
+      Promise.all(
+        listaProduse.map((product) => {
+          const ProduseComenzi = {
+            nr_comanda: nr_comanda,
+            cod_produs: product.cod_produs,
+            cantitate: product.cantitate,
+          };
+
+          let q = "INSERT INTO produsecomenzi SET ?";
+
+          db.query(q, ProduseComenzi, async (error, results) => {
+            if (error) success = false;
+            else {
+              db.query(
+                "UPDATE produse SET stoc_initial = ? WHERE cod_produs = ?",
+                [product.stoc_initial - product.cantitate, product.cod_produs],
+                async (error, results) => {
+                  if (error) console.log(error);
+                }
+              );
+            }
+          });
+        })
+      );
+
+      if (success) {
+        return await res.json({
+          message: "Comanda plasata!",
+          status: 200,
+          order: results,
+        });
+      } else {
+        return await res.json({
+          message: "Eroare!",
+          status: 500,
+          order: results,
+        });
+      }
+    }
+  });
+};
+
 exports.getAllOrders = (req, res) => {
   let query =
     "select distinct c.nr_comanda, c.data_comanda, c.data_livrare, c.nr_factura, f.*, " +

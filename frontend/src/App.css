@@ -919,7 +919,8 @@ input::placeholder {
 .produse .produs {
     width: 90%;
     height: 250px;
-    background: #273444;
+    /*  background: #273444; */
+    background: #1e2835;
     margin: 20px auto;
     overflow: hidden;
     display: flex;
@@ -1136,123 +1137,8 @@ input::placeholder {
     width: 30px;
 }
 
-/* .produse .produs {
-    height: 500px;
-    border-radius: 20px;
-    border: 1px solid #455261;
-    padding: 10px 60px;
-    position: relative;
-    margin: 30px;
-    display: block;
-    max-width: 350px;
-}
-
-.produse .produs .image {
-    height: 50%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.produse .produs .image img {
-    height: 80%;
-    margin: 0 auto;
-}
-
-.produse .produs .text {
-    height: 50%;
-    width: 100%;
-    display: block;
-    position: relative;
-}
-
-.produse .produs .text .pret {
-    margin-top: 0px;
-    font-size: 30px;
-    color: #cccccc;
-    font-weight: 600;
-}
-
-.produse .produs .text .numeProdus {
-    margin-top: -10px;
-    margin-bottom: 20px;
-    font-size: 15px;
-    color: #e0e6f0;
-    font-weight: 300;
-}
-
-.produs .categStoc {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-}
-.produs .categorie {
-    color: #8491a2;
-    font-size: 15px;
-    text-align: right;
-}
-
-.produse .produs .text .stoc {
-    font-size: 16px;
-    color: rgb(72, 155, 72);
-    font-weight: 500;
-}
-
-.produs .descriere {
-    text-align: justify;
-    font-size: 13px;
-    color: #455261;
-}
-
-.productBtns {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 15px;
-} */
-
-/* .productBtns .factura {
-    border-radius: 50%;
-    background-color: rgb(72, 155, 72);
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-} */
-
-/* .productBtns .factura img {
-    width: 30px;
-} */
-
-/* .productBtns .comanda {
-    border-radius: 50%;
-    background-color: rgb(204, 79, 58);
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.productBtns .comanda img {
-    width: 30px;
-} */
-/* 
-.produse .inner .row {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-} */
-
 .produse .inner .comandaSlide {
     position: fixed;
-    /* height: 30px; */
     overflow: hidden;
     width: 400px;
     bottom: 0;
@@ -1344,8 +1230,10 @@ input::placeholder {
     text-align: center;
     color: #ccc;
     background: rgb(206, 76, 25);
+    border: 1px solid rgb(206, 76, 25);
     cursor: pointer;
     margin-bottom: 10px;
+    transition: all 0.2s ease;
 }
 
 .buttonPlaceOrder {
@@ -1355,6 +1243,14 @@ input::placeholder {
     color: #ccc;
     background: rgb(85, 161, 65);
     cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid rgb(85, 161, 65);
+}
+
+.buttonPlaceOrder:hover,
+.buttonRemoveOrder:hover {
+    background-color: transparent;
+    color: #111;
 }
 
 .addAndRemoveProduct {
@@ -1789,7 +1685,8 @@ input::placeholder {
 }
 
 .ordersContainer .middleOrderContainer .middleLeft .image svg {
-    transform: scale(10);
+    /* transform: scale(10); */
+    transform: scale(8);
     fill: #111;
 }
 

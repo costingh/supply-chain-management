@@ -8,16 +8,12 @@ import {
 } from './types'
 import OrdersService from '../services/orders.service'
 
-/* 
-const listaProduse = [{
-    cod_produs: 15, 
-    cantitate: 200
-}] 
-*/
-/* export const addOrder =
+export const addOrder =
     (cod_furnizor, data_livrare, listaProduse) => (dispatch) => {
         return OrdersService.addOrder(
-            cod_furnizor, data_livrare, listaProduse
+            cod_furnizor,
+            data_livrare,
+            listaProduse
         ).then((response) => {
             if (response.data.status === 200) {
                 dispatch({
@@ -34,7 +30,7 @@ const listaProduse = [{
                 return response.data
             }
         })
-    } */
+    }
 
 export const getAllOrders = () => (dispatch) => {
     return OrdersService.getAllOrders().then((response) => {

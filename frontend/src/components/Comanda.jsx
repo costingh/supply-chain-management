@@ -146,7 +146,7 @@ export default function Comanda() {
                                 <p className="desc">
                                     {detaliiComanda &&
                                     detaliiComanda.data_livrare
-                                        ? 'Comanda livrata'
+                                        ? 'Livrare Estimata'
                                         : 'Comanda in tranzit'}
                                 </p>
                                 <p className="suppName">

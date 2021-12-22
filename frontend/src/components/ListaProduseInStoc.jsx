@@ -17,12 +17,12 @@ import {
     updateProduct,
     deleteProduct,
 } from '../actions/products'
+import { addOrder } from '../actions/orders'
 
 // moment.js for date formatting
 import moment from 'moment'
-import Alert from './Alert'
 
-function ListaProduseInStoc() {
+function ListaProduseInStoc({ setData }) {
     const { categories } = useSelector((state) => state.categories)
     const { products } = useSelector((state) => state.products)
     const dispatch = useDispatch()
@@ -31,7 +31,6 @@ function ListaProduseInStoc() {
     const [filteredProducts, setFilteredProducts] = useState([])
     const [searchCategory, setSearchCategory] = useState('')
     const [searchProduct, setSearchProduct] = useState('')
-    const [data, setData] = useState(null)
     const [height, setHeight] = useState('30px')
     const [opened, setOpened] = useState(false)
     const [ordersList, setOrdersList] = useState([])
@@ -73,17 +72,6 @@ function ListaProduseInStoc() {
             setCategoriesListSelect(list)
         }
     }, [categories])
-
-    // if data is not null, open popup (in data we receive confirmation after successfull/failed request)
-    useEffect(() => {
-        if (data) {
-            document.querySelector('.overlay').classList.add('open')
-        }
-    }, [data])
-
-    const closeAlert = () => {
-        document.querySelector('.overlay').classList.remove('open')
-    }
 
     /* const handleEditProduct = (product) => {}
 
@@ -173,48 +161,64 @@ function ListaProduseInStoc() {
             `#cantitate-${product.cod_produs}`
         ).value
 
-        if (parseInt(cantitate) >= 1) {
-            if (
-                !ordersList.filter((e) => e.cod_produs === product.cod_produs)
-                    .length > 0
-            ) {
-                product.cantitate = parseInt(cantitate)
-                setOrdersList((ordersList) => [...ordersList, product])
-                if (e.target.children.length === 0) {
-                    e.target.parentNode.classList.add('disabled')
-                } else e.target.classList.add('disabled')
-            } else alert('Produsul este deja in lista!')
-        } else alert('Cantitatea trebuie sa fie pozitiva!')
+        if (cantitate > product.stoc_initial) {
+            setData({
+                message:
+                    'Furnizorul are in stoc doar ' +
+                    product.stoc_initial +
+                    ' ' +
+                    product.unitate_masura,
+                status: 400,
+            })
+        } else {
+            if (parseInt(cantitate) >= 1) {
+                if (
+                    !ordersList.filter(
+                        (e) => e.cod_produs === product.cod_produs
+                    ).length > 0
+                ) {
+                    product.cantitate = parseInt(cantitate)
+                    setOrdersList((ordersList) => [...ordersList, product])
+                    if (e.target.children.length === 0) {
+                        e.target.parentNode.classList.add('disabled')
+                    } else e.target.classList.add('disabled')
+                } else alert('Produsul este deja in lista!')
+            } else alert('Cantitatea trebuie sa fie pozitiva!')
+        }
     }
 
-    const increaseQuantity = (cod_produs) => {
+    const increaseQuantity = (cod_produs, prod) => {
         const cantitate = document.querySelector(
             `#cantitate-${cod_produs}`
         ).value
+
         const arr = document.querySelectorAll(`#cantitate-${cod_produs}`)
-        arr[0].value = parseInt(cantitate) + 1
+        if (parseInt(cantitate) < prod.stoc_initial)
+            arr[0].value = parseInt(cantitate) + 1
         if (arr.length === 2) {
-            arr[1].value = parseInt(cantitate) + 1
-            let list = []
-            ordersList.map((o) => {
-                if (o.cod_produs !== cod_produs) list.push(o)
-                else
-                    list.push({
-                        cantitate: o.cantitate + 1,
-                        categorie: o.categorie,
-                        cod_produs: o.cod_produs,
-                        data_creare: o.data_creare,
-                        descriere_categorie: o.descriere_categorie,
-                        descriere_produs: o.descriere_produs,
-                        id_categorie: o.id_categorie,
-                        imagine_produs: o.imagine_produs,
-                        nume_produs: o.nume_produs,
-                        pret: o.pret,
-                        stoc_initial: o.stoc_initial,
-                        unitate_masura: o.unitate_masura,
-                    })
-            })
-            setOrdersList(list)
+            if (parseInt(cantitate) < prod.stoc_initial) {
+                arr[1].value = parseInt(cantitate) + 1
+                let list = []
+                ordersList.map((o) => {
+                    if (o.cod_produs !== cod_produs) list.push(o)
+                    else
+                        list.push({
+                            cantitate: o.cantitate + 1,
+                            categorie: o.categorie,
+                            cod_produs: o.cod_produs,
+                            data_creare: o.data_creare,
+                            descriere_categorie: o.descriere_categorie,
+                            descriere_produs: o.descriere_produs,
+                            id_categorie: o.id_categorie,
+                            imagine_produs: o.imagine_produs,
+                            nume_produs: o.nume_produs,
+                            pret: o.pret,
+                            stoc_initial: o.stoc_initial,
+                            unitate_masura: o.unitate_masura,
+                        })
+                })
+                setOrdersList(list)
+            }
         }
     }
 
@@ -332,9 +336,64 @@ function ListaProduseInStoc() {
         setOrderPrice((Math.round(price * 100) / 100).toFixed(2))
     }
 
+    const handlePlaceOrder = () => {
+        // 01. insert comanda (cod_furnizor, data_livrare) -> return nr_comanda (insertedId)
+        // 02. insert produsecomenzi (nr_comanda, cod_produs, cantitate)
+
+        // ordersList contine lista de produse -> PRODUS (cod_produs, cantitate, cod_furnizor...)
+        // deci lista trebuie separata in functie de cod_furnizor (cate o lista de produse pt fiecare furnizor)
+        // 1. cream lista de furnizori distincti
+        // 2. pt fiecare furnizor adaugam si lista de produse
+        // 3. efectuam pasul 01
+        // 4. iteram peste lista ce contine produsele grupate dupa cod_furnizor, si efectuam pasul 02 pt fiecare produs din lista
+
+        const suppliersList = []
+        const ordersBySupplier = []
+
+        for (let i = 0; i < ordersList.length; i++) {
+            let cod_furnizor = ordersList[i].cod_furnizor
+
+            if (i === 0) suppliersList.push(cod_furnizor)
+            else {
+                if (!suppliersList.includes(cod_furnizor))
+                    suppliersList.push(cod_furnizor)
+            }
+        }
+
+        for (let i = 0; i < suppliersList.length; i++) {
+            let list = []
+            for (let j = 0; j < ordersList.length; j++) {
+                if (ordersList[j].cod_furnizor === suppliersList[i])
+                    list.push(ordersList[j])
+            }
+
+            ordersBySupplier.push({
+                cod_furnizor: suppliersList[i],
+                productsList: list,
+            })
+        }
+
+        let now = Date.now()
+        let data_livrare = now + 86400000 * 3 // add three days (milliseconds) current date
+
+        Promise.all(
+            ordersBySupplier.map((order) =>
+                dispatch(
+                    addOrder(
+                        order.cod_furnizor,
+                        data_livrare,
+                        order.productsList
+                    )
+                ).then((data) => {
+                    setData(data)
+                    console.log(data)
+                })
+            )
+        )
+    }
+
     return (
         <div className="produse">
-            <Alert data={data} closeAlert={closeAlert} redirect={'no'} />
             <div className="nav">
                 <Box
                     component="form"
@@ -472,7 +531,8 @@ function ListaProduseInStoc() {
                                             viewBox="0 0 24 24"
                                             onClick={() =>
                                                 increaseQuantity(
-                                                    item.cod_produs
+                                                    item.cod_produs,
+                                                    item
                                                 )
                                             }
                                             className="addAndRemoveProduct"
@@ -496,7 +556,12 @@ function ListaProduseInStoc() {
                         >
                             Goliti
                         </div>
-                        <div className="buttonPlaceOrder">Comandati</div>
+                        <div
+                            className="buttonPlaceOrder"
+                            onClick={handlePlaceOrder}
+                        >
+                            Comandati
+                        </div>
                     </div>
                 </div>
                 {filteredProducts &&
@@ -550,9 +615,9 @@ function ListaProduseInStoc() {
                                     </div>
                                     <div>
                                         <p className="dataCreare">
-                                            {moment(product.data_creare)
-                                                .add(10, 'days')
-                                                .calendar()}
+                                            {moment(product.data_creare).format(
+                                                'l'
+                                            )}
                                         </p>
                                     </div>
                                 </div>
@@ -594,7 +659,8 @@ function ListaProduseInStoc() {
                                                 viewBox="0 0 24 24"
                                                 onClick={() =>
                                                     increaseQuantity(
-                                                        product.cod_produs
+                                                        product.cod_produs,
+                                                        product
                                                     )
                                                 }
                                             >
@@ -613,14 +679,6 @@ function ListaProduseInStoc() {
                                                 src="/images/shopping-cart.svg"
                                                 alt=""
                                             />
-                                            {/* <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="24"
-                                                height="24"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path d="M10.975 8l.025-.5c0-.517-.067-1.018-.181-1.5h5.993l-.564 2h-5.273zm-2.475 10c-.828 0-1.5.672-1.5 1.5 0 .829.672 1.5 1.5 1.5s1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm11.305-15l-3.432 12h-10.428l-.455-1.083c-.323.049-.653.083-.99.083-.407 0-.805-.042-1.191-.114l1.306 3.114h13.239l3.474-12h1.929l.743-2h-4.195zm-6.305 15c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm-4.5-10.5c0 2.485-2.018 4.5-4.5 4.5-2.484 0-4.5-2.015-4.5-4.5s2.016-4.5 4.5-4.5c2.482 0 4.5 2.015 4.5 4.5zm-2-.5h-2v-2h-1v2h-2v1h2v2h1v-2h2v-1z" />
-                                            </svg> */}
                                         </div>
                                         <div className="factura">
                                             <img
@@ -633,35 +691,6 @@ function ListaProduseInStoc() {
                             </div>
                         </div>
                     ))}
-                {/*  {filteredProducts.map((product) => (
-                    <div className="produs" key={product.cod_produs}>
-                        <div className="image">
-                            <img src={product.imagine_produs} alt="banane" />
-                        </div>
-                        <div className="text">
-                            <p className="pret">{product.pret} Lei</p>
-                            <p className="numeProdus">{product.nume_produs}</p>
-                            <div className="categStoc">
-                                <p className="stoc">In stoc</p>
-                                <p className="categorie">
-                                    {product.nume_categorie}
-                                </p>
-                            </div>
-                            <p className="descriere">
-                                {product.descriere_categorie}
-                            </p>
-                            <p>Data Creare: {product.data_creare}</p>
-                            <div className="productBtns">
-                                <div className="factura">
-                                    <img src="/images/factura.svg" alt="" />
-                                </div>
-                                <div className="comanda">
-                                    <img src="/images/comanda.svg" alt="" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))} */}
             </div>
         </div>
     )

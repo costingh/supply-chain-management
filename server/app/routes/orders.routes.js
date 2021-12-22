@@ -10,7 +10,7 @@ module.exports = function (app) {
     next();
   });
 
-  /* app.post("/api/comenzi/add", [authJwt.verifyToken], controller.addOrder); */
+  app.post("/api/comenzi/add", [authJwt.verifyToken], controller.addOrder);
   app.get("/api/comenzi/all", [authJwt.verifyToken], controller.getAllOrders);
 
   app.get(

@@ -120,7 +120,7 @@ function AdminDashobard() {
                                 <Angajati setData={setData} />
                             </Route>
                             <Route path="/admin/dashboard/produse">
-                                <Produse />
+                                <Produse setData={setData} />
                             </Route>
                             <Route path="/admin/dashboard/categorii">
                                 <Categorii />

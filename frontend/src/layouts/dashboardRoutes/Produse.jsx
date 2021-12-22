@@ -2,11 +2,10 @@ import React from 'react'
 import AdaugaProduse from '../../components/AdaugaProduse'
 import ListaProduseInStoc from '../../components/ListaProduseInStoc'
 
-function Produse() {
+function Produse({ setData }) {
     return (
         <div className="tableContainer" style={{ flex: '1' }}>
-            {/* <AdaugaProduse /> */}
-            <ListaProduseInStoc />
+            <ListaProduseInStoc setData={setData} />
         </div>
     )
 }
