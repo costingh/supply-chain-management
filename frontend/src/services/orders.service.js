@@ -30,8 +30,8 @@ const getOrderByNumber = (number) => {
         })
 }
 
-const deleteOrder = (comanda) => {
-    return axios.delete(API_URL + `delete/${comanda}`, {
+const deleteOrder = (nr_comanda) => {
+    return axios.delete(API_URL + `delete/${nr_comanda}`, {
         headers: authHeader(),
     })
 }

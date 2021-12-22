@@ -50,13 +50,13 @@ export const getAllOrders = () => (dispatch) => {
         }
     })
 }
-/* 
-export const deleteOrder = (orderName) => (dispatch) => {
-    return OrdersService.deleteOrder(orderName).then((response) => {
+
+export const deleteOrder = (nr_comanda) => (dispatch) => {
+    return OrdersService.deleteOrder(nr_comanda).then((response) => {
         if (response.data.status === 200) {
             dispatch({
                 type: DELETE_ORDERS_SUCCESS,
-                payload: { orderName: orderName },
+                payload: { nr_comanda: nr_comanda },
             })
 
             return response.data
@@ -68,4 +68,4 @@ export const deleteOrder = (orderName) => (dispatch) => {
             return response.data
         }
     })
-} */
+}

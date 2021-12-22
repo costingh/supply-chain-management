@@ -137,3 +137,26 @@ exports.getOrderByNumber = (req, res) => {
     }
   });
 };
+
+exports.deleteOrder = (req, res) => {
+  const nr_comanda = req.params.nr;
+
+  db.query(
+    "DELETE FROM comenzi WHERE nr_comanda = ?",
+    [nr_comanda],
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+        return res.json({
+          message: "Comanda nu a putut fi anulata!",
+          status: 500,
+        });
+      }
+
+      return res.json({
+        message: "Comanda a fost anulata!",
+        status: 200,
+      });
+    }
+  );
+};

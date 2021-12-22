@@ -38,6 +38,9 @@ export default function (state = initialState, action) {
         case DELETE_ORDERS_SUCCESS:
             return {
                 ...state,
+                orders: state.orders.filter(
+                    (order) => order.nr_comanda !== payload.nr_comanda
+                ),
             }
         case DELETE_ORDERS_FAIL:
             return {

@@ -7,17 +7,20 @@ import { Link } from 'react-router-dom'
 // components
 import GenerareFactura from '../../components/GenerareFactura'
 // actions
-import { getAllOrders } from '../../actions/orders'
+import { getAllOrders, deleteOrder } from '../../actions/orders'
 // services
 import OrdersService from '../../services/orders.service'
 // date formatter
 import moment from 'moment'
 
-function Comenzi() {
+function Comenzi({ setData }) {
     const { user: currentUser } = useSelector((state) => state.auth)
     const { orders } = useSelector((state) => state.orders)
     const [loading, setLoading] = useState(false)
     const [generateInvoiceOpened, setGenerateInvoiceOpened] = useState(false)
+    const [confirm, setConfirm] = useState(false)
+    const [messageConfirm, setMessageConfirm] = useState('')
+    const [nrComanda, setNrComanda] = useState(null)
 
     // generare factura
     const [detaliiComanda, setDetaliiComanda] = useState(null)
@@ -43,8 +46,46 @@ function Comenzi() {
                 .catch((err) => console.log(err))
     }
 
+    const handleOrderDelete = (nr) => {
+        setMessageConfirm('Sunteti sigur ca doriti sa anulati comanda?')
+        setConfirm(true)
+        setNrComanda(nr)
+    }
+
+    const confirmed = () => {
+        if (messageConfirm === 'Sunteti sigur ca doriti sa anulati comanda?') {
+            // delete
+            if (nrComanda)
+                dispatch(deleteOrder(nrComanda)).then((data) => {
+                    setData(data)
+                })
+        } else if (
+            messageConfirm === 'Sunteti sigur ca doriti sa modificati comanda?'
+        ) {
+            // update
+        }
+
+        setConfirm(false)
+    }
+
+    const handleOrderUpdate = () => {
+        setMessageConfirm('Sunteti sigur ca doriti sa modificati comanda?')
+        setConfirm(true)
+    }
+
     return (
         <div className="ordersContainer">
+            {confirm && (
+                <div className="confirmPanel">
+                    <div>
+                        <p>{messageConfirm}</p>
+                        <div>
+                            <div onClick={() => setConfirm(false)}>Nu</div>
+                            <div onClick={confirmed}>Da</div>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="nav">
                 <h1>
                     {orders && orders.length === 1
@@ -210,6 +251,38 @@ function Comenzi() {
                                             : '-'}
                                     </span>
                                 </p>
+
+                                {!o.nr_factura ? (
+                                    <div style={{ display: 'flex' }}>
+                                        <div
+                                            className="btn-primary upd"
+                                            style={{ marginRight: '15px' }}
+                                            onClick={handleOrderUpdate}
+                                        >
+                                            Modificati
+                                        </div>
+                                        <div
+                                            className="btn-primary del"
+                                            onClick={() =>
+                                                handleOrderDelete(o.nr_comanda)
+                                            }
+                                        >
+                                            Stergeti
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div style={{ display: 'flex' }}>
+                                        <div
+                                            className="btn-primary upd disabled"
+                                            style={{ marginRight: '15px' }}
+                                        >
+                                            Modificati
+                                        </div>
+                                        <div className="btn-primary del disabled">
+                                            Stergeti
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             {generateInvoiceOpened && (
                                 <GenerareFactura

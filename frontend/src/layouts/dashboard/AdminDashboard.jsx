@@ -114,7 +114,7 @@ function AdminDashobard() {
                                 <Comanda />
                             </Route>
                             <Route path="/admin/dashboard/comenzi">
-                                <Comenzi />
+                                <Comenzi setData={setData} />
                             </Route>
                             <Route path="/admin/dashboard/angajati">
                                 <Angajati setData={setData} />

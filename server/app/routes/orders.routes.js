@@ -19,12 +19,13 @@ module.exports = function (app) {
     controller.getOrderByNumber
   );
 
-  /* app.delete(
-    "/api/comenzi/delete/:name",
+  app.delete(
+    "/api/comenzi/delete/:nr",
     [authJwt.verifyToken],
     controller.deleteOrder
   );
 
+  /* 
   app.post(
     "/api/comenzi/update/:identifier",
     [authJwt.verifyToken],

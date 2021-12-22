@@ -57,7 +57,6 @@ export default function Comanda() {
     }, [produseComanda])
 
     const handleGenerateInvoice = (nr_comanda) => {
-        console.log(nr_comanda)
         setGenerateInvoiceOpened(true)
         if (nr_comanda > 0)
             OrdersService.getOrderByNumber(nr_comanda)
