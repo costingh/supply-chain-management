@@ -11,10 +11,17 @@ module.exports = function (app) {
   });
 
   app.post("/api/furnizori/add", [authJwt.verifyToken], controller.addSupplier);
+
   app.get(
     "/api/furnizori/all",
     [authJwt.verifyToken],
     controller.getAllSuppliers
+  );
+
+  app.get(
+    "/api/furnizori/all-names",
+    [authJwt.verifyToken],
+    controller.getAllSupplierNames
   );
 
   app.delete(

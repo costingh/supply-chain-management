@@ -29,6 +29,23 @@ const getAllProducts = () => {
     return axios.get(API_URL + 'all', { headers: authHeader() })
 }
 
+const searchForProduct = (
+    category,
+    name,
+    supplier,
+    minPrice,
+    maxPrice,
+    order
+) => {
+    return axios.get(
+        API_URL +
+            `search?category=${category}&name=${name}&supplier=${supplier}&minPrice=${minPrice}&maxPrice=${maxPrice}&order=${order}`,
+        {
+            headers: authHeader(),
+        }
+    )
+}
+
 const deleteProduct = (productName) => {
     return axios.delete(API_URL + `delete/${productName}`, {
         headers: authHeader(),
@@ -64,4 +81,5 @@ export default {
     getAllProducts,
     deleteProduct,
     updateProduct,
+    searchForProduct,
 }

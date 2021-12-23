@@ -119,7 +119,6 @@ exports.getOrderByNumber = (req, res) => {
         if (error) console.log(error);
         if (results.length > 0) {
           response.push(results);
-          console.log(response);
 
           if (response.length > 0) {
             return res.json({
@@ -141,7 +140,7 @@ exports.getOrderByNumber = (req, res) => {
 
 exports.deleteOrder = (req, res) => {
   const nr_comanda = req.params.nr;
-  // daca anulam o comanda, sa updatam stoc_initial din recordurile - produsecomenzi
+  // daca anulam o comanda, trebuie sa updatam stoc_initial din produse folosind cantitatea comandata din produsecomenzi
   // select * from produsecomenzi where nr_comanda = nr_comanda
   // Promise.all(results.map(res => update produse set stoc_initial = stoc_initial + ap.cantitate where cod_produs = pc.cod_produs ))
   db.query(

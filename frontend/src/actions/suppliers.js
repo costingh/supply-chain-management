@@ -54,6 +54,16 @@ export const getAllSuppliers = () => (dispatch) => {
     })
 }
 
+export const getAllSupplierNames = () => {
+    return SuppliersService.getAllSupplierNames()
+        .then((response) => {
+            return response.data
+        })
+        .catch((error) => {
+            return error
+        })
+}
+
 export const deleteSupplier = (supplierName) => (dispatch) => {
     return SuppliersService.deleteSupplier(supplierName).then((response) => {
         if (response.data.status === 200) {

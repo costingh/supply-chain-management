@@ -21,6 +21,9 @@ const addSupplier = (nume_furnizor, strada, numar, oras, judet, nr_telefon) => {
 const getAllSuppliers = () => {
     return axios.get(API_URL + 'all', { headers: authHeader() })
 }
+const getAllSupplierNames = () => {
+    return axios.get(API_URL + 'all-names', { headers: authHeader() })
+}
 
 const deleteSupplier = (supplierName) => {
     return axios.delete(API_URL + `delete/${supplierName}`, {
@@ -32,4 +35,5 @@ export default {
     addSupplier,
     getAllSuppliers,
     deleteSupplier,
+    getAllSupplierNames,
 }

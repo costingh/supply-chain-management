@@ -1,23 +1,23 @@
 // React
-import { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 // Material UI
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
 
 // actions
 import { getAllCategories } from '../actions/categories'
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
-import {
-    addProduct,
-    getAllProducts,
-    updateProduct,
-    deleteProduct,
-} from '../actions/products'
+import { getAllProducts, searchForProduct } from '../actions/products'
 import { addOrder } from '../actions/orders'
+import { getAllSupplierNames } from '../actions/suppliers'
 
 // moment.js for date formatting
 import moment from 'moment'
@@ -25,22 +25,44 @@ import moment from 'moment'
 function ListaProduseInStoc({ setData }) {
     const { categories } = useSelector((state) => state.categories)
     const { products } = useSelector((state) => state.products)
-    const dispatch = useDispatch()
-    const [categoriesListSelect, setCategoriesListSelect] = useState([])
-    const [productsListSelect, setProductsListSelect] = useState([])
-    const [filteredProducts, setFilteredProducts] = useState([])
-    const [searchCategory, setSearchCategory] = useState('')
-    const [searchProduct, setSearchProduct] = useState('')
-    const [height, setHeight] = useState('30px')
-    const [opened, setOpened] = useState(false)
-    const [ordersList, setOrdersList] = useState([])
-    const [orderPrice, setOrderPrice] = useState(0)
 
     const productNameSearchRef = useRef()
     const categoryNameSearchRef = useRef()
+    const suppNameRef = useRef()
+    const dispatch = useDispatch()
+
+    const [categoriesListSelect, setCategoriesListSelect] = useState([])
+    const [suppliersListSelect, setSuppliersListSelect] = useState([])
+    const [productsListSelect, setProductsListSelect] = useState([])
+    const [filteredProducts, setFilteredProducts] = useState([])
+    const [filters, setFilters] = useState(false)
+    const [searchCategory, setSearchCategory] = useState('')
+    const [searchProduct, setSearchProduct] = useState('')
+    const [ordersList, setOrdersList] = useState([])
+    const [orderPrice, setOrderPrice] = useState(0)
+    const [height, setHeight] = useState('30px')
+    const [opened, setOpened] = useState(false)
+    const [orderBy, setOrderBy] = useState('desc')
+    const [minPrice, setMinPrice] = React.useState(0)
+    const [maxPrice, setMaxPrice] = React.useState(5000)
+
     // set Redux state (state.products)
     useEffect(() => {
         dispatch(getAllProducts()).then((data) => {})
+
+        getAllSupplierNames()
+            .then((data) => {
+                let list = []
+
+                data.supplierNames.map((supp) => {
+                    list.push({
+                        label: supp.nume_furnizor,
+                        descriere: supp.nume_furnizor,
+                    })
+                })
+                setSuppliersListSelect(list)
+            })
+            .catch((err) => console.log(err))
     }, [])
 
     // every time the state.products changes, set current products list and the select options
@@ -73,14 +95,6 @@ function ListaProduseInStoc({ setData }) {
         }
     }, [categories])
 
-    /* const handleEditProduct = (product) => {}
-
-    const handleDeleteProduct = (product) => {
-        dispatch(deleteProduct(product.nume_produs)).then((data) => {
-            setData(data)
-        })
-    } */
-
     const handleCategoryNameSearch = (e) => setSearchCategory(e.target.value)
     const handleProductNameSearch = (e) => setSearchProduct(e.target.value)
 
@@ -93,10 +107,33 @@ function ListaProduseInStoc({ setData }) {
     }, [ordersList])
 
     const handleSearch = () => {
-        search(
-            productNameSearchRef.current.value,
-            categoryNameSearchRef.current.value
-        )
+        if (filters) {
+            let prodName = productNameSearchRef.current.value
+                ? productNameSearchRef.current.value + '%'
+                : '%'
+            let catName = categoryNameSearchRef.current.value
+                ? categoryNameSearchRef.current.value + '%'
+                : '%'
+            let suppName = suppNameRef.current.value
+                ? suppNameRef.current.value + '%'
+                : '%'
+
+            searchForProduct(
+                catName,
+                prodName,
+                suppName,
+                minPrice,
+                maxPrice,
+                orderBy
+            )
+                .then((resp) => setFilteredProducts(resp.products))
+                .catch((err) => console.log(err))
+        } else {
+            search(
+                productNameSearchRef.current.value,
+                categoryNameSearchRef.current.value
+            )
+        }
     }
 
     const search = (productName, categoryName) => {
@@ -387,11 +424,18 @@ function ListaProduseInStoc({ setData }) {
                     )
                 ).then((data) => {
                     setData(data)
-                    console.log(data)
                 })
             )
         )
     }
+
+    const handleFilters = () => {
+        if (filters) setFilters(false)
+        else setFilters(true)
+    }
+
+    const handleMinPriceChange = (e) => setMinPrice(e.target.value)
+    const handleMaxPriceChange = (e) => setMaxPrice(e.target.value)
 
     return (
         <div className="produse">
@@ -427,27 +471,168 @@ function ListaProduseInStoc({ setData }) {
                             background: '#455261',
                         }}
                     ></div>
-                    <Autocomplete
-                        freeSolo
-                        disableClearable
-                        id="denumire-produse"
-                        options={productsListSelect}
-                        style={{ width: '60%' }}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Produse"
-                                onChange={handleProductNameSearch}
-                                inputRef={productNameSearchRef}
-                            />
-                        )}
-                    />
+                    <div
+                        style={{
+                            width: '60%',
+                            display: 'flex',
+                            position: 'relative',
+                        }}
+                    >
+                        <Autocomplete
+                            freeSolo
+                            disableClearable
+                            id="denumire-produse"
+                            options={productsListSelect}
+                            style={{ width: '90%', position: 'relative' }}
+                            renderInput={(params) => (
+                                <div>
+                                    <TextField
+                                        {...params}
+                                        label="Produse"
+                                        onChange={handleProductNameSearch}
+                                        inputRef={productNameSearchRef}
+                                    />
+                                </div>
+                            )}
+                        />
+                        <div className="filter" onClick={handleFilters}>
+                            <div className="filterInner">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path d="M17 8c.552 0 1 .449 1 1s-.448 1-1 1-1-.449-1-1 .448-1 1-1zm0-2c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm-10 6c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm10-8c.343 0 .677.035 1 .101v-2.101c0-.552-.447-1-1-1s-1 .448-1 1v2.101c.323-.066.657-.101 1-.101zm-10 6c.343 0 .677.035 1 .101v-8.101c0-.552-.447-1-1-1s-1 .448-1 1v8.101c.323-.066.657-.101 1-.101zm10 4c-.343 0-.677-.035-1-.101v8.101c0 .552.447 1 1 1s1-.448 1-1v-8.101c-.323.066-.657.101-1 .101zm-10 6c-.343 0-.677-.035-1-.101v2.101c0 .552.447 1 1 1s1-.448 1-1v-2.101c-.323.066-.657.101-1 .101z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
                     <div className="submit" onClick={handleSearch}>
                         <p>Cautati</p>
                     </div>
                 </Box>
             </div>
-            <div className="inner">
+            <div
+                className="filterNav"
+                style={{ height: `${filters ? '80px' : '0px'}` }}
+            >
+                <Autocomplete
+                    freeSolo
+                    disableClearable
+                    id="furnizori-produse"
+                    options={suppliersListSelect}
+                    style={{ width: '25%' }}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Furnizor"
+                            inputRef={suppNameRef}
+                        />
+                    )}
+                />
+                <FormControl style={{ width: '200px' }}>
+                    <InputLabel id="min-price">Pret de la:</InputLabel>
+                    <Select
+                        labelId="min-price"
+                        value={minPrice}
+                        label="0"
+                        onChange={handleMinPriceChange}
+                    >
+                        <MenuItem value={0}>0 LEI</MenuItem>
+                        <MenuItem value={10}>10 LEI</MenuItem>
+                        <MenuItem value={100}>100 LEI</MenuItem>
+                        <MenuItem value={200}>200 LEI</MenuItem>
+                        <MenuItem value={300}>300 LEI</MenuItem>
+                        <MenuItem value={400}>400 LEI</MenuItem>
+                        <MenuItem value={500}>500 LEI</MenuItem>
+                        <MenuItem value={1000}>1000 LEI</MenuItem>
+                        <MenuItem value={5000}>5000 LEI</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl style={{ width: '200px' }}>
+                    <InputLabel id="max-price">Pana la:</InputLabel>
+                    <Select
+                        labelId="max-price"
+                        value={maxPrice}
+                        label="Age"
+                        onChange={handleMaxPriceChange}
+                    >
+                        <MenuItem value={0}>0 LEI</MenuItem>
+                        <MenuItem value={10}>10 LEI</MenuItem>
+                        <MenuItem value={100}>100 LEI</MenuItem>
+                        <MenuItem value={200}>200 LEI</MenuItem>
+                        <MenuItem value={300}>300 LEI</MenuItem>
+                        <MenuItem value={400}>400 LEI</MenuItem>
+                        <MenuItem value={500}>500 LEI</MenuItem>
+                        <MenuItem value={1000}>1000 LEI</MenuItem>
+                        <MenuItem value={5000}>5000 LEI</MenuItem>
+                    </Select>
+                </FormControl>
+                {/* <label htmlFor="pret-minim">Pret de la:</label>
+                <select name="pret-minim" id="pret-minim" className="minPrice">
+                    <option value="0">0 Lei</option>
+                    <option value="10">10 Lei</option>
+                    <option value="50">50 Lei</option>
+                    <option value="100">100 Lei</option>
+                </select> 
+                <label htmlFor="pret-maxim">Pana la:</label>
+                <select name="pret-maxim" id="pret-maxim" className="maxPrice">
+                    <option value="100000">100000 Lei</option>
+                    <option value="10000">10000 Lei</option>
+                    <option value="1000">1000 Lei</option>
+                    <option value="500">500 Lei</option>
+                </select>
+                */}
+                <div
+                    style={{
+                        display: 'flex',
+                        columnGap: '10px',
+                        marginLeft: 'auto',
+                    }}
+                >
+                    <div
+                        className={`${
+                            orderBy === 'desc' ? 'desc active' : 'desc'
+                        }`}
+                        onClick={() => setOrderBy('desc')}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                        >
+                            <path d="M6 21l6-8h-4v-10h-4v10h-4l6 8zm16-12h-8v-2h8v2zm2-6h-10v2h10v-2zm-4 8h-6v2h6v-2zm-2 4h-4v2h4v-2zm-2 4h-2v2h2v-2z" />
+                        </svg>
+                    </div>
+                    <div
+                        className={`${
+                            orderBy === 'asc' ? 'asc active' : 'asc'
+                        }`}
+                        onClick={() => setOrderBy('asc')}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                        >
+                            <path d="M6 3l-6 8h4v10h4v-10h4l-6-8zm16 14h-8v-2h8v2zm2 2h-10v2h10v-2zm-4-8h-6v2h6v-2zm-2-4h-4v2h4v-2zm-2-4h-2v2h2v-2z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div
+                className="inner"
+                style={{
+                    height: `${
+                        filters
+                            ? 'calc(100vh - 90px - 80px)'
+                            : 'calc(100vh - 90px)'
+                    }`,
+                }}
+            >
                 <div className="comandaSlide" style={{ height: `${height}` }}>
                     <div className="flexCont">
                         <h3>

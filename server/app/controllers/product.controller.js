@@ -98,6 +98,57 @@ exports.getAllProducts = (req, res) => {
   });
 };
 
+exports.searchForProduct = (req, res) => {
+  const { category, name, supplier, minPrice, maxPrice, order } = req.query;
+
+  const queryString =
+    "SELECT p.*, c.*, f.nume_furnizor FROM categorii c inner join produse p on c.id_categorie = p.categorie " +
+    "inner join furnizori f on f.cod_furnizor = p.cod_furnizor " +
+    "WHERE p.nume_produs LIKE ? AND c.nume_categorie LIKE ? AND f.nume_furnizor LIKE ? AND p.pret >= ? AND p.pret <= ? " +
+    `ORDER BY p.pret ${order}`;
+
+  db.query(
+    queryString,
+    [category, name, supplier, minPrice, maxPrice, order],
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+      }
+      if (results.length > 0) {
+        let productsList = [];
+        results.map((prod) => {
+          productsList.push({
+            cod_produs: prod.cod_produs,
+            nume_produs: prod.nume_produs,
+            descriere_produs: prod.descriere_produs,
+            unitate_masura: prod.unitate_masura,
+            stoc_initial: prod.stoc_initial,
+            pret: prod.pret,
+            categorie: prod.nume_categorie,
+            data_creare: prod.data_creare,
+            imagine_produs: prod.imagine_produs,
+            cod_furnizor: prod.cod_furnizor,
+            id_categorie: prod.id_categorie,
+            descriere_categorie: prod.descriere_categorie,
+            cantitate: 0,
+            nume_furnizor: prod.nume_furnizor,
+          });
+        });
+        return res.json({
+          message: "Products fetched successfully!",
+          status: 200,
+          products: productsList,
+        });
+      } else {
+        return res.send({
+          message: "No products in database!",
+          status: 409,
+        });
+      }
+    }
+  );
+};
+
 exports.deleteProduct = (req, res) => {
   const productToDelete = req.params.name;
 

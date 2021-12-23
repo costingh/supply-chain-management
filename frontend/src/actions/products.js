@@ -64,6 +64,30 @@ export const getAllProducts = () => (dispatch) => {
     })
 }
 
+export const searchForProduct = (
+    category,
+    name,
+    supplier,
+    minPrice,
+    maxPrice,
+    order
+) => {
+    return ProductsService.searchForProduct(
+        category,
+        name,
+        supplier,
+        minPrice,
+        maxPrice,
+        order
+    )
+        .then((response) => {
+            return response.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+
 export const deleteProduct = (productName) => (dispatch) => {
     return ProductsService.deleteProduct(productName).then((response) => {
         if (response.data.status === 200) {

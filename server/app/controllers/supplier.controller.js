@@ -89,3 +89,24 @@ exports.deleteSupplier = (req, res) => {
     }
   );
 };
+
+exports.getAllSupplierNames = (req, res) => {
+  db.query("SELECT nume_furnizor FROM furnizori", async (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        message: "Suppliers fetched successfully!",
+        status: 200,
+        supplierNames: results,
+      });
+    } else {
+      return res.send({
+        message: "No suppliers in database!",
+        status: 409,
+      });
+    }
+  });
+};

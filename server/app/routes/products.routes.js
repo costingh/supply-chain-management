@@ -13,6 +13,12 @@ module.exports = function (app) {
   app.post("/api/produse/add", [authJwt.verifyToken], controller.addProduct);
   app.get("/api/produse/all", [authJwt.verifyToken], controller.getAllProducts);
 
+  app.get(
+    "/api/produse/search",
+    [authJwt.verifyToken],
+    controller.searchForProduct
+  );
+
   app.delete(
     "/api/produse/delete/:name",
     [authJwt.verifyToken],
