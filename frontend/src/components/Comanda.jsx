@@ -89,7 +89,17 @@ export default function Comanda() {
                     >
                         <div className="addNewOrder">Inapoi</div>
                     </Link>
-                    <div className="addNewOrder">Editati</div>
+                    {detaliiComanda && !detaliiComanda.nr_factura && (
+                        <Link
+                            to={`/${
+                                currentUser && currentUser.administrator === 'N'
+                                    ? 'angajat'
+                                    : 'admin'
+                            }/dashboard/comenzi/comanda/editati/${orderNumber}`}
+                        >
+                            <div className="addNewOrder">Editati</div>
+                        </Link>
+                    )}
                 </div>
             </div>
             <div className="ordersInner">
@@ -117,12 +127,13 @@ export default function Comanda() {
                             </div>
                             <div className="historyTableRow">
                                 <p className="date">
-                                    {detaliiComanda &&
+                                    -
+                                    {/* {detaliiComanda &&
                                     detaliiComanda.data_comanda
                                         ? moment(
                                               detaliiComanda.data_comanda
                                           ).format('llll')
-                                        : '-'}
+                                        : '-'} */}
                                 </p>
                                 <p className="desc">Preluata de curier</p>
                                 <p className="suppName">

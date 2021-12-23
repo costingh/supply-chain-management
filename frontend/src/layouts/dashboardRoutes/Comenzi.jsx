@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 // redux
 import { useDispatch, useSelector } from 'react-redux'
 // router
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 // components
 import GenerareFactura from '../../components/GenerareFactura'
 // actions
@@ -15,6 +15,9 @@ import moment from 'moment'
 
 function Comenzi({ setData }) {
     const { user: currentUser } = useSelector((state) => state.auth)
+
+    const history = useHistory()
+
     const { orders } = useSelector((state) => state.orders)
     const [loading, setLoading] = useState(false)
     const [generateInvoiceOpened, setGenerateInvoiceOpened] = useState(false)
@@ -63,14 +66,22 @@ function Comenzi({ setData }) {
             messageConfirm === 'Sunteti sigur ca doriti sa modificati comanda?'
         ) {
             // update
+            history.push(
+                `/${
+                    currentUser && currentUser.administrator === 'N'
+                        ? 'angajat'
+                        : 'admin'
+                }/dashboard/comenzi/comanda/editati/${nrComanda}`
+            )
         }
 
         setConfirm(false)
     }
 
-    const handleOrderUpdate = () => {
+    const handleOrderUpdate = (nr) => {
         setMessageConfirm('Sunteti sigur ca doriti sa modificati comanda?')
         setConfirm(true)
+        setNrComanda(nr)
     }
 
     return (
@@ -257,7 +268,9 @@ function Comenzi({ setData }) {
                                         <div
                                             className="btn-primary upd"
                                             style={{ marginRight: '15px' }}
-                                            onClick={handleOrderUpdate}
+                                            onClick={() =>
+                                                handleOrderUpdate(o.nr_comanda)
+                                            }
                                         >
                                             Modificati
                                         </div>

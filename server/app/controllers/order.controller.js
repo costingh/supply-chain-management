@@ -72,7 +72,8 @@ exports.getAllOrders = (req, res) => {
     "select distinct c.nr_comanda, c.data_comanda, c.data_livrare, c.nr_factura, f.*, " +
     "(select sum(p.pret * pc.cantitate) from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs where nr_comanda = c.nr_comanda) as total " +
     "from comenzi c inner join produsecomenzi pc on c.nr_comanda = pc.nr_comanda " +
-    "inner join furnizori f on f.cod_furnizor = c.cod_furnizor";
+    "inner join furnizori f on f.cod_furnizor = c.cod_furnizor " +
+    "order by c.data_comanda desc";
 
   db.query(query, async (error, results) => {
     if (error) {
@@ -140,23 +141,49 @@ exports.getOrderByNumber = (req, res) => {
 
 exports.deleteOrder = (req, res) => {
   const nr_comanda = req.params.nr;
-
+  // daca anulam o comanda, sa updatam stoc_initial din recordurile - produsecomenzi
+  // select * from produsecomenzi where nr_comanda = nr_comanda
+  // Promise.all(results.map(res => update produse set stoc_initial = stoc_initial + ap.cantitate where cod_produs = pc.cod_produs ))
   db.query(
-    "DELETE FROM comenzi WHERE nr_comanda = ?",
+    "SELECT * FROM produsecomenzi WHERE nr_comanda = ?",
     [nr_comanda],
     async (error, results) => {
       if (error) {
-        console.log(error);
         return res.json({
           message: "Comanda nu a putut fi anulata!",
           status: 500,
         });
-      }
+      } else {
+        Promise.all(
+          results.map((res) => {
+            db.query(
+              "UPDATE produse SET stoc_initial = stoc_initial + ? WHERE cod_produs = ?",
+              [res.cantitate, res.cod_produs],
+              async (error, results) => {
+                if (error) console.log(error);
+              }
+            );
+          })
+        );
+        db.query(
+          "DELETE FROM comenzi WHERE nr_comanda = ?",
+          [nr_comanda],
+          async (error, results) => {
+            if (error) {
+              console.log(error);
+              return res.json({
+                message: "Comanda nu a putut fi anulata!",
+                status: 500,
+              });
+            }
 
-      return res.json({
-        message: "Comanda a fost anulata!",
-        status: 200,
-      });
+            return res.json({
+              message: "Comanda a fost anulata!",
+              status: 200,
+            });
+          }
+        );
+      }
     }
   );
 };
