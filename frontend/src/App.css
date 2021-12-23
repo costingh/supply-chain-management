@@ -2336,7 +2336,168 @@ input::placeholder {
 .confirmPanel > div > div div:last-child:hover {
     background: transparent;
 }
+/* ##############################################
+################ EDITARE COMANDA ################
+################################################# */
+.editareComanda {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
 
+.editareComanda .editareComandaFlexInner {
+    width: 80%;
+    height: 70vh;
+    overflow-x: auto;
+}
+
+.navEditareComanda h1 {
+    color: #e1e1e1;
+}
+
+.navEditareComanda {
+    color: #8491a2;
+}
+
+.editareComanda .editareComandaFlexInner .navEditareComanda,
+.editareComanda .editareComandaFlexInner .bottomEditareComanda {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 0px;
+}
+
+.innerEditareComanda {
+    height: 66%;
+    overflow-y: auto;
+}
+
+.innerEditareComanda {
+    color: #273444;
+    scrollbar-color: #172439 #273444;
+    scrollbar-width: thin;
+}
+
+.innerEditareComanda .heading,
+.innerEditareComanda .row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #455261;
+    padding: 20px;
+}
+
+.innerEditareComanda .heading {
+    color: #8491a2;
+    /* text-transform: uppercase; */
+}
+
+.innerEditareComanda .heading .col:first-child {
+    display: block;
+}
+
+.innerEditareComanda .col {
+    width: 23%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 50px;
+}
+
+.innerEditareComanda .col:first-child {
+    width: 39%;
+}
+
+.innerEditareComanda .col:last-child {
+    width: 10%;
+}
+
+.innerEditareComanda .col img {
+    /* width: 80px; */
+    height: 80px;
+}
+
+.innerEditareComanda .col .quantityContainer {
+    display: flex;
+    align-items: center;
+    padding: 0px 15px;
+    column-gap: 15px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #455261;
+}
+
+.innerEditareComanda .col .quantityContainer input {
+    width: 40px;
+    appearance: none;
+    border: none;
+    height: 100%;
+    background-color: transparent;
+    text-align: center;
+    border-left: 1px solid #455261;
+    border-right: 1px solid #455261;
+    outline: none;
+    color: #e1e1e1;
+}
+
+.innerEditareComanda .col .quantityContainer div {
+    color: #8491a2;
+    font-size: 21px;
+}
+
+.innerEditareComanda .col p:first-child {
+    color: #ccc;
+    font-size: 18px;
+}
+
+.innerEditareComanda .col p:last-child {
+    color: #8491a2;
+    font-size: 15px;
+}
+
+.innerEditareComanda .col .pret {
+    color: #111 !important;
+    font-size: 16px !important;
+    font-weight: 700;
+}
+
+.innerEditareComanda .col .remove {
+    color: #8491a2;
+    font-size: 20px !important;
+    font-weight: 200;
+    cursor: pointer;
+}
+
+.editareComandaBtn {
+    padding: 10px 20px;
+    color: #1e2835;
+    background-color: rgb(85, 161, 65);
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.anulareEditareComandaBtn {
+    padding: 10px 20px;
+    color: #ccc;
+    background-color: #111;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.bottomEditareComanda p {
+    color: #111;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.bottomEditareComanda p span {
+    font-size: 14px;
+    color: #8491a2;
+}
 /* ##############################################
 ############### GENERARE FACTURA ################
 ################################################# */

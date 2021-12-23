@@ -17,6 +17,7 @@ import UserService from '../../services/user.service'
 import { listItems } from '../../utils/sidebarConfig'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import CreareComanda from '../../components/CreareComanda'
+import EditareComanda from '../../components/EditareComanda'
 function AdminDashobard() {
     const { user: currentUser } = useSelector((state) => state.auth)
     const [redirect, setRedirect] = useState(false)
@@ -109,6 +110,9 @@ function AdminDashobard() {
                             </Route>
                             <Route path="/admin/dashboard/comenzi/creare">
                                 <CreareComanda />
+                            </Route>
+                            <Route path="/admin/dashboard/comenzi/comanda/editati/">
+                                <EditareComanda />
                             </Route>
                             <Route path="/admin/dashboard/comenzi/comanda/">
                                 <Comanda />

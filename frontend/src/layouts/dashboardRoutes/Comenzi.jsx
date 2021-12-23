@@ -24,7 +24,7 @@ function Comenzi({ setData }) {
     const [confirm, setConfirm] = useState(false)
     const [messageConfirm, setMessageConfirm] = useState('')
     const [nrComanda, setNrComanda] = useState(null)
-
+    const [productsForEachOrder, setProductsForEachOrder] = useState([])
     // generare factura
     const [detaliiComanda, setDetaliiComanda] = useState(null)
     const [produseComanda, setProduseComanda] = useState([])
@@ -116,7 +116,7 @@ function Comenzi({ setData }) {
             <div className="ordersInner" style={{ display: 'block' }}>
                 {orders &&
                     orders.length &&
-                    orders.map((o) => (
+                    orders.map((o, index) => (
                         <div className="order" key={o.nr_comanda}>
                             <div className="topOrderContainer">
                                 <div className="topOrderLeft">
@@ -193,8 +193,10 @@ function Comenzi({ setData }) {
                                             {o.nume_furnizor}
                                         </p>
                                         <p>
-                                            - {o.oras}, {o.judet}, Strada{' '}
-                                            {o.strada}, nr.{o.numar}
+                                            - {o.oras}, {o.judet}
+                                        </p>
+                                        <p>
+                                            - Strada {o.strada}, nr.{o.numar}
                                         </p>
                                         <p>- Nr. Telefon: {o.nr_telefon}</p>
                                     </div>
