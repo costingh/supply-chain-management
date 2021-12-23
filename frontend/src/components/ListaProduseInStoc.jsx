@@ -206,6 +206,7 @@ function ListaProduseInStoc({ setData }) {
                             cantitate: o.cantitate + 1,
                             categorie: o.categorie,
                             cod_produs: o.cod_produs,
+                            cod_furnizor: o.cod_furnizor,
                             data_creare: o.data_creare,
                             descriere_categorie: o.descriere_categorie,
                             descriere_produs: o.descriere_produs,
@@ -239,6 +240,7 @@ function ListaProduseInStoc({ setData }) {
                             cantitate: o.cantitate - 1,
                             categorie: o.categorie,
                             cod_produs: o.cod_produs,
+                            cod_furnizor: o.cod_furnizor,
                             data_creare: o.data_creare,
                             descriere_categorie: o.descriere_categorie,
                             descriere_produs: o.descriere_produs,
@@ -375,7 +377,6 @@ function ListaProduseInStoc({ setData }) {
 
         let now = Date.now()
         let data_livrare = now + 86400000 * 3 // add three days (milliseconds) current date
-
         Promise.all(
             ordersBySupplier.map((order) =>
                 dispatch(
