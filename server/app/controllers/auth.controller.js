@@ -97,6 +97,7 @@ exports.signup = (req, res) => {
         email: email,
         parola: hashedPassword,
         administrator: administrator,
+        id_departament: "4",
       };
 
       if (phoneNumber) User.numar_telefon = phoneNumber;
