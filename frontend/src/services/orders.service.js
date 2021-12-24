@@ -36,9 +36,21 @@ const deleteOrder = (nr_comanda) => {
     })
 }
 
+const updateOrder = (produseLista, produseSterse, orderNumber) => {
+    return axios.post(
+        API_URL + `update/${orderNumber}`,
+        {
+            produseLista,
+            produseSterse,
+        },
+        { headers: authHeader() }
+    )
+}
+
 export default {
     addOrder,
     getAllOrders,
     deleteOrder,
     getOrderByNumber,
+    updateOrder,
 }

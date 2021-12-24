@@ -25,10 +25,9 @@ module.exports = function (app) {
     controller.deleteOrder
   );
 
-  /* 
   app.post(
-    "/api/comenzi/update/:identifier",
+    "/api/comenzi/update/:orderNumber",
     [authJwt.verifyToken],
     controller.updateOrder
-  ); */
+  );
 };

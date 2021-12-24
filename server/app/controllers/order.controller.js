@@ -104,7 +104,7 @@ exports.getOrderByNumber = (req, res) => {
     `where c.nr_comanda = ${orderNumber}`;
 
   let queryProduseComandate =
-    "select pc.cantitate, p.unitate_masura, p.nume_produs, p.descriere_produs, c.nume_categorie, p.imagine_produs, p.pret " +
+    "select pc.cantitate, p.unitate_masura, p.stoc_initial, p.nume_produs,p.cod_produs,  p.descriere_produs, c.nume_categorie, p.imagine_produs, p.pret " +
     "from produsecomenzi pc inner join produse p on pc.cod_produs = p.cod_produs " +
     "inner join categorii c on p.categorie = c.id_categorie " +
     `where pc.nr_comanda = ${orderNumber}`;
@@ -185,4 +185,59 @@ exports.deleteOrder = (req, res) => {
       }
     }
   );
+};
+
+exports.updateOrder = async (req, res) => {
+  const { produseLista, produseSterse } = req.body;
+  const { orderNumber } = req.params;
+
+  // iteram peste produseComanda si extragem cod_produs
+  // pentru fiecare cod_produs, efectuam:
+  // -> UPDATE produsecomenzi SET cantitate = ... WHERE cod_produs = ...
+  // -> UPDATE produse SET stoc_initial = ... WHERE cod_produs = ...
+  // iteram peste removedProducts
+  // -> UPDATE produse SET stoc_initial = ... WHERE cod_produs = ...
+  // -> DELETE FROM produsecomenzi WHERE cod_produs = ...
+
+  if (produseLista && produseLista.length > 0) {
+    await Promise.all(
+      produseLista.map((pc) => {
+        db.query(
+          "UPDATE produsecomenzi SET cantitate = ? WHERE cod_produs = ? AND nr_comanda = ?",
+          [pc.cantitate, pc.cod_produs, orderNumber],
+          async (error, results) => {
+            if (error) console.log(error);
+            else {
+              db.query(
+                "UPDATE produse SET stoc_initial = ? WHERE cod_produs = ?",
+                [pc.stoc_initial, pc.cod_produs],
+                async (error, results) => {
+                  if (error) console.log(error);
+                }
+              );
+            }
+          }
+        );
+      })
+    );
+  }
+
+  if (produseSterse && produseSterse.length > 0) {
+    await Promise.all(
+      produseSterse.map((cod) => {
+        db.query(
+          "DELETE FROM produsecomenzi WHERE cod_produs = ? AND nr_comanda = ?",
+          [cod, orderNumber],
+          async (error, results) => {
+            if (error) console.log(error);
+          }
+        );
+      })
+    );
+  }
+
+  return res.json({
+    message: "Comanda modificata cu succes!",
+    status: 200,
+  });
 };

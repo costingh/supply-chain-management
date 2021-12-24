@@ -2417,8 +2417,12 @@ input::placeholder {
 }
 
 .innerEditareComanda .col img {
-    /* width: 80px; */
-    height: 80px;
+    width: 80px;
+    /* height: 80px; */
+}
+
+.innerEditareComanda .col.image {
+    justify-content: flex-start;
 }
 
 .innerEditareComanda .col .quantityContainer {
@@ -2447,6 +2451,12 @@ input::placeholder {
 .innerEditareComanda .col .quantityContainer div {
     color: #8491a2;
     font-size: 21px;
+    cursor: pointer;
+    transition: all 0.2 ease;
+}
+
+.innerEditareComanda .col .quantityContainer div:hover {
+    color: #e1e1e1;
 }
 
 .innerEditareComanda .col p:first-child {
