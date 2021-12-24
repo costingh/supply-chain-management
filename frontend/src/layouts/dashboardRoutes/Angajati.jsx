@@ -141,6 +141,18 @@ function Angajati({ setData }) {
                                                 </svg>
                                             )}
                                         </div>
+                                        {emp.id_angajat === emp.id_manager && (
+                                            <div
+                                                className="angajatRol"
+                                                style={{
+                                                    background: '#004D25',
+                                                    color: '#48bf53',
+                                                    textAlign: 'center',
+                                                }}
+                                            >
+                                                MANAGER
+                                            </div>
+                                        )}
                                         <div>
                                             {emp.administrator === 'D' ? (
                                                 <div
@@ -179,6 +191,17 @@ function Angajati({ setData }) {
                                         </div>
                                     </div>
                                     <div className="text">
+                                        <p
+                                            style={{
+                                                marginTop: '-10px',
+                                                marginBottom: '-5px',
+                                                color: '#ccc',
+                                                fontSize: '14px',
+                                                fontWeight: '200',
+                                            }}
+                                        >
+                                            Departament: {emp.nume_departament}
+                                        </p>
                                         <h2>
                                             {emp.nume} {emp.prenume},{' '}
                                             <span>
