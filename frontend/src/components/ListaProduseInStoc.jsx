@@ -109,13 +109,13 @@ function ListaProduseInStoc({ setData }) {
     const handleSearch = () => {
         if (filters) {
             let prodName = productNameSearchRef.current.value
-                ? productNameSearchRef.current.value
+                ? productNameSearchRef.current.value + '%'
                 : '%'
             let catName = categoryNameSearchRef.current.value
-                ? categoryNameSearchRef.current.value
+                ? categoryNameSearchRef.current.value + '%'
                 : '%'
             let suppName = suppNameRef.current.value
-                ? suppNameRef.current.value
+                ? suppNameRef.current.value + '%'
                 : '%'
 
             searchForProduct(

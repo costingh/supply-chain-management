@@ -109,7 +109,7 @@ exports.searchForProduct = (req, res) => {
 
   db.query(
     queryString,
-    [category, name, supplier, minPrice, maxPrice, order],
+    [name, category, supplier.replace(/%20/g, " "), minPrice, maxPrice, order],
     async (error, results) => {
       if (error) {
         console.log(error);
