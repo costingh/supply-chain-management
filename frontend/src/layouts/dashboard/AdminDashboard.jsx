@@ -106,7 +106,7 @@ function AdminDashobard() {
                                 <Furnizori />
                             </Route>
                             <Route path="/admin/dashboard/facturi">
-                                <Facturi />
+                                <Facturi setData={setData} />
                             </Route>
                             <Route path="/admin/dashboard/comenzi/creare">
                                 <CreareComanda />

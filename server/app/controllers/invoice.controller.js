@@ -60,7 +60,13 @@ exports.addInvoice = (req, res) => {
 };
 
 exports.getAllInvoices = (req, res) => {
-  db.query("SELECT * FROM facturi", async (error, results) => {
+  let query =
+    "select fa.nr_factura, fa.data_factura, fa.total, fu.nume_furnizor, fu.strada, fu.numar, fu.oras, fu.judet, fu.nr_telefon, d.nume_departament " +
+    "from facturi fa inner join furnizori fu on fa.cod_furnizor = fu.cod_furnizor " +
+    "inner join departamente d on fu.id_departament = d.id_departament " +
+    "order by fa.data_factura desc";
+
+  db.query(query, async (error, results) => {
     if (error) {
       console.log(error);
     }
