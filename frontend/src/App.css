@@ -1143,6 +1143,13 @@ input::placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid rgb(204, 79, 58);
+}
+
+.produse .produs .text .textRight .factura:hover {
+    background-color: transparent;
 }
 
 .produse .produs .text .textRight .factura img {

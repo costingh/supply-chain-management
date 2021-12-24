@@ -437,6 +437,21 @@ function ListaProduseInStoc({ setData }) {
     const handleMinPriceChange = (e) => setMinPrice(e.target.value)
     const handleMaxPriceChange = (e) => setMaxPrice(e.target.value)
 
+    const handleRemoveFromOrderList = (e, product) => {
+        if (product.cantitate !== 0) {
+            if (ordersList) {
+                setOrdersList(
+                    ordersList.filter(
+                        (o) => o.cod_produs !== product.cod_produs
+                    )
+                )
+                document
+                    .querySelector(`.comanda-produs-${product.cod_produs}`)
+                    .classList.remove('disabled')
+            }
+        }
+    }
+
     return (
         <div className="produse">
             <div className="nav">
@@ -569,21 +584,6 @@ function ListaProduseInStoc({ setData }) {
                         <MenuItem value={5000}>5000 LEI</MenuItem>
                     </Select>
                 </FormControl>
-                {/* <label htmlFor="pret-minim">Pret de la:</label>
-                <select name="pret-minim" id="pret-minim" className="minPrice">
-                    <option value="0">0 Lei</option>
-                    <option value="10">10 Lei</option>
-                    <option value="50">50 Lei</option>
-                    <option value="100">100 Lei</option>
-                </select> 
-                <label htmlFor="pret-maxim">Pana la:</label>
-                <select name="pret-maxim" id="pret-maxim" className="maxPrice">
-                    <option value="100000">100000 Lei</option>
-                    <option value="10000">10000 Lei</option>
-                    <option value="1000">1000 Lei</option>
-                    <option value="500">500 Lei</option>
-                </select>
-                */}
                 <div
                     style={{
                         display: 'flex',
@@ -856,7 +856,7 @@ function ListaProduseInStoc({ setData }) {
                                     </div>
                                     <div className="buttonsContainer">
                                         <div
-                                            className="comanda"
+                                            className={`comanda comanda-produs-${product.cod_produs}`}
                                             onClick={(e) =>
                                                 handleAddOnOrderList(e, product)
                                             }
@@ -866,9 +866,17 @@ function ListaProduseInStoc({ setData }) {
                                                 alt=""
                                             />
                                         </div>
-                                        <div className="factura">
+                                        <div
+                                            className="factura"
+                                            onClick={(e) =>
+                                                handleRemoveFromOrderList(
+                                                    e,
+                                                    product
+                                                )
+                                            }
+                                        >
                                             <img
-                                                src="/images/comanda.svg"
+                                                src="/images/shopping-cart-remove.svg"
                                                 alt=""
                                             />
                                         </div>
