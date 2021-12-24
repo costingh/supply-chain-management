@@ -5,24 +5,27 @@ const dbConfig = require("../config/db.config");
 const db = mysql.createConnection(dbConfig);
 
 exports.getAllEmployees = (req, res) => {
-  db.query("SELECT * FROM angajati", async (error, results) => {
-    if (error) {
-      console.log(error);
-    }
+  db.query(
+    "SELECT *, d.nume_departament, d.id_manager FROM angajati a inner join departamente d on a.id_departament=d.id_departament ",
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+      }
 
-    if (results.length > 0) {
-      return res.json({
-        message: "Employees fetched successfully!",
-        status: 200,
-        employees: results,
-      });
-    } else {
-      return res.send({
-        message: "No employees in database!",
-        status: 409,
-      });
+      if (results.length > 0) {
+        return res.json({
+          message: "Employees fetched successfully!",
+          status: 200,
+          employees: results,
+        });
+      } else {
+        return res.send({
+          message: "No employees in database!",
+          status: 409,
+        });
+      }
     }
-  });
+  );
 };
 
 exports.getProfile = (req, res) => {
