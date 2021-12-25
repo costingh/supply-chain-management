@@ -333,7 +333,16 @@ function Furnizori() {
     return (
         <>
             <div className="innerContent">
-                <div className="tableContainer">
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
                     <TableBtnsContainer
                         setShowFilterPanelName={setShowFilterPanelName}
                         deleteRecords={deleteRecords}
@@ -345,7 +354,7 @@ function Furnizori() {
                         setSelectionModel={setSelectionModel}
                     />
                 </div>
-                <div className="filtersContainer">
+                {/* <div className="filtersContainer">
                     <div className="filtersInner">
                         <div className="headerInputs">
                             {showFilterPanelName === 'add' &&
@@ -389,7 +398,7 @@ function Furnizori() {
                             showFilterPanelName={showFilterPanelName}
                         />
                     </div>
-                </div>
+                </div> */}
             </div>
             <Alert data={data} closeAlert={closeAlert} redirect={'no'} />
         </>
