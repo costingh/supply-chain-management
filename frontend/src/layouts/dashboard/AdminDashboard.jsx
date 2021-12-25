@@ -18,6 +18,7 @@ import { listItems } from '../../utils/sidebarConfig'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import CreareComanda from '../../components/CreareComanda'
 import EditareComanda from '../../components/EditareComanda'
+import Home from '../dashboardRoutes/Home'
 function AdminDashobard() {
     const { user: currentUser } = useSelector((state) => state.auth)
     const [redirect, setRedirect] = useState(false)
@@ -126,14 +127,17 @@ function AdminDashobard() {
                             <Route path="/admin/dashboard/produse">
                                 <Produse setData={setData} />
                             </Route>
-                            <Route path="/admin/dashboard/categorii">
-                                <Categorii />
+                            <Route path="/admin/dashboard/home">
+                                <Home />
                             </Route>
+                            {/* <Route path="/admin/dashboard/categorii">
+                                <Categorii />
+                            </Route> */}
                             <Route path="/admin/dashboard/profil">
                                 <Profile />
                             </Route>
                             <Route path="/admin/dashboard">
-                                return <Redirect to="/admin/dashboard/profil" />
+                                return <Redirect to="/admin/dashboard/home" />
                             </Route>
                         </Switch>
                     </div>

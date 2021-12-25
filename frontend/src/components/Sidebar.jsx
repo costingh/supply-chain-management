@@ -40,6 +40,7 @@ function Sidebar({ activeTabName, setActiveTabName, admin }) {
             setActiveTabName('Categorii')
         else if (location.pathname.includes('profil'))
             setActiveTabName('Profil')
+        else setActiveTabName('Dashboard')
     }, [location.pathname])
 
     return (
@@ -65,9 +66,11 @@ function Sidebar({ activeTabName, setActiveTabName, admin }) {
                     style={{ textDecoration: 'none' }}
                     key={item.name}
                     onClick={() => setActiveTabName(item.name)}
-                    to={`${
-                        admin ? '/admin/' : '/employee/'
-                    }dashboard/${item.name.toLowerCase()}`}
+                    to={`${admin ? '/admin/' : '/employee/'}dashboard/${
+                        item.name !== 'Dashboard'
+                            ? item.name.toLowerCase()
+                            : 'home'
+                    }`}
                 >
                     <svg
                         width="24"

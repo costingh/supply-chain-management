@@ -106,7 +106,7 @@ function Login() {
     }, [data])
 
     if (isLoggedIn) {
-        return <Redirect to="/admin/dashboard/profil" />
+        return <Redirect to="/admin/dashboard/home" />
     }
 
     return (

@@ -2959,3 +2959,100 @@ input::placeholder {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 }
+
+/* ##############################################
+######################## HOME ###################
+################################################# */
+.homeContainer {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.homeContainer nav {
+    width: 100%;
+    padding: 0px 60px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.homeContainer .inner {
+    display: flex;
+    height: calc(100% - 80px);
+    width: 100%;
+}
+
+.homeContainer .innerL {
+    width: 65%;
+}
+
+.homeContainer .innerL .homeTop {
+    width: 90%;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 30px;
+    background-color: #273444;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.homeContainer .innerL .homeTop .box {
+    width: 25%;
+    display: flex;
+    align-items: center;
+}
+
+.homeContainer .innerL .homeTop .box .icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    background-color: #455261;
+    margin: 0;
+    margin-right: 20px;
+}
+
+.homeContainer .innerL .homeTop .box p {
+    font-size: 16px;
+    color: #455261;
+    font-weight: 300;
+}
+
+.homeContainer .innerL .homeTop .box h2 {
+    color: #e1e1e1;
+}
+
+.homeContainer .innerL .middle {
+    width: 90%;
+    margin: 30px auto;
+    height: 500px;
+    background-color: #273444;
+    border-radius: 20px;
+}
+
+.homeContainer .innerR {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    padding: 0px 30px 30px 30px;
+    width: 35%;
+    row-gap: 30px;
+}
+
+.homeContainer .innerR .innerRtop {
+    height: 70%;
+    width: 100%;
+    background-color: #273444;
+    border-radius: 20px;
+}
+
+.homeContainer .innerR .innerRbottom {
+    height: 30%;
+    width: 100%;
+    background-color: #273444;
+    border-radius: 20px;
+}
