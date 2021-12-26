@@ -17,6 +17,62 @@ const totalSpentByMonth = (numberOfMonths) => {
         })
 }
 
+const numberOfInvoices = () => {
+    return axios
+        .get(API_URL + 'numar-facturi', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+
+const numberOfOrders = () => {
+    return axios
+        .get(API_URL + 'numar-comenzi', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+
+const numberOfSuppliers = () => {
+    return axios
+        .get(API_URL + 'numar-furnizori', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+
+const numberOfEmployees = () => {
+    return axios
+        .get(API_URL + 'numar-angajati', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+
 export default {
     totalSpentByMonth,
+    numberOfOrders,
+    numberOfInvoices,
+    numberOfSuppliers,
+    numberOfEmployees,
 }

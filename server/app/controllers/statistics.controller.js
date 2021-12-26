@@ -69,3 +69,144 @@ exports.totalSpentByMonth = (req, res) => {
     }
   });
 };
+
+exports.numberOfInvoices = (req, res) => {
+  db.query("select count(*) from facturi", async (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        message: "Success!",
+        status: 200,
+        result: results,
+      });
+    } else {
+      return res.send({
+        message: "Error",
+        status: 409,
+      });
+    }
+  });
+};
+
+exports.numberOfInvoices = (req, res) => {
+  db.query(
+    "select count(*) as total_facturi from facturi",
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+      }
+
+      if (results.length > 0) {
+        return res.json({
+          message: "Success!",
+          status: 200,
+          result: results[0],
+        });
+      } else {
+        return res.send({
+          message: "Error",
+          status: 409,
+        });
+      }
+    }
+  );
+};
+
+exports.numberOfOrders = (req, res) => {
+  db.query(
+    "select count(*) as total_comenzi from comenzi",
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+      }
+
+      if (results.length > 0) {
+        return res.json({
+          message: "Success!",
+          status: 200,
+          result: results[0],
+        });
+      } else {
+        return res.send({
+          message: "Error",
+          status: 409,
+        });
+      }
+    }
+  );
+};
+
+exports.numberOfInvoices = (req, res) => {
+  db.query(
+    "select count(*) as total_facturi from facturi",
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+      }
+
+      if (results.length > 0) {
+        return res.json({
+          message: "Success!",
+          status: 200,
+          result: results[0],
+        });
+      } else {
+        return res.send({
+          message: "Error",
+          status: 409,
+        });
+      }
+    }
+  );
+};
+
+exports.numberOfSuppliers = (req, res) => {
+  db.query(
+    "select count(*) as total_furnizori from furnizori",
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+      }
+
+      if (results.length > 0) {
+        return res.json({
+          message: "Success!",
+          status: 200,
+          result: results[0],
+        });
+      } else {
+        return res.send({
+          message: "Error",
+          status: 409,
+        });
+      }
+    }
+  );
+};
+
+exports.numberOfEmployees = (req, res) => {
+  db.query(
+    "select count(*) as total_angajati from angajati where administrator = 'N'",
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+      }
+
+      if (results.length > 0) {
+        return res.json({
+          message: "Success!",
+          status: 200,
+          result: results[0],
+        });
+      } else {
+        return res.send({
+          message: "Error",
+          status: 409,
+        });
+      }
+    }
+  );
+};

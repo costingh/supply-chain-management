@@ -15,7 +15,6 @@ const BarChart = () => {
         setMonthsRange(num)
         StatisticsService.totalSpentByMonth(num)
             .then((data) => {
-                console.log(data.result)
                 if (data.result && data.result.length > 0) {
                     let arrayOfMonths = []
                     let arrayOfData = []

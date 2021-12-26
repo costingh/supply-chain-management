@@ -15,4 +15,28 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.totalSpentByMonth
   );
+
+  app.get(
+    "/api/statistici/numar-comenzi",
+    [authJwt.verifyToken],
+    controller.numberOfOrders
+  );
+
+  app.get(
+    "/api/statistici/numar-facturi",
+    [authJwt.verifyToken],
+    controller.numberOfInvoices
+  );
+
+  app.get(
+    "/api/statistici/numar-furnizori",
+    [authJwt.verifyToken],
+    controller.numberOfSuppliers
+  );
+
+  app.get(
+    "/api/statistici/numar-angajati",
+    [authJwt.verifyToken],
+    controller.numberOfEmployees
+  );
 };
