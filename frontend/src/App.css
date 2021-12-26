@@ -2978,6 +2978,16 @@ input::placeholder {
     justify-content: space-between;
 }
 
+.homeContainer nav h1 {
+    font-size: 25px;
+    font-weight: 500;
+    color: #ccc;
+}
+
+.homeContainer nav p {
+    color: #8491a2;
+}
+
 .homeContainer .inner {
     display: flex;
     height: calc(100% - 80px);
@@ -3055,4 +3065,35 @@ input::placeholder {
     width: 100%;
     background-color: #273444;
     border-radius: 20px;
+}
+
+/* ################################ CHART ################################## */
+.range {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 15px;
+    z-index: 10;
+}
+
+.range div {
+    padding: 3px 15px;
+    border-radius: 7px;
+    background-color: #455261;
+    color: #ccc;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px solid #455261;
+    transition: all 0.2s ease;
+}
+
+.range div:hover {
+    background-color: transparent;
+}
+
+.range div.active {
+    background-color: transparent;
 }

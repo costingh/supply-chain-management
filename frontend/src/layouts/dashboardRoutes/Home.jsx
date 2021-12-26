@@ -1,13 +1,13 @@
 import React from 'react'
-import { Bar } from 'react-chartjs-2'
 import BarChart from '../../components/BarChart'
+import moment from 'moment'
 
 function Home() {
     return (
         <div className="homeContainer">
             <nav>
                 <h1>Bine ai revenit!</h1>
-                <p>Wednesday, 18 August 2021</p>
+                <p>{moment().format('LL')}</p>
             </nav>
             <div className="inner">
                 <div className="innerL">
@@ -41,7 +41,7 @@ function Home() {
                             </div>
                         </div>
                     </div>
-                    <div className="middle">
+                    <div className="middle" style={{ padding: '10px' }}>
                         <BarChart />
                     </div>
                     <div className="bottom"></div>

@@ -1,42 +1,69 @@
 import React, { useState, useEffect } from 'react'
+import StatisticsService from '../services/statistics-service'
 import { Chart, registerables } from 'chart.js'
 Chart.register(...registerables)
 
 const BarChart = () => {
-    const [labels, setLabels] = useState([])
+    const [monthsRange, setMonthsRange] = useState(6)
+    const [chart, setChart] = useState(null)
 
     useEffect(() => {
-        getLastSixMonths()
+        fetchData(6)
     }, [])
 
-    useEffect(() => {
-        if (labels && labels.length > 0) {
+    const fetchData = (num) => {
+        setMonthsRange(num)
+        StatisticsService.totalSpentByMonth(num)
+            .then((data) => {
+                console.log(data.result)
+                if (data.result && data.result.length > 0) {
+                    let arrayOfMonths = []
+                    let arrayOfData = []
+                    data.result.map((res) => {
+                        arrayOfMonths.push(res.nume_luna)
+                        arrayOfData.push(res.total)
+                    })
+
+                    drawChart(arrayOfMonths, arrayOfData)
+                }
+            })
+            .catch((err) => console.log(err))
+    }
+
+    const drawChart = (labels, data) => {
+        if (labels && labels.length > 0 && data && data.length > 0) {
             const ctx = document.getElementById('myChart')
+            let length = 400,
+                angle = 270
+            let gradient = ctx
+                .getContext('2d')
+                .createLinearGradient(
+                    700,
+                    500,
+                    300 + Math.cos(angle) * length,
+                    300 + Math.sin(angle) * length
+                )
+            gradient.addColorStop(1, 'rgba(60,66,185,0.4)')
+            gradient.addColorStop(0, 'rgba(0,0,0,0)')
+
             const myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [
                         {
-                            label: '# of Votes',
-                            data: [12, 19, 3, 5, 2, 3],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)',
-                            ],
-                            /* borderColor: '#8491a2', */
-                            borderWidth: 1,
+                            backgroundColor: gradient,
+                            label: 'Total comenzi (LEI)',
+                            data: data,
+                            borderColor: 'rgba(60,66,185,255)',
+                            borderWidth: 2,
                             fill: 'start',
-                            backgroundColor: '#3c42b9',
                             lineTension: 0.5,
                         },
                     ],
                 },
                 options: {
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -44,37 +71,46 @@ const BarChart = () => {
                     },
                 },
             })
+
+            setChart(myChart)
         }
-    }, [labels])
+    }
 
-    const getLastSixMonths = () => {
-        let monthNames = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
-        ]
-
-        let today = new Date()
-        let lastSixMonths = []
-
-        for (let i = 6; i > 0; i -= 1) {
-            let d = new Date(today.getFullYear(), today.getMonth() - i, 1)
-            lastSixMonths.push(monthNames[d.getMonth()])
+    const clearChart = (num) => {
+        if (chart) {
+            chart.destroy()
+            setChart(null)
+            fetchData(num)
         }
-        setLabels(lastSixMonths)
     }
 
     return (
-        <canvas id="myChart" style={{ height: '100%', width: '100%' }}></canvas>
+        <div style={{ height: '100%', width: '100%', position: 'relative' }}>
+            <div className="range">
+                <div
+                    className={`${monthsRange === 3 && 'active'}`}
+                    onClick={() => clearChart(3)}
+                >
+                    3 Luni
+                </div>
+                <div
+                    className={`${monthsRange === 6 && 'active'}`}
+                    onClick={() => clearChart(6)}
+                >
+                    6 Luni
+                </div>
+                <div
+                    className={`${monthsRange === 12 && 'active'}`}
+                    onClick={() => clearChart(12)}
+                >
+                    12 Luni
+                </div>
+            </div>
+            <canvas
+                id="myChart"
+                style={{ height: '100%', width: '100%', position: 'relative' }}
+            ></canvas>
+        </div>
     )
 }
 
