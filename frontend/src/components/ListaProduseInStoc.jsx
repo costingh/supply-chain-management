@@ -22,9 +22,10 @@ import { getAllSupplierNames } from '../actions/suppliers'
 // moment.js for date formatting
 import moment from 'moment'
 
-function ListaProduseInStoc({ setData }) {
+function ListaProduseInStoc({ setData, setRedirectTo }) {
     const { categories } = useSelector((state) => state.categories)
     const { products } = useSelector((state) => state.products)
+    const { user: currentUser } = useSelector((state) => state.auth)
 
     const productNameSearchRef = useRef()
     const categoryNameSearchRef = useRef()
@@ -306,32 +307,39 @@ function ListaProduseInStoc({ setData }) {
     }
 
     const handleChange = (e, product) => {
-        if (e.target.value === '') e.target.value = 0
-        const arr = document.querySelectorAll(
-            `#cantitate-${product.cod_produs}`
-        )
-        arr[0].value = parseInt(e.target.value)
-        if (arr.length === 2) {
-            arr[1].value = parseInt(e.target.value)
+        if (e.target.value === '') {
+            e.target.value = 0
+        } else {
+            const arr = document.querySelectorAll(
+                `#cantitate-${product.cod_produs}`
+            )
+            arr[0].value = parseInt(e.target.value)
+            if (arr.length === 2) {
+                arr[1].value = parseInt(e.target.value)
 
-            let list = []
-            ordersList.map((order) => {
-                list.push({
-                    cantitate: e.target.value,
-                    categorie: order.categorie,
-                    cod_produs: order.cod_produs,
-                    data_creare: order.data_creare,
-                    descriere_categorie: order.descriere_categorie,
-                    descriere_produs: order.descriere_produs,
-                    id_categorie: order.id_categorie,
-                    imagine_produs: order.imagine_produs,
-                    nume_produs: order.nume_produs,
-                    pret: order.pret,
-                    stoc_initial: order.stoc_initial,
-                    unitate_masura: order.unitate_masura,
+                let list = []
+                ordersList.map((order) => {
+                    if (order.cod_produs !== product.cod_produs)
+                        list.push(order)
+                    else
+                        list.push({
+                            cantitate: parseInt(e.target.value),
+                            categorie: order.categorie,
+                            cod_produs: order.cod_produs,
+                            cod_furnizor: order.cod_furnizor,
+                            data_creare: order.data_creare,
+                            descriere_categorie: order.descriere_categorie,
+                            descriere_produs: order.descriere_produs,
+                            id_categorie: order.id_categorie,
+                            imagine_produs: order.imagine_produs,
+                            nume_produs: order.nume_produs,
+                            pret: order.pret,
+                            stoc_initial: order.stoc_initial,
+                            unitate_masura: order.unitate_masura,
+                        })
                 })
-            })
-            setOrdersList(list)
+                setOrdersList(list)
+            }
         }
     }
 
@@ -427,6 +435,10 @@ function ListaProduseInStoc({ setData }) {
                 })
             )
         )
+
+        if (currentUser && currentUser.administrator === 'N')
+            setRedirectTo('/employee/dashboard/comenzi')
+        else setRedirectTo('/admin/dashboard/comenzi')
     }
 
     const handleFilters = () => {

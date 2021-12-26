@@ -22,6 +22,7 @@ import Home from '../dashboardRoutes/Home'
 function AdminDashobard() {
     const { user: currentUser } = useSelector((state) => state.auth)
     const [redirect, setRedirect] = useState(false)
+    const [redirectTo, setRedirectTo] = useState('')
     const [activeTabName, setActiveTabName] = useState(listItems[0].name)
     const [data, setData] = useState(null)
 
@@ -101,6 +102,7 @@ function AdminDashobard() {
                             data={data}
                             closeAlert={closeAlert}
                             redirect={'no'}
+                            redirectTo={redirectTo}
                         />
                         <Switch>
                             <Route path="/admin/dashboard/furnizori">
@@ -125,7 +127,10 @@ function AdminDashobard() {
                                 <Angajati setData={setData} />
                             </Route>
                             <Route path="/admin/dashboard/produse">
-                                <Produse setData={setData} />
+                                <Produse
+                                    setData={setData}
+                                    setRedirectTo={setRedirectTo}
+                                />
                             </Route>
                             <Route path="/admin/dashboard/home">
                                 <Home />

@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-function Alert({ data, closeAlert, goToLoginPage, redirect }) {
+function Alert({ data, closeAlert, goToLoginPage, redirect, redirectTo }) {
     return (
         <div className="overlay">
             <div className="alert">
@@ -31,9 +32,17 @@ function Alert({ data, closeAlert, goToLoginPage, redirect }) {
                 <p className="social-text">{data && data.message}</p>
                 {redirect === 'no' ? (
                     data && data.status === 200 ? (
-                        <div className="button">
-                            <p onClick={closeAlert}>Done</p>
-                        </div>
+                        redirectTo !== '' ? (
+                            <Link to={redirectTo}>
+                                <div className="button">
+                                    <p onClick={closeAlert}>Done</p>
+                                </div>
+                            </Link>
+                        ) : (
+                            <div className="button">
+                                <p onClick={closeAlert}>Done</p>
+                            </div>
+                        )
                     ) : (
                         <div className="button">
                             <p onClick={closeAlert}>Try Again</p>
