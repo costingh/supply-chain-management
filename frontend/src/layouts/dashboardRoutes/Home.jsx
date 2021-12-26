@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import BarChart from '../../components/BarChart'
+import BarChart from '../../charts/BarChart'
+import Doughnut from '../../charts/Doughnut'
 import moment from 'moment'
 import StatisticsService from '../../services/statistics-service'
 
@@ -80,7 +81,10 @@ function Home() {
                 </div>
                 <div className="innerR">
                     <div className="innerRtop"></div>
-                    <div className="innerRbottom"></div>
+                    <div className="innerRbottom">
+                        {' '}
+                        <Doughnut />
+                    </div>
                 </div>
             </div>
         </div>

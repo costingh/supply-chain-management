@@ -39,4 +39,22 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.numberOfEmployees
   );
+
+  app.get(
+    "/api/statistici/furnizori",
+    [authJwt.verifyToken],
+    controller.suppliersWIthNoProductsBought
+  );
+
+  app.get(
+    "/api/statistici/oras-furnizori",
+    [authJwt.verifyToken],
+    controller.mostSupplierInACity
+  );
+
+  app.get(
+    "/api/statistici/furnizori-pe-orase",
+    [authJwt.verifyToken],
+    controller.suppliersByCity
+  );
 };

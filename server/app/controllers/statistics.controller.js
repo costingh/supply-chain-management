@@ -210,3 +210,81 @@ exports.numberOfEmployees = (req, res) => {
     }
   );
 };
+
+exports.suppliersWIthNoProductsBought = (req, res) => {
+  let query =
+    "select f.nume_furnizor " +
+    "from furnizori f " +
+    "where f.cod_furnizor not in " +
+    "(select f2.cod_furnizor from furnizori f2 " +
+    "inner join produse p on p.cod_furnizor = f2.cod_furnizor " +
+    "inner join produsecomenzi pc on pc.cod_produs = p.cod_produs) ";
+
+  db.query(query, async (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        message: "Success!",
+        status: 200,
+        result: results,
+      });
+    } else {
+      return res.send({
+        message: "Error",
+        status: 409,
+      });
+    }
+  });
+};
+
+exports.mostSupplierInACity = (req, res) => {
+  let query =
+    "SELECT MAX(f.nr_furnizori) as furnizori_in_oras, f.oras " +
+    "FROM (SELECT COUNT(*) AS nr_furnizori, f.oras FROM furnizori f group by f.oras) f";
+
+  db.query(query, async (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        message: "Success!",
+        status: 200,
+        result: results[0],
+      });
+    } else {
+      return res.send({
+        message: "Error",
+        status: 409,
+      });
+    }
+  });
+};
+
+exports.suppliersByCity = (req, res) => {
+  let query =
+    "SELECT COUNT(*) AS nr_furnizori, oras FROM furnizori f group by f.oras";
+
+  db.query(query, async (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        message: "Success!",
+        status: 200,
+        result: results,
+      });
+    } else {
+      return res.send({
+        message: "Error",
+        status: 409,
+      });
+    }
+  });
+};

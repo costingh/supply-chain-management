@@ -259,7 +259,7 @@ function Angajati({ setData }) {
                                                     'N'
                                                     ? 'employee'
                                                     : 'admin'
-                                            }/dashboard/profile`}
+                                            }/dashboard/profil`}
                                         >
                                             <div className="update">
                                                 Actualizati Profilul

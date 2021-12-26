@@ -69,10 +69,50 @@ const numberOfEmployees = () => {
         })
 }
 
+const suppliersWIthNoProductsBought = () => {
+    return axios
+        .get(API_URL + 'furnizori', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+const mostSupplierInACity = () => {
+    return axios
+        .get(API_URL + 'oras-furnizori', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+const suppliersByCity = () => {
+    return axios
+        .get(API_URL + 'furnizori-pe-orase', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+
 export default {
     totalSpentByMonth,
     numberOfOrders,
     numberOfInvoices,
     numberOfSuppliers,
     numberOfEmployees,
+    suppliersWIthNoProductsBought,
+    mostSupplierInACity,
+    suppliersByCity,
 }
