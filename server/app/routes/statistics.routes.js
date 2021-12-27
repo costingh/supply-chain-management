@@ -63,4 +63,27 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.popularProducts
   );
+
+  app.get(
+    "/api/statistici/furnizor-popular",
+    [authJwt.verifyToken],
+    controller.favouriteSupplier
+  );
+
+  app.get(
+    "/api/statistici/angajat-popular",
+    [authJwt.verifyToken],
+    controller.bestEmployee
+  );
+
+  app.get(
+    "/api/statistici/furnizori-fara-comenzi",
+    [authJwt.verifyToken],
+    controller.suppliersWithNoOrders
+  );
+  app.get(
+    "/api/statistici/produse/:furnizor",
+    [authJwt.verifyToken],
+    controller.listOfProductsFromSupplier
+  );
 };

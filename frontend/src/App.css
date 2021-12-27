@@ -2971,7 +2971,7 @@ input::placeholder {
 
 .homeContainer nav {
     width: 100%;
-    padding: 0px 60px;
+    padding: 0px 30px;
     height: 80px;
     display: flex;
     align-items: center;
@@ -2995,13 +2995,14 @@ input::placeholder {
 }
 
 .homeContainer .innerL {
-    width: 65%;
+    width: 70%;
+    padding: 0px 30px;
+    height: 100%;
 }
 
 .homeContainer .innerL .homeTop {
-    width: 90%;
-    margin: 0 auto;
-    padding: 30px;
+    width: 100%;
+    padding: 15px 20px;
     border-radius: 30px;
     background-color: #273444;
     display: flex;
@@ -3043,11 +3044,54 @@ input::placeholder {
 }
 
 .homeContainer .innerL .middle {
-    width: 90%;
-    margin: 30px auto;
+    width: 100%;
+    margin-top: 30px;
     height: 500px;
     background-color: #273444;
     border-radius: 20px;
+    margin-bottom: 30px;
+}
+
+.homeContainer .innerL .bottom {
+    width: 100%;
+    height: calc(100% - 500px - 70px - 30px - 30px - 30px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 30px;
+}
+
+.homeContainer .innerL .bottom .bottomBox {
+    padding: 20px 40px;
+    background-color: #273444;
+    color: #e1e1e1;
+    border-radius: 20px;
+    width: 50%;
+    overflow-y: auto;
+    display: flex;
+    column-gap: 30px;
+    align-items: center;
+}
+
+.homeContainer .innerL .bottom .bottomBox .img {
+    width: 70px;
+    height: 70px;
+    background-color: #8491a2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.homeContainer .innerL .bottom .bottomBox .img svg {
+    transform: scale(1.4);
+}
+
+.homeContainer .innerL .bottom .bottomBox h1 {
+    font-size: 15px;
+    font-weight: 400;
+    color: #8491a2;
+    margin-bottom: 10px;
 }
 
 .homeContainer .innerR {
@@ -3056,8 +3100,8 @@ input::placeholder {
     justify-content: space-between;
     flex-direction: column;
     height: 100%;
-    padding: 0px 30px 30px 30px;
-    width: 35%;
+    padding: 0px 30px 30px 0px;
+    width: 30%;
     row-gap: 30px;
 }
 
@@ -3161,6 +3205,73 @@ input::placeholder {
     scrollbar-width: thin;
 }
 
+.homeContainer .tabels {
+    padding: 30px;
+}
+
+.homeContainer .tabels h1 {
+    font-size: 18px;
+    margin-bottom: 30px;
+    font-weight: 400;
+    color: #e1e1e1;
+}
+
+.homeContainer .tabels .tbl {
+    width: 100%;
+    padding: 20px 30px;
+    background-color: #273444;
+    border-radius: 20px;
+}
+
+.homeContainer .tabels .tbl .tableColumns {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 15px;
+}
+
+.homeContainer .tabels .tbl .tableColumns .tableCol {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+}
+
+.tableColumns.header div {
+    color: #455261;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.tableColumns.data div {
+    color: #8491a2;
+    font-size: 15px;
+    font-weight: 400;
+    padding: 5px 0px;
+}
+
+.homeContainer .tableCol .suppImg {
+    width: 40px;
+    height: 40px;
+    /* background-color: rgba(65, 215, 170, 0.1); */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* fill: rgba(65, 215, 170, 0.5); */
+}
+
+.homeContainer .tableCol .suppImg svg {
+    transform: scale(0.8);
+}
+
+.homeContainer .supplierNameCol {
+    color: rgb(17, 20, 24);
+    font-weight: 600;
+    font-size: 16px;
+}
 /* ################################ CHART ################################## */
 .range {
     position: absolute;

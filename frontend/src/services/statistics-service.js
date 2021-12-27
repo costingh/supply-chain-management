@@ -117,6 +117,54 @@ const popularProducts = () => {
             return err
         })
 }
+const favouriteSupplier = () => {
+    return axios
+        .get(API_URL + 'furnizor-popular', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+const bestEmployee = () => {
+    return axios
+        .get(API_URL + 'angajat-popular', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+const suppliersWithNoOrders = () => {
+    return axios
+        .get(API_URL + 'furnizori-fara-comenzi', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
+const listOfProductsFromSupplier = (numeFurnizor) => {
+    return axios
+        .get(API_URL + 'produse/' + numeFurnizor, {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
 
 export default {
     totalSpentByMonth,
@@ -128,4 +176,8 @@ export default {
     mostSupplierInACity,
     suppliersByCity,
     popularProducts,
+    favouriteSupplier,
+    bestEmployee,
+    suppliersWithNoOrders,
+    listOfProductsFromSupplier,
 }
