@@ -24,7 +24,7 @@ function Comenzi({ setData }) {
     const [confirm, setConfirm] = useState(false)
     const [messageConfirm, setMessageConfirm] = useState('')
     const [nrComanda, setNrComanda] = useState(null)
-    const [productsForEachOrder, setProductsForEachOrder] = useState([])
+    const [invoiceForOrder, setInvoiceForOrder] = useState(null)
     // generare factura
     const [detaliiComanda, setDetaliiComanda] = useState(null)
     const [produseComanda, setProduseComanda] = useState([])
@@ -40,6 +40,7 @@ function Comenzi({ setData }) {
 
     const handleGenerateInvoice = (nr_comanda) => {
         setGenerateInvoiceOpened(true)
+        setInvoiceForOrder(nr_comanda)
         if (nr_comanda > 0)
             OrdersService.getOrderByNumber(nr_comanda)
                 .then((resp) => {
@@ -299,18 +300,16 @@ function Comenzi({ setData }) {
                                     </div>
                                 )}
                             </div>
-                            {generateInvoiceOpened && (
-                                <GenerareFactura
-                                    setGenerateInvoiceOpened={
-                                        setGenerateInvoiceOpened
-                                    }
-                                    detaliiComanda={detaliiComanda}
-                                    produseComanda={produseComanda}
-                                    nrComanda={o.nr_comanda}
-                                />
-                            )}
                         </div>
                     ))}
+                {generateInvoiceOpened && (
+                    <GenerareFactura
+                        setGenerateInvoiceOpened={setGenerateInvoiceOpened}
+                        detaliiComanda={detaliiComanda}
+                        produseComanda={produseComanda}
+                        nrComanda={invoiceForOrder}
+                    />
+                )}
             </div>
         </div>
     )

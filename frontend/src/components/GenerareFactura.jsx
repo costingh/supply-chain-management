@@ -24,7 +24,6 @@ function GenerareFactura({
 
     const generareFactura = () => {
         setLoading(true)
-
         dispatch(generateInvoice(nrComanda)).then((data) => {
             setTimeout(() => {
                 setLoading(false)

@@ -6,7 +6,7 @@ const db = mysql.createConnection(dbConfig);
 
 exports.addInvoice = (req, res) => {
   const { nrComanda } = req.body;
-
+  console.log(nrComanda);
   let query1 =
     "select distinct " +
     "c.cod_furnizor, (select sum(p.pret * pc.cantitate) from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs where nr_comanda = ?) as total " +
@@ -35,8 +35,8 @@ exports.addInvoice = (req, res) => {
           });
         } else {
           db.query(
-            "UPDATE comenzi SET nr_factura = ?",
-            results.insertId,
+            "UPDATE comenzi SET nr_factura = ? where nr_comanda = ?",
+            [results.insertId, nrComanda],
             (error, results) => {
               if (error) {
                 return res.json({
