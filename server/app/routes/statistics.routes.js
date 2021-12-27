@@ -57,4 +57,10 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.suppliersByCity
   );
+
+  app.get(
+    "/api/statistici/produse-populare",
+    [authJwt.verifyToken],
+    controller.popularProducts
+  );
 };

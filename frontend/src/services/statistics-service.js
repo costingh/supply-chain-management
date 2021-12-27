@@ -105,6 +105,18 @@ const suppliersByCity = () => {
             return err
         })
 }
+const popularProducts = () => {
+    return axios
+        .get(API_URL + 'produse-populare', {
+            headers: authHeader(),
+        })
+        .then((resp) => {
+            return resp.data
+        })
+        .catch((err) => {
+            return err
+        })
+}
 
 export default {
     totalSpentByMonth,
@@ -115,4 +127,5 @@ export default {
     suppliersWIthNoProductsBought,
     mostSupplierInACity,
     suppliersByCity,
+    popularProducts,
 }

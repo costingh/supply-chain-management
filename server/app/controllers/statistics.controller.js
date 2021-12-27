@@ -288,3 +288,32 @@ exports.suppliersByCity = (req, res) => {
     }
   });
 };
+
+exports.popularProducts = (req, res) => {
+  let query =
+    "select p.nume_produs, p.pret, p.imagine_produs, sum(pc.cantitate) as cantitate_lunara, month(pc.data_comanda) as luna " +
+    "from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs " +
+    "where month(pc.data_comanda) in (select month(data_comanda) from produsecomenzi) " +
+    "group by p.nume_produs, month(pc.data_comanda) " +
+    "having sum(pc.cantitate) >ANY (select sum(pc2.cantitate) from produse p2 inner join produsecomenzi pc2 on p2.cod_produs = pc2.cod_produs where month(pc2.data_comanda) in (select month(data_comanda) from produsecomenzi) group by p2.nume_produs) " +
+    "order by month(pc.data_comanda) desc";
+
+  db.query(query, async (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        message: "Success!",
+        status: 200,
+        result: results,
+      });
+    } else {
+      return res.send({
+        message: "Error",
+        status: 409,
+      });
+    }
+  });
+};
