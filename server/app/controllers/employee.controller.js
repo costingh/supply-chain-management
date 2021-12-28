@@ -112,7 +112,7 @@ exports.updateProfile = (req, res) => {
           }
 
           return res.json({
-            message: "Profile updated successfully!",
+            message: "Profil actualizat!",
             status: 200,
             profile: [
               {

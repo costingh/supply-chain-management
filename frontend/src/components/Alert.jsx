@@ -25,9 +25,7 @@ function Alert({ data, closeAlert, goToLoginPage, redirect, redirectTo }) {
                     </svg>
                 </div>
                 <h1>
-                    {data && data.status === 200
-                        ? 'Congratulations'
-                        : 'Ooops...'}
+                    {data && data.status === 200 ? 'Felicitari' : 'Ooops...'}
                 </h1>
                 <p className="social-text">{data && data.message}</p>
                 {redirect === 'no' ? (

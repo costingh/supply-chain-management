@@ -41,11 +41,11 @@ exports.signup = (req, res) => {
 
       if (results.length > 0) {
         return res.send({
-          message: "That email is already in use!",
+          message: "Acest email este deja folosit!",
           status: 409,
         });
       } else if (password !== passwordConfirm) {
-        return res.send({ message: "Passwords don't match!", status: 401 });
+        return res.send({ message: "Parolele nu se potrivesc!", status: 401 });
       }
 
       // check if phone number is unique if exists
@@ -60,7 +60,7 @@ exports.signup = (req, res) => {
 
             if (results.length > 0) {
               return res.send({
-                message: "The phone number is already used!",
+                message: "Numarul de telefon este folosit!",
                 status: 410,
               });
             }
@@ -80,7 +80,7 @@ exports.signup = (req, res) => {
 
             if (results.length > 0) {
               return res.send({
-                message: "The SSN is already in our database!",
+                message: "CNP-ul exista in baza de date!",
                 status: 411,
               });
             }
@@ -113,7 +113,7 @@ exports.signup = (req, res) => {
         if (error) console.log(error);
         else {
           return res.json({
-            message: "User Registered Successfully",
+            message: "Cont creat cu succes!",
             status: 200,
           });
         }
@@ -134,16 +134,6 @@ exports.signin = (req, res) => {
         console.log(error);
       }
 
-      // response example
-      /* 
-        nume: 'popescu',
-        prenume: 'ion',
-        parola: '$2a$10$G5YNcVGFBJpJF3WvGuLbEOxcyOTwEttOpm.kjhw5usgHKI7lb.CCy',
-        email: 'popescu.ion@angajat.com',
-        administrator: 'N',
-        data_creare: 2021-10-27T13:33:20.000Z
-      */
-
       if (results.length > 0) {
         //validate password
         const validPassword = await bcrypt.compare(password, results[0].parola);
@@ -156,10 +146,9 @@ exports.signin = (req, res) => {
           process.env.JWT_SECRET,
           { expiresIn: "3h" }
         );
-        //send response
         res.json({ user: results[0], token, status: 200 });
       } else {
-        return res.send({ message: "Incorrect email!", status: 403 });
+        return res.send({ message: "Email incorect!", status: 403 });
       }
     }
   );

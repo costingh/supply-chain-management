@@ -17,10 +17,7 @@ exports.addCategory = (req, res) => {
 
       if (results.length > 0) {
         return res.send({
-          message:
-            "A category named " +
-            nume_categorie +
-            " already exists in database!",
+          message: "O categorie " + nume_categorie + " deja exista!",
           status: 409,
         });
       }
@@ -34,7 +31,7 @@ exports.addCategory = (req, res) => {
         if (error) console.log(error);
         else {
           return res.json({
-            message: "Category added successfully!",
+            message: "Categoria a fost adaugata!",
             status: 200,
             category: Category,
           });
@@ -52,13 +49,13 @@ exports.getAllCategories = (req, res) => {
 
     if (results.length > 0) {
       return res.json({
-        message: "Categories fetched successfully!",
+        message: "Categorii returnate cu succes!",
         status: 200,
         categories: results,
       });
     } else {
       return res.send({
-        message: "No categories in database!",
+        message: "Nu exista categorii in baza de date!",
         status: 409,
       });
     }
@@ -77,7 +74,7 @@ exports.deleteCategory = (req, res) => {
       }
 
       return res.json({
-        message: "Category deleted successfully!",
+        message: "Categorie stearsa!",
         status: 200,
       });
     }
@@ -100,7 +97,7 @@ exports.updateCategory = (req, res) => {
       }
 
       return res.json({
-        message: "Category updated successfully!",
+        message: "Categoria a fost actualizata!",
         status: 200,
         category: [
           {

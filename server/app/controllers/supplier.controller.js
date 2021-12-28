@@ -124,7 +124,7 @@ exports.deleteSupplier = (req, res) => {
       }
 
       return res.json({
-        message: "Supplier deleted successfully!",
+        message: "Furnizorul a fost sters!",
         status: 200,
       });
     }
