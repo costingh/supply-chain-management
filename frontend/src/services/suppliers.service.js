@@ -18,6 +18,29 @@ const addSupplier = (nume_furnizor, strada, numar, oras, judet, nr_telefon) => {
     )
 }
 
+const updateSupplier = (
+    id,
+    nume_furnizor,
+    strada,
+    numar,
+    oras,
+    judet,
+    nr_telefon
+) => {
+    return axios.post(
+        API_URL + `update/${id}`,
+        {
+            nume_furnizor,
+            strada,
+            numar,
+            oras,
+            judet,
+            nr_telefon,
+        },
+        { headers: authHeader() }
+    )
+}
+
 const getAllSuppliers = () => {
     return axios.get(API_URL + 'all', { headers: authHeader() })
 }
@@ -31,9 +54,17 @@ const deleteSupplier = (supplierName) => {
     })
 }
 
+const getSupplierByName = (supplierName) => {
+    return axios.get(API_URL + `get-supplier/${supplierName}`, {
+        headers: authHeader(),
+    })
+}
+
 export default {
     addSupplier,
     getAllSuppliers,
     deleteSupplier,
     getAllSupplierNames,
+    getSupplierByName,
+    updateSupplier,
 }

@@ -1,6 +1,8 @@
 import {
     ADD_SUPPLIER_SUCCESS,
     ADD_SUPPLIER_FAIL,
+    UPDATE_SUPPLIER_SUCCESS,
+    UPDATE_SUPPLIER_FAIL,
     FETCH_SUPPLIERS_SUCCESS,
     FETCH_SUPPLIERS_FAIL,
     DELETE_SUPPLIER_SUCCESS,
@@ -28,6 +30,35 @@ export const addSupplier =
             } else {
                 dispatch({
                     type: ADD_SUPPLIER_FAIL,
+                })
+
+                return response.data
+            }
+        })
+    }
+
+export const updateSupplier =
+    (id, nume_furnizor, strada, numar, oras, judet, nr_telefon) =>
+    (dispatch) => {
+        return SuppliersService.updateSupplier(
+            id,
+            nume_furnizor,
+            strada,
+            numar,
+            oras,
+            judet,
+            nr_telefon
+        ).then((response) => {
+            if (response.data.status === 200) {
+                dispatch({
+                    type: UPDATE_SUPPLIER_SUCCESS,
+                    payload: response.data,
+                })
+
+                return response.data
+            } else {
+                dispatch({
+                    type: UPDATE_SUPPLIER_FAIL,
                 })
 
                 return response.data

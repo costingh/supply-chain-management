@@ -50,6 +50,47 @@ exports.addSupplier = (req, res) => {
   );
 };
 
+exports.updateSupplier = (req, res) => {
+  const { nume_furnizor, strada, numar, oras, judet, nr_telefon } = req.body;
+  const cod_furnizor = req.params.id;
+
+  let Furnizor = {
+    nume_furnizor: nume_furnizor,
+    strada: strada,
+    numar: numar,
+    oras: oras,
+    judet: judet,
+    nr_telefon: nr_telefon,
+  };
+
+  db.query(
+    "UPDATE furnizori SET ? WHERE cod_furnizor = ?",
+    [Furnizor, cod_furnizor],
+    async (error, results) => {
+      if (error) {
+        return res.send({
+          message: "Eroare la actualizare!",
+          status: 409,
+        });
+      } else {
+        return res.send({
+          message: "Actualizare reusita!",
+          status: 200,
+          data: {
+            cod_furnizor: cod_furnizor,
+            nume_furnizor: nume_furnizor,
+            strada: strada,
+            numar: numar,
+            oras: oras,
+            judet: judet,
+            nr_telefon: nr_telefon,
+          },
+        });
+      }
+    }
+  );
+};
+
 exports.getAllSuppliers = (req, res) => {
   db.query("SELECT * FROM furnizori", async (error, results) => {
     if (error) {
@@ -109,4 +150,29 @@ exports.getAllSupplierNames = (req, res) => {
       });
     }
   });
+};
+
+exports.getSupplierByName = (req, res) => {
+  db.query(
+    "SELECT * FROM furnizori where nume_furnizor = ?",
+    [req.params.suppName],
+    async (error, results) => {
+      if (error) {
+        console.log(error);
+      }
+
+      if (results.length > 0) {
+        return res.json({
+          message: "Success!",
+          status: 200,
+          supplier: results[0],
+        });
+      } else {
+        return res.send({
+          message: "Error!",
+          status: 409,
+        });
+      }
+    }
+  );
 };

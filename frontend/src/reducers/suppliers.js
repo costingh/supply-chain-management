@@ -1,6 +1,8 @@
 import {
     ADD_SUPPLIER_SUCCESS,
     ADD_SUPPLIER_FAIL,
+    UPDATE_SUPPLIER_SUCCESS,
+    UPDATE_SUPPLIER_FAIL,
     FETCH_SUPPLIERS_SUCCESS,
     FETCH_SUPPLIERS_FAIL,
     DELETE_SUPPLIER_SUCCESS,
@@ -26,6 +28,18 @@ export default function (state = initialState, action) {
                     : { suppliers: payload.supplier },
             }
         case ADD_SUPPLIER_FAIL:
+            return {
+                ...state,
+            }
+        case UPDATE_SUPPLIER_SUCCESS:
+            return {
+                ...state,
+                suppliers: state.suppliers.map((s) => {
+                    if (s.cod_furnizor != payload.data.cod_furnizor) return s
+                    else return payload.data
+                }),
+            }
+        case UPDATE_SUPPLIER_FAIL:
             return {
                 ...state,
             }

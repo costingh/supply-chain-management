@@ -3302,3 +3302,102 @@ input::placeholder {
 .range div.active {
     background-color: transparent;
 }
+
+/* #################################################
+################## UPDATE SUPPLIER #################
+#################################################### */
+.updateSupplier {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.updateSupplier > div {
+    width: 450px;
+    height: 600px;
+    overflow-y: auto;
+    max-width: 100%;
+    max-height: 100%;
+    background-color: #19212c;
+    padding: 40px;
+    border-radius: 30px;
+}
+
+.updateSupplier > div h1 {
+    color: #e1e1e1;
+    font-size: 25px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.updateSupplier > div p {
+    width: 30%;
+    color: #e1e1e1;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.updateSupplier > div input {
+    width: 70%;
+    /* height: 40px; */
+    appearance: none;
+    outline: none;
+    border-radius: 10px;
+    border: 1px solid #455261;
+    background-color: #455261;
+    padding: 10px 20px;
+}
+
+.updateSupplier .flex {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 15px;
+    margin-bottom: 20px;
+}
+
+.updateSupplier .flex .closeBtn,
+.updateSupplier .flex .submitBtn {
+    margin-top: 20px;
+    flex: 0.5;
+    padding: 15px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+}
+
+.updateSupplier .flex .closeBtn {
+    background-color: #111;
+    color: #e1e1e1;
+}
+
+.updateSupplier .flex .closeBtn:hover {
+    color: #333;
+}
+
+.updateSupplier .flex .submitBtn {
+    background-color: rgb(206, 128, 25);
+    color: #111;
+}
+
+.updateSupplier .flex .submitBtn:hover {
+    color: #ccc;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.updateSupplier > div::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.updateSupplier > div {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}

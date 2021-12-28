@@ -11,6 +11,11 @@ module.exports = function (app) {
   });
 
   app.post("/api/furnizori/add", [authJwt.verifyToken], controller.addSupplier);
+  app.post(
+    "/api/furnizori/update/:id",
+    [authJwt.verifyToken],
+    controller.updateSupplier
+  );
 
   app.get(
     "/api/furnizori/all",
@@ -22,6 +27,12 @@ module.exports = function (app) {
     "/api/furnizori/all-names",
     [authJwt.verifyToken],
     controller.getAllSupplierNames
+  );
+
+  app.get(
+    "/api/furnizori/get-supplier/:suppName",
+    [authJwt.verifyToken],
+    controller.getSupplierByName
   );
 
   app.delete(
