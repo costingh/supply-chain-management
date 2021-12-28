@@ -22,7 +22,7 @@ function Angajati({ setData }) {
     const [filteredListOfEmp, setFilteredListOfEmp] = useState([])
     const [updateSalaryOpened, setUpdateSalaryOpened] = useState(false)
     const [newSalary, setNewSalary] = useState(0)
-
+    const [empToUpdate, setEmpToUpdate] = useState(null)
     useEffect(() => {
         dispatch(getAllEmployees()).then((data) => {})
     }, [])
@@ -57,7 +57,8 @@ function Angajati({ setData }) {
         )
     }
 
-    const handleUpdateSalary = () => {
+    const handleUpdateSalary = (emp) => {
+        setEmpToUpdate(emp)
         setUpdateSalaryOpened(true)
     }
 
@@ -65,15 +66,16 @@ function Angajati({ setData }) {
         setNewSalary(e.target.value)
     }
 
-    const handleSubmit = (email) => {
-        const num = parseFloat(newSalary, 10)
-
-        if (!isNaN(num))
-            dispatch(updateSalary(email, num)).then((data) => {
-                setData(data)
-                setUpdateSalaryOpened(false)
-            })
-        else alert('Salariul trebuie sa fie un numar!')
+    const handleSubmit = () => {
+        if (empToUpdate) {
+            const num = parseFloat(newSalary, 10)
+            if (!isNaN(num))
+                dispatch(updateSalary(empToUpdate.email, num)).then((data) => {
+                    setData(data)
+                    setUpdateSalaryOpened(false)
+                })
+            else alert('Salariul trebuie sa fie un numar!')
+        }
     }
 
     return (
@@ -268,7 +270,9 @@ function Angajati({ setData }) {
                                     ) : currentUser.administrator === 'D' ? (
                                         <div
                                             className="update"
-                                            onClick={handleUpdateSalary}
+                                            onClick={() =>
+                                                handleUpdateSalary(emp)
+                                            }
                                         >
                                             Modificare Salariu
                                         </div>
@@ -286,125 +290,98 @@ function Angajati({ setData }) {
                                             <p>Nu aveti drept de actualizare</p>
                                         </div>
                                     )}
-                                    {updateSalaryOpened && (
-                                        <div className="updateSalary">
-                                            <div>
-                                                <h1>Modificati Salariul</h1>
-                                                <div className="flex">
-                                                    <div className="flexInner">
-                                                        <p className="bold">
-                                                            Nume:{' '}
-                                                        </p>
-                                                        <p className="muted">
-                                                            {emp.nume}
-                                                        </p>
-                                                    </div>
-                                                    <div className="flexInner">
-                                                        <p className="bold">
-                                                            Preume:{' '}
-                                                        </p>
-                                                        <p className="muted">
-                                                            {emp.prenume}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex">
-                                                    <div className="flexInner">
-                                                        <p className="bold">
-                                                            CNP:{' '}
-                                                        </p>
-                                                        <p className="muted">
-                                                            {emp.CNP
-                                                                ? emp.CNP
-                                                                : '-'}
-                                                        </p>
-                                                    </div>
-                                                    <div className="flexInner">
-                                                        <p className="bold">
-                                                            Varsta:{' '}
-                                                        </p>
-                                                        <p className="muted">
-                                                            {moment(
-                                                                emp.data_nastere,
-                                                                'YYYYMMDD'
-                                                            )
-                                                                .fromNow()
-                                                                .substring(
-                                                                    0,
-                                                                    2
-                                                                )}{' '}
-                                                            de ani
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex">
-                                                    <div className="flexInner">
-                                                        <p className="bold">
-                                                            Telefon:{' '}
-                                                        </p>
-                                                        <p className="muted">
-                                                            {emp.numar_telefon
-                                                                ? emp.numar_telefon
-                                                                : '-'}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    className="line"
-                                                    style={{
-                                                        marginBottom: '20px',
-                                                    }}
-                                                >
-                                                    <p className="bold">
-                                                        Email:{' '}
-                                                    </p>
-                                                    <p className="muted">
-                                                        {emp.email}
-                                                    </p>
-                                                </div>
-                                                <span>Salariu Lunar</span>
-                                                <input
-                                                    type="text"
-                                                    defaultValue={
-                                                        emp.salariu
-                                                            ? emp.salariu
-                                                            : '0.00'
-                                                    }
-                                                    onChange={
-                                                        handleSalaryChange
-                                                    }
-                                                />
-
-                                                <div className="flex">
-                                                    <div
-                                                        className="closeBtn"
-                                                        onClick={() =>
-                                                            setUpdateSalaryOpened(
-                                                                false
-                                                            )
-                                                        }
-                                                    >
-                                                        Anulati
-                                                    </div>
-                                                    <div
-                                                        className="submitBtn"
-                                                        onClick={() =>
-                                                            handleSubmit(
-                                                                emp.email
-                                                            )
-                                                        }
-                                                    >
-                                                        Modificati
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         </div>
                     ))}
             </div>
+            {updateSalaryOpened && (
+                <div className="updateSalary">
+                    <div>
+                        <h1>Modificati Salariul</h1>
+                        <div className="flex">
+                            <div className="flexInner">
+                                <p className="bold">Nume: </p>
+                                <p className="muted">
+                                    {empToUpdate && empToUpdate.nume}
+                                </p>
+                            </div>
+                            <div className="flexInner">
+                                <p className="bold">Preume: </p>
+                                <p className="muted">
+                                    {empToUpdate && empToUpdate.prenume}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex">
+                            <div className="flexInner">
+                                <p className="bold">CNP: </p>
+                                <p className="muted">
+                                    {empToUpdate && empToUpdate.CNP
+                                        ? empToUpdate.CNP
+                                        : '-'}
+                                </p>
+                            </div>
+                            <div className="flexInner">
+                                <p className="bold">Varsta: </p>
+                                <p className="muted">
+                                    {empToUpdate &&
+                                        moment(
+                                            empToUpdate.data_nastere,
+                                            'YYYYMMDD'
+                                        )
+                                            .fromNow()
+                                            .substring(0, 2)}{' '}
+                                    de ani
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex">
+                            <div className="flexInner">
+                                <p className="bold">Telefon: </p>
+                                <p className="muted">
+                                    {empToUpdate && empToUpdate.numar_telefon
+                                        ? empToUpdate.numar_telefon
+                                        : '-'}
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            className="line"
+                            style={{
+                                marginBottom: '20px',
+                            }}
+                        >
+                            <p className="bold">Email: </p>
+                            <p className="muted">
+                                {empToUpdate && empToUpdate.email}
+                            </p>
+                        </div>
+                        <span>Salariu Lunar</span>
+                        <input
+                            type="text"
+                            defaultValue={
+                                empToUpdate && empToUpdate.salariu
+                                    ? empToUpdate.salariu
+                                    : '0.00'
+                            }
+                            onChange={handleSalaryChange}
+                        />
+
+                        <div className="flex">
+                            <div
+                                className="closeBtn"
+                                onClick={() => setUpdateSalaryOpened(false)}
+                            >
+                                Anulati
+                            </div>
+                            <div className="submitBtn" onClick={handleSubmit}>
+                                Modificati
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
