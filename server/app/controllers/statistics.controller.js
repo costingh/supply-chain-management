@@ -72,7 +72,6 @@ exports.totalSpentByMonth = (req, res) => {
         for (let i = 0; i < last_x_months.length; i++)
           if (res.luna - 1 === data[i].index_luna) data[i].total = res.total;
       });
-      console.log(data);
       return res.json({
         message: "Success!",
         status: 200,
