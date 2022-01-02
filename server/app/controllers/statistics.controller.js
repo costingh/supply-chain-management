@@ -39,10 +39,27 @@ exports.totalSpentByMonth = (req, res) => {
         "Decembrie",
       ];
 
-      let last_x_months = months.slice(
-        new Date().getMonth() + 1 - monthsNo,
-        new Date().getMonth() + 1
-      );
+      let last_x_months = [];
+
+      if (new Date().getMonth() + 1 - monthsNo > 0) {
+        last_x_months = months.slice(
+          new Date().getMonth() + 1 - monthsNo,
+          new Date().getMonth() + 1
+        );
+      } else {
+        let currentMonth = new Date().getMonth() + 1;
+
+        for (let i = 0; i < monthsNo; i++) {
+          if (currentMonth - i > 0) {
+            last_x_months.push(months[i]);
+          } else {
+            last_x_months.push(months[months.length - i]);
+          }
+        }
+        last_x_months = last_x_months.reverse();
+      }
+
+      console.log(new Date().getMonth() + 1 - monthsNo);
 
       for (let i = 0; i < last_x_months.length; i++)
         data.push({
@@ -55,7 +72,7 @@ exports.totalSpentByMonth = (req, res) => {
         for (let i = 0; i < last_x_months.length; i++)
           if (res.luna - 1 === data[i].index_luna) data[i].total = res.total;
       });
-
+      console.log(data);
       return res.json({
         message: "Success!",
         status: 200,
@@ -63,7 +80,7 @@ exports.totalSpentByMonth = (req, res) => {
       });
     } else {
       return res.send({
-        message: "Success",
+        message: "Error",
         status: 409,
       });
     }

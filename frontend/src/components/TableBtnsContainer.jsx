@@ -1,6 +1,10 @@
 import React from 'react'
 
-function TableBtnsContainer({ setShowFilterPanelName, deleteRecords }) {
+function TableBtnsContainer({
+    setShowFilterPanelName,
+    deleteRecords,
+    isAdmin,
+}) {
     return (
         <div className="actions">
             <div
@@ -31,17 +35,19 @@ function TableBtnsContainer({ setShowFilterPanelName, deleteRecords }) {
                 </svg>
                 <p>Editati</p>
             </div>
-            <div className="btn delete" onClick={deleteRecords}>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                >
-                    <path d="M21 6l-3 18h-12l-3-18h2.028l2.666 16h8.611l2.666-16h2.029zm-4.711-4c-.9 0-1.631-1.099-1.631-2h-5.316c0 .901-.73 2-1.631 2h-5.711v2h20v-2h-5.711z" />
-                </svg>
-                <p>Stergeti</p>
-            </div>
+            {isAdmin && (
+                <div className="btn delete" onClick={deleteRecords}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                    >
+                        <path d="M21 6l-3 18h-12l-3-18h2.028l2.666 16h8.611l2.666-16h2.029zm-4.711-4c-.9 0-1.631-1.099-1.631-2h-5.316c0 .901-.73 2-1.631 2h-5.711v2h20v-2h-5.711z" />
+                    </svg>
+                    <p>Stergeti</p>
+                </div>
+            )}
         </div>
     )
 }

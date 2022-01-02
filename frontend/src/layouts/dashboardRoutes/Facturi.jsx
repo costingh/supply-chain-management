@@ -14,11 +14,12 @@ const coloaneFacturi = [
 
 function Facturi({ setData }) {
     const { invoices } = useSelector((state) => state.invoices)
-    const [selectionModel, setSelectionModel] = useState([])
+    const { user: currentUser } = useSelector((state) => state.auth)
 
     const dispatch = useDispatch()
 
     const [showFilterPanelName, setShowFilterPanelName] = useState('search')
+    const [selectionModel, setSelectionModel] = useState([])
     const [randFacturi, setRandFacturi] = useState([])
 
     // get all invoices when mounting component
@@ -87,6 +88,13 @@ function Facturi({ setData }) {
                 <TableBtnsContainer
                     setShowFilterPanelName={setShowFilterPanelName}
                     deleteRecords={deleteRecords}
+                    isAdmin={
+                        currentUser
+                            ? currentUser.administrator === 'D'
+                                ? true
+                                : false
+                            : false
+                    }
                 />
                 <DataTable
                     rows={randFacturi}
