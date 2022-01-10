@@ -59,8 +59,6 @@ exports.totalSpentByMonth = (req, res) => {
         last_x_months = last_x_months.reverse();
       }
 
-      console.log(new Date().getMonth() + 1 - monthsNo);
-
       for (let i = 0; i < last_x_months.length; i++)
         data.push({
           nume_luna: last_x_months[i],
@@ -76,27 +74,6 @@ exports.totalSpentByMonth = (req, res) => {
         message: "Success!",
         status: 200,
         result: data,
-      });
-    } else {
-      return res.send({
-        message: "Error",
-        status: 409,
-      });
-    }
-  });
-};
-
-exports.numberOfInvoices = (req, res) => {
-  db.query("select count(*) from facturi", async (error, results) => {
-    if (error) {
-      console.log(error);
-    }
-
-    if (results.length > 0) {
-      return res.json({
-        message: "Success!",
-        status: 200,
-        result: results,
       });
     } else {
       return res.send({
@@ -133,31 +110,7 @@ exports.numberOfInvoices = (req, res) => {
 
 exports.numberOfOrders = (req, res) => {
   db.query(
-    "select count(*) as total_comenzi from comenzi",
-    async (error, results) => {
-      if (error) {
-        console.log(error);
-      }
-
-      if (results.length > 0) {
-        return res.json({
-          message: "Success!",
-          status: 200,
-          result: results[0],
-        });
-      } else {
-        return res.send({
-          message: "Error",
-          status: 409,
-        });
-      }
-    }
-  );
-};
-
-exports.numberOfInvoices = (req, res) => {
-  db.query(
-    "select count(*) as total_facturi from facturi",
+    "select count(distinct nr_comanda) as total_comenzi from produsecomenzi",
     async (error, results) => {
       if (error) {
         console.log(error);
@@ -309,9 +262,9 @@ exports.popularProducts = (req, res) => {
   let query =
     "select p.nume_produs, p.pret, p.imagine_produs, sum(pc.cantitate) as cantitate_lunara, month(pc.data_comanda) as luna " +
     "from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs " +
-    "group by p.nume_produs, month(pc.data_comanda) " +
-    "having sum(pc.cantitate) >ANY (select sum(pc2.cantitate) from produse p2 inner join produsecomenzi pc2 on p2.cod_produs = pc2.cod_produs group by p2.nume_produs, month(pc2.data_comanda)) " +
-    "order by month(pc.data_comanda) desc";
+    "group by month(pc.data_comanda), p.nume_produs " +
+    "having sum(pc.cantitate) IN (select max(s.max) from (select sum(pc2.cantitate) as max, month(pc2.data_comanda) as luna from produsecomenzi pc2 group by pc2.cod_produs, month(pc2.data_comanda) order by sum(pc2.cantitate)) as s  group by s.luna) " +
+    "order by month(pc.data_comanda) asc";
 
   db.query(query, async (error, results) => {
     if (error) {
