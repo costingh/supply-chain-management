@@ -70,7 +70,7 @@ function Comenzi({ setData }) {
             history.push(
                 `/${
                     currentUser && currentUser.administrator === 'N'
-                        ? 'angajat'
+                        ? 'employee'
                         : 'admin'
                 }/dashboard/comenzi/comanda/editati/${nrComanda}`
             )
