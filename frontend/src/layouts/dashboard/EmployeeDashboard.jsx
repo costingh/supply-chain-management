@@ -106,7 +106,7 @@ function EmployeeDashboard() {
                                 />
                             </Route>
                             <Route path="/employee/dashboard/home">
-                                <Home />
+                                <Home setData={setData} />
                             </Route>
                             {/* <Route path="/admin/dashboard/categorii">
                                 <Categorii />
