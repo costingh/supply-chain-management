@@ -149,7 +149,7 @@ function EditareComanda() {
             history.push(
                 `/${
                     currentUser && currentUser.administrator === 'N'
-                        ? 'angajat'
+                        ? 'employee'
                         : 'admin'
                 }/dashboard/comenzi/`
             )
@@ -174,7 +174,7 @@ function EditareComanda() {
                         history.push(
                             `/${
                                 currentUser && currentUser.administrator === 'N'
-                                    ? 'angajat'
+                                    ? 'employee'
                                     : 'admin'
                             }/dashboard/comenzi/`
                         )
