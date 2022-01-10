@@ -83,7 +83,7 @@ export default function Comanda() {
                     <Link
                         to={`/${
                             currentUser && currentUser.administrator === 'N'
-                                ? 'angajat'
+                                ? 'employee'
                                 : 'admin'
                         }/dashboard/comenzi`}
                     >
@@ -93,7 +93,7 @@ export default function Comanda() {
                         <Link
                             to={`/${
                                 currentUser && currentUser.administrator === 'N'
-                                    ? 'angajat'
+                                    ? 'employee'
                                     : 'admin'
                             }/dashboard/comenzi/comanda/editati/${orderNumber}`}
                         >
@@ -327,7 +327,7 @@ export default function Comanda() {
                                                 currentUser &&
                                                 currentUser.administrator ===
                                                     'N'
-                                                    ? 'angajat'
+                                                    ? 'employee'
                                                     : 'admin'
                                             }/dashboard/${
                                                 detaliiComanda.nr_factura
