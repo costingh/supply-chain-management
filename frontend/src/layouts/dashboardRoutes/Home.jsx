@@ -1,9 +1,21 @@
+// React
 import React, { useEffect, useState } from 'react'
+
+// redux
+import { useDispatch, useSelector } from 'react-redux'
+
+// charts
 import BarChart from '../../charts/BarChart'
 import Doughnut from '../../charts/Doughnut'
-import moment from 'moment'
-import StatisticsService from '../../services/statistics-service'
 
+// time formatting
+import moment from 'moment'
+
+// services
+import StatisticsService from '../../services/statistics-service'
+import SuppliersService from '../../services/suppliers.service'
+
+// constants
 const backgrounds = [
     'rgba(60, 66, 185, 0.2)',
     'rgba(60, 162, 185, 0.2)',
@@ -29,7 +41,9 @@ const colors = [
     'rgba(185, 60, 122, 0.4)',
 ]
 
-function Home() {
+function Home({ setData }) {
+    const { user: currentUser } = useSelector((state) => state.auth)
+
     const [numberOfInvoices, setNumberOfInvoices] = useState(0)
     const [numberOfOrders, setNumberOfOrders] = useState(0)
     const [numberOfSuppliers, setNumberOfSuppliers] = useState(0)
@@ -120,6 +134,17 @@ function Home() {
         ]
 
         return months[month - 1]
+    }
+
+    const handleDeleteSupplier = (s) => {
+        SuppliersService.deleteSupplier(s.nume_furnizor)
+            .then((data) => {
+                setData(data.data)
+                setTimeout(() => {
+                    window.location.reload(false)
+                }, 2000)
+            })
+            .catch((error) => console.log(error))
     }
 
     return (
@@ -329,6 +354,7 @@ function Home() {
                         <div className="tableCol">Nume Furnizor</div>
                         <div className="tableCol">Oras Furnizor</div>
                         <div className="tableCol">Numar Telefon</div>
+                        <div className="tableCol">Actiuni</div>
                     </div>
                     {suppliersWithoutOrders &&
                         suppliersWithoutOrders.map((s, index) => (
@@ -370,6 +396,36 @@ function Home() {
                                 </div>
                                 <div className="tableCol">{s.oras}</div>
                                 <div className="tableCol">{s.nr_telefon}</div>
+                                <div className="tableCol">
+                                    {currentUser &&
+                                    currentUser.administrator === 'D' ? (
+                                        <p
+                                            style={{
+                                                padding: '6px 15px',
+                                                borderRadius: '5px',
+                                                background: '#111',
+                                                cursor: 'pointer',
+                                                display: 'inline-block',
+                                            }}
+                                            onClick={() =>
+                                                handleDeleteSupplier(s)
+                                            }
+                                        >
+                                            Stergeti
+                                        </p>
+                                    ) : (
+                                        <p
+                                            style={{
+                                                padding: '6px 15px',
+                                                borderRadius: '5px',
+                                                background: '#1e2835',
+                                                color: '#7e7b7a',
+                                            }}
+                                        >
+                                            Stergeti
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         ))}
                 </div>
