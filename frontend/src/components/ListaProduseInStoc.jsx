@@ -421,7 +421,7 @@ function ListaProduseInStoc({ setData, setRedirectTo }) {
         }
 
         let now = Date.now()
-        let data_livrare = now + 86400000 * 3 // add three days (milliseconds) current date
+        let data_livrare = now + 86400000 * 5 // add 5 days (in milliseconds) to current date
         Promise.all(
             ordersBySupplier.map((order) =>
                 dispatch(

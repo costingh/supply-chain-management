@@ -4,7 +4,7 @@ import DataTable from '../../components/DataTable'
 import { useDispatch, useSelector } from 'react-redux'
 import TableBtnsContainer from '../../components/TableBtnsContainer'
 import { getAllInvoices, deleteInvoice } from '../../actions/invoices'
-
+import InvoicesService from '../../services/invoices.service'
 const coloaneFacturi = [
     { field: 'id', headerName: 'Numar Factura', width: 200 },
     { field: 'dataFactura', headerName: 'Data Factura', width: 300 },
@@ -18,9 +18,10 @@ function Facturi({ setData }) {
 
     const dispatch = useDispatch()
 
-    const [showFilterPanelName, setShowFilterPanelName] = useState('search')
     const [selectionModel, setSelectionModel] = useState([])
     const [randFacturi, setRandFacturi] = useState([])
+    const [grid, setGrid] = useState('table')
+    const [invoicesWithProducts, setInvoicesWithProducts] = useState([])
 
     // get all invoices when mounting component
     useEffect(() => {
@@ -29,9 +30,21 @@ function Facturi({ setData }) {
 
     useEffect(() => {
         let invoicesArray = []
+        let invWithProd = []
+
         if (invoices) {
             if (invoices.length > 0) {
                 invoices.map((invoice) => {
+                    InvoicesService.getAnInvoice(invoice.nr_factura)
+                        .then((resp) => {
+                            invWithProd.push({
+                                ...invoice,
+                                listaProduse: resp.products,
+                            })
+                            setInvoicesWithProducts(invWithProd)
+                        })
+                        .catch((err) => console.log(err))
+
                     invoicesArray.push({
                         id: invoice.nr_factura,
                         total: invoice.total,
@@ -53,6 +66,10 @@ function Facturi({ setData }) {
             ])
         }
     }, [invoices])
+
+    useEffect(() => {
+        console.log(invoicesWithProducts)
+    }, [invoicesWithProducts])
 
     const deleteRecords = () => {
         if (selectionModel.length === 1) {
@@ -83,27 +100,89 @@ function Facturi({ setData }) {
     }
 
     return (
-        <>
-            <div className="tableContainer" style={{ flex: '1' }}>
-                <TableBtnsContainer
-                    setShowFilterPanelName={setShowFilterPanelName}
-                    deleteRecords={deleteRecords}
-                    isAdmin={
-                        currentUser
-                            ? currentUser.administrator === 'D'
-                                ? true
-                                : false
+        <div style={{ width: '100%' }}>
+            <TableBtnsContainer
+                setGrid={setGrid}
+                grid={grid}
+                deleteRecords={deleteRecords}
+                isAdmin={
+                    currentUser
+                        ? currentUser.administrator === 'D'
+                            ? true
                             : false
-                    }
-                />
-                <DataTable
-                    rows={randFacturi}
-                    columns={coloaneFacturi}
-                    selectionModel={selectionModel}
-                    setSelectionModel={setSelectionModel}
-                />
-            </div>
-        </>
+                        : false
+                }
+            />
+            {grid === 'table' ? (
+                <div
+                    style={{
+                        width: '100%',
+                        height: 'calc(100% - 84px)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <DataTable
+                        rows={randFacturi}
+                        columns={coloaneFacturi}
+                        selectionModel={selectionModel}
+                        setSelectionModel={setSelectionModel}
+                    />
+                </div>
+            ) : (
+                <div
+                    className="gridLayout"
+                    style={{
+                        height: 'calc(100% - 84px)',
+                    }}
+                >
+                    {invoicesWithProducts &&
+                        invoicesWithProducts.map((i) => (
+                            <div className="innerLayout" key={i.nr_factura}>
+                                <div className="factura">
+                                    <div className="top">
+                                        <p>Factura nr. {i.nr_factura}</p>
+                                        <p>
+                                            Data:{' '}
+                                            {moment(i.data_factura).format('l')}
+                                        </p>
+                                    </div>
+                                    <div className="details">
+                                        <p>
+                                            Departamentul de{' '}
+                                            {i.nume_departament}
+                                        </p>
+                                        <p>
+                                            {i.nume_furnizor +
+                                                ' ' +
+                                                i.oras +
+                                                ' ' +
+                                                i.strada +
+                                                ' ' +
+                                                i.numar}
+                                        </p>
+                                        <p>Telefon: {i.nr_telefon}</p>
+                                    </div>
+                                    <div className="productsList">
+                                        {i.listaProduse.map((p) => (
+                                            <div>
+                                                {p.nume_produs}, {p.cantitate}
+                                                {p.unitate_masura} x {p.pret}{' '}
+                                                Lei/
+                                                {p.unitate_masura}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <p className="total">
+                                        Total: {i.total} LEI
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                </div>
+            )}
+        </div>
     )
 }
 

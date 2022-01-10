@@ -14,6 +14,12 @@ module.exports = function (app) {
 
   app.get("/api/facturi/all", [authJwt.verifyToken], controller.getAllInvoices);
 
+  app.get(
+    "/api/facturi/factura/:numar",
+    [authJwt.verifyToken],
+    controller.getAnInvoice
+  );
+
   app.delete(
     "/api/facturi/delete/:id",
     [authJwt.verifyToken],

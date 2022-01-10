@@ -1016,6 +1016,19 @@ input::placeholder {
     width: 100%;
 }
 
+.tableGrid {
+    transition: all 0.2s ease;
+    fill: #8491a2;
+}
+
+.tableGrid:hover {
+    fill: #e1e1e1 !important;
+}
+
+.tableGrid.active {
+    fill: #e1e1e1;
+}
+
 .produse .produs .text .textLeft .edit,
 .produse .produs .text .textLeft .delete {
     display: flex;
@@ -3400,4 +3413,60 @@ input::placeholder {
 .updateSupplier > div {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+}
+
+/* #################################################
+###################### FACTURI #####################
+#################################################### */
+
+.gridLayout {
+    width: 100%;
+    height: calc(100% - 60px - 80px);
+    padding: 20px 40px;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 50% 50%;
+    overflow-y: auto;
+}
+
+.innerLayout {
+    padding: 15px;
+}
+
+.factura {
+    background: #19212c;
+    height: 100%;
+    border-radius: 15px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.factura .top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.factura .top p {
+    color: #8491a2;
+}
+.factura .details {
+    color: #e1e1e1;
+    padding-top: 15px;
+}
+
+.factura .productsList {
+    height: 100%;
+}
+
+.factura .total {
+    color: #8491a2;
+}
+
+.factura .productsList {
+    padding-top: 10px;
+    color: #8491a2;
+    font-size: 14px;
+    overflow-y: auto;
 }

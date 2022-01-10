@@ -86,6 +86,37 @@ exports.getAllInvoices = (req, res) => {
   });
 };
 
+exports.getAnInvoice = (req, res) => {
+  let query =
+    "select p.nume_produs, p.pret, p.unitate_masura, pc.cantitate " +
+    "from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs " +
+    "inner join comenzi c on pc.nr_comanda = c.nr_comanda " +
+    "inner join facturi f on f.nr_factura = c.nr_factura " +
+    "where f.nr_factura = ?";
+
+  db.query(query, req.params.numar, async (error, results) => {
+    if (error) {
+      return res.send({
+        message: "Eroare!",
+        status: 409,
+      });
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        message: "Succes!",
+        status: 200,
+        products: results,
+      });
+    } else {
+      return res.send({
+        message: "Nu a fost gasita factura!",
+        status: 409,
+      });
+    }
+  });
+};
+
 exports.deleteInvoice = (req, res) => {
   const numarFactura = req.params.id;
 

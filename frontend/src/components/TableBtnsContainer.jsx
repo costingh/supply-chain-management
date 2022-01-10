@@ -1,40 +1,11 @@
 import React from 'react'
 
-function TableBtnsContainer({
-    setShowFilterPanelName,
-    deleteRecords,
-    isAdmin,
-}) {
+function TableBtnsContainer({ grid, setGrid, deleteRecords, isAdmin }) {
     return (
-        <div className="actions">
-            <div
-                className="btn add"
-                onClick={() => setShowFilterPanelName('add')}
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                >
-                    <path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z" />
-                </svg>
-                <p>Adaugati</p>
-            </div>
-            <div
-                className="btn update"
-                onClick={() => setShowFilterPanelName('update')}
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                >
-                    <path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z" />
-                </svg>
-                <p>Editati</p>
-            </div>
+        <div
+            className="actions"
+            style={{ width: '100%', padding: '15px 40px' }}
+        >
             {isAdmin && (
                 <div className="btn delete" onClick={deleteRecords}>
                     <svg
@@ -48,6 +19,43 @@ function TableBtnsContainer({
                     <p>Stergeti</p>
                 </div>
             )}
+            <div style={{ display: 'flex', columnGap: '20px' }}>
+                <div
+                    className={
+                        grid === 'grid' ? 'tableGrid active' : 'tableGrid'
+                    }
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setGrid('grid')}
+                    >
+                        <path d="M11 11h-11v-11h11v11zm13 0h-11v-11h11v11zm-13 13h-11v-11h11v11zm13 0h-11v-11h11v11z" />
+                    </svg>
+                </div>
+                <div
+                    className={
+                        grid === 'table' ? 'tableGrid active' : 'tableGrid'
+                    }
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        style={{
+                            transform: 'rotate(90deg)',
+                            cursor: 'pointer',
+                        }}
+                        onClick={() => setGrid('table')}
+                    >
+                        <path d="M6 24h-6v-24h6v24zm9-24h-6v24h6v-24zm9 0h-6v24h6v-24z" />
+                    </svg>
+                </div>
+            </div>
         </div>
     )
 }
