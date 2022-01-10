@@ -114,13 +114,16 @@ exports.getAllSuppliers = (req, res) => {
 
 exports.deleteSupplier = (req, res) => {
   const supplierToDeleteName = req.params.name;
-
   db.query(
     "DELETE FROM furnizori WHERE nume_furnizor = ?",
     [supplierToDeleteName],
     async (error, results) => {
       if (error) {
         console.log(error);
+        return res.json({
+          message: "Furnizorul nu a putut fi sters!",
+          status: 500,
+        });
       }
 
       return res.json({
