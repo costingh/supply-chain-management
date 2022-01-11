@@ -264,7 +264,7 @@ exports.popularProducts = (req, res) => {
     "from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs " +
     "group by month(pc.data_comanda), p.nume_produs " +
     "having sum(pc.cantitate) IN (select max(s.max) from (select sum(pc2.cantitate) as max, month(pc2.data_comanda) as luna from produsecomenzi pc2 group by pc2.cod_produs, month(pc2.data_comanda) order by sum(pc2.cantitate)) as s  group by s.luna) " +
-    "order by month(pc.data_comanda) asc";
+    "order by pc.data_comanda desc";
 
   db.query(query, async (error, results) => {
     if (error) {
