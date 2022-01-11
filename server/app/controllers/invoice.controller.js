@@ -6,13 +6,17 @@ const db = mysql.createConnection(dbConfig);
 
 exports.addInvoice = (req, res) => {
   const { nrComanda } = req.body;
-  console.log(nrComanda);
-  let query1 =
-    "select distinct " +
-    "c.cod_furnizor, (select sum(p.pret * pc.cantitate) from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs where nr_comanda = ?) as total " +
-    "from comenzi c, produse p, produsecomenzi pc";
 
-  db.query(query1, nrComanda, (error, results) => {
+  let query1 =
+    "select c.cod_furnizor, " +
+    "( " +
+    "select sum(p.pret * pc.cantitate) " +
+    "from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs " +
+    "where nr_comanda = ? " +
+    ") as total " +
+    "from comenzi c where c.nr_comanda = ?";
+
+  db.query(query1, [nrComanda, nrComanda], (error, results) => {
     if (error) {
       return res.json({
         message: "Comanda nu a putut fi gasita!",
@@ -26,6 +30,7 @@ exports.addInvoice = (req, res) => {
         cod_furnizor: results[0].cod_furnizor,
         total: results[0].total,
       };
+
       db.query("INSERT INTO facturi set ?", Factura, (error, results) => {
         if (error) {
           return res.json({

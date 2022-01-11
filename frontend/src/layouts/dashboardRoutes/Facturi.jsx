@@ -67,9 +67,9 @@ function Facturi({ setData }) {
         }
     }, [invoices])
 
-    useEffect(() => {
+    /*  useEffect(() => {
         console.log(invoicesWithProducts)
-    }, [invoicesWithProducts])
+    }, [invoicesWithProducts]) */
 
     const deleteRecords = () => {
         if (selectionModel.length === 1) {
@@ -104,6 +104,7 @@ function Facturi({ setData }) {
             <TableBtnsContainer
                 setGrid={setGrid}
                 grid={grid}
+                invoices={invoices}
                 deleteRecords={deleteRecords}
                 isAdmin={
                     currentUser
@@ -168,8 +169,6 @@ function Facturi({ setData }) {
                                         {i.listaProduse.map((p) => (
                                             <div>
                                                 {p.nume_produs}, {p.cantitate}
-                                                {p.unitate_masura} x {p.pret}{' '}
-                                                Lei/
                                                 {p.unitate_masura}
                                             </div>
                                         ))}
