@@ -260,11 +260,21 @@ exports.suppliersByCity = (req, res) => {
 
 exports.popularProducts = (req, res) => {
   let query =
-    "select p.nume_produs, p.pret, p.imagine_produs, sum(pc.cantitate) as cantitate_lunara, month(pc.data_comanda) as luna " +
-    "from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs " +
-    "group by month(pc.data_comanda), p.nume_produs " +
-    "having sum(pc.cantitate) IN (select max(s.max) from (select sum(pc2.cantitate) as max, month(pc2.data_comanda) as luna from produsecomenzi pc2 group by pc2.cod_produs, month(pc2.data_comanda) order by sum(pc2.cantitate)) as s  group by s.luna) " +
-    "order by pc.data_comanda desc";
+    "select max(s.cantitate_totala) as cantitate_lunara, s.produs as nume_produs, s.luna as luna, s.imagine_produs, s.pret as pret " +
+    "from " +
+    "( " +
+    "select sum(pc.cantitate) as cantitate_totala, " +
+    "month(pc.data_comanda) as luna, " +
+    "p.nume_produs as produs, " +
+    "p.imagine_produs as imagine_produs, " +
+    "pc.data_comanda as data_completa, " +
+    "p.pret as pret " +
+    "from produsecomenzi pc inner join produse p on pc.cod_produs = p.cod_produs " +
+    "group by month(pc.data_comanda), pc.cod_produs " +
+    "order by month(pc.data_comanda) desc, sum(pc.cantitate) desc " +
+    ") as s " +
+    "group by s.luna " +
+    "order by s.data_completa desc ";
 
   db.query(query, async (error, results) => {
     if (error) {

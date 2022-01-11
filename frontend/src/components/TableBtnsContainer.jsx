@@ -1,12 +1,18 @@
 import React from 'react'
 
-function TableBtnsContainer({ grid, setGrid, deleteRecords, isAdmin }) {
+function TableBtnsContainer({
+    grid,
+    setGrid,
+    deleteRecords,
+    isAdmin,
+    invoices,
+}) {
     return (
         <div
             className="actions"
             style={{ width: '100%', padding: '15px 40px' }}
         >
-            {isAdmin && (
+            {isAdmin ? (
                 <div className="btn delete" onClick={deleteRecords}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -17,6 +23,16 @@ function TableBtnsContainer({ grid, setGrid, deleteRecords, isAdmin }) {
                         <path d="M21 6l-3 18h-12l-3-18h2.028l2.666 16h8.611l2.666-16h2.029zm-4.711-4c-.9 0-1.631-1.099-1.631-2h-5.316c0 .901-.73 2-1.631 2h-5.711v2h20v-2h-5.711z" />
                     </svg>
                     <p>Stergeti</p>
+                </div>
+            ) : (
+                <div
+                    style={{
+                        color: '#e1e1e1',
+                        fontSize: '23px',
+                        fontWeight: '500',
+                    }}
+                >
+                    {invoices && `${invoices.length} Facturi`}
                 </div>
             )}
             <div style={{ display: 'flex', columnGap: '20px' }}>
