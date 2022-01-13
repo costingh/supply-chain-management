@@ -259,6 +259,27 @@ exports.suppliersByCity = (req, res) => {
 };
 
 exports.popularProducts = (req, res) => {
+  const months = [
+    "Ianuarie",
+    "Februarie",
+    "Martie",
+    "Aprilie",
+    "Mai",
+    "Iunie",
+    "Iulie",
+    "August",
+    "Septembrie",
+    "Octombrie",
+    "Noiembrie",
+    "Decembrie",
+  ];
+
+  let string = "";
+
+  if (months.includes(req.params.name)) {
+    string = `where s.luna = ${months.indexOf(req.params.name) + 1} `;
+  }
+
   let query =
     "select max(s.cantitate_totala) as cantitate_lunara, s.produs as nume_produs, s.luna as luna, s.imagine_produs, s.pret as pret " +
     "from " +
@@ -273,6 +294,7 @@ exports.popularProducts = (req, res) => {
     "group by month(pc.data_comanda), pc.cod_produs " +
     "order by month(pc.data_comanda) desc, sum(pc.cantitate) desc " +
     ") as s " +
+    string +
     "group by s.luna " +
     "order by s.data_completa desc ";
 

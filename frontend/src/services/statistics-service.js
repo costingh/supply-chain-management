@@ -105,9 +105,9 @@ const suppliersByCity = () => {
             return err
         })
 }
-const popularProducts = () => {
+const popularProducts = (currentMonthRange) => {
     return axios
-        .get(API_URL + 'produse-populare', {
+        .get(API_URL + `produse-populare/${currentMonthRange}`, {
             headers: authHeader(),
         })
         .then((resp) => {

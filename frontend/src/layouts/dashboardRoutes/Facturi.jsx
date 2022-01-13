@@ -173,7 +173,10 @@ function Facturi({ setData }) {
                                             </div>
                                         ))}
                                     </div>
-                                    <p className="total">
+                                    <p
+                                        className="total"
+                                        style={{ color: '#e1e1e1' }}
+                                    >
                                         Total: {i.total} LEI
                                     </p>
                                 </div>

@@ -41,6 +41,21 @@ const colors = [
     'rgba(185, 60, 122, 0.4)',
 ]
 
+const months = [
+    'Ianuarie',
+    'Februarie',
+    'Martie',
+    'Aprilie',
+    'Mai',
+    'Iunie',
+    'Iulie',
+    'August',
+    'Septembrie',
+    'Octombrie',
+    'Noiembrie',
+    'Decembrie',
+]
+
 function Home({ setData }) {
     const { user: currentUser } = useSelector((state) => state.auth)
 
@@ -52,6 +67,7 @@ function Home({ setData }) {
     const [popularSupplier, setPopularSupplier] = useState(null)
     const [mostExperiencedEmployee, setMostExperiencedEmployee] = useState(null)
     const [suppliersWithoutOrders, setSuppliersWithoutOrders] = useState(null)
+    const [currentMonthRange, setCurrentMonthRange] = useState('all')
 
     useEffect(() => {
         StatisticsService.numberOfInvoices()
@@ -90,7 +106,7 @@ function Home({ setData }) {
             })
             .catch((err) => console.log(err))
 
-        StatisticsService.popularProducts()
+        StatisticsService.popularProducts(currentMonthRange)
             .then((data) => {
                 setPopularProducts(data.result)
             })
@@ -146,6 +162,18 @@ function Home({ setData }) {
             })
             .catch((error) => console.log(error))
     }
+
+    const handleMonthChangePopularProducts = (e) => {
+        setCurrentMonthRange(e.target.value)
+    }
+
+    useEffect(() => {
+        StatisticsService.popularProducts(currentMonthRange)
+            .then((data) => {
+                setPopularProducts(data.result)
+            })
+            .catch((err) => console.log(err))
+    }, [currentMonthRange])
 
     return (
         <div className="homeContainer">
@@ -307,7 +335,24 @@ function Home({ setData }) {
                 </div>
                 <div className="innerR">
                     <div className="innerRtop">
-                        <h1>Produse populare</h1>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <h1>Produse populare</h1>
+                            <select
+                                name="popularProdPerMonths"
+                                onChange={handleMonthChangePopularProducts}
+                            >
+                                <option value="all">Intreaga perioada</option>
+                                {months.map((m) => (
+                                    <option value={m}>{m}</option>
+                                ))}
+                            </select>
+                        </div>
                         <div className="popularProducts">
                             {popularProducts &&
                                 popularProducts.map((p) => (

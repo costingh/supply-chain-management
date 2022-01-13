@@ -59,7 +59,7 @@ module.exports = function (app) {
   );
 
   app.get(
-    "/api/statistici/produse-populare",
+    "/api/statistici/produse-populare/:name",
     [authJwt.verifyToken],
     controller.popularProducts
   );
