@@ -51,6 +51,35 @@ export const getAllOrders = () => (dispatch) => {
     })
 }
 
+export const filterOrders =
+    (minDate, maxDate, minPrice, maxPrice, sortDirection, sortBy, checked) =>
+    (dispatch) => {
+        return OrdersService.filterOrders(
+            minDate,
+            maxDate,
+            minPrice,
+            maxPrice,
+            sortDirection,
+            sortBy,
+            checked
+        ).then((response) => {
+            if (response.data.status === 200) {
+                dispatch({
+                    type: FETCH_ORDERS_SUCCESS,
+                    payload: { orders: response.data.orders },
+                })
+
+                return response.data
+            } else {
+                dispatch({
+                    type: FETCH_ORDERS_FAIL,
+                })
+
+                return response.data
+            }
+        })
+    }
+
 export const deleteOrder = (nr_comanda) => (dispatch) => {
     return OrdersService.deleteOrder(nr_comanda).then((response) => {
         if (response.data.status === 200) {

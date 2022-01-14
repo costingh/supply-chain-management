@@ -7,14 +7,16 @@ import { Link, useHistory } from 'react-router-dom'
 // components
 import GenerareFactura from '../../components/GenerareFactura'
 // actions
-import { getAllOrders, deleteOrder } from '../../actions/orders'
+import { getAllOrders, deleteOrder, filterOrders } from '../../actions/orders'
 // services
 import OrdersService from '../../services/orders.service'
 // date formatter
 import moment from 'moment'
+import Checkbox from '@mui/material/Checkbox'
 
 function Comenzi({ setData }) {
     const { user: currentUser } = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
 
     const history = useHistory()
 
@@ -25,17 +27,32 @@ function Comenzi({ setData }) {
     const [messageConfirm, setMessageConfirm] = useState('')
     const [nrComanda, setNrComanda] = useState(null)
     const [invoiceForOrder, setInvoiceForOrder] = useState(null)
+
     // generare factura
     const [detaliiComanda, setDetaliiComanda] = useState(null)
     const [produseComanda, setProduseComanda] = useState([])
 
-    const dispatch = useDispatch()
+    // sortare
+    const [minDate, setMinDate] = useState('2018-07-22')
+    const [maxDate, setMaxDate] = useState('2022-01-22')
+    const [minPrice, setMinPrice] = useState('0')
+    const [maxPrice, setMaxPrice] = useState('9999')
+    const [sortDirection, setSortDirection] = useState('desc')
+    const [sortBy, setSortBy] = useState('c.data_comanda')
+    const [checked, setChecked] = useState(false)
+    const [completeOrdersList, setCompleteOrdersList] = useState([])
+
+    // handle methods for inputs
+    const handleMinDateChange = (e) => setMinDate(e.target.value)
+    const handleMaxDateChange = (e) => setMaxDate(e.target.value)
+    const handleMinPriceChange = (e) => setMinPrice(e.target.value)
+    const handleMaxPriceChange = (e) => setMaxPrice(e.target.value)
+    const handleSortDirection = (e) => setSortDirection(e.target.value)
+    const handleSortBy = (e) => setSortBy(e.target.value)
+    const handleCheckbox = (e) => setChecked(e.target.checked)
 
     useEffect(() => {
-        setLoading(true)
-        dispatch(getAllOrders()).then((data) => {
-            setLoading(false)
-        })
+        dispatch(getAllOrders()).then((data) => {})
     }, [])
 
     const handleGenerateInvoice = (nr_comanda) => {
@@ -85,6 +102,43 @@ function Comenzi({ setData }) {
         setNrComanda(nr)
     }
 
+    const sort = () => {
+        dispatch(
+            filterOrders(
+                minDate,
+                maxDate,
+                minPrice,
+                maxPrice,
+                sortDirection,
+                sortBy,
+                checked
+            )
+        ).then((data) => {})
+    }
+
+    useEffect(() => {
+        const fetch = async () => {
+            setLoading(false)
+            let arr = []
+            await Promise.all(
+                orders.map((o) => {
+                    return OrdersService.getOrderByNumber(o.nr_comanda)
+                        .then((data) => {
+                            arr.push({
+                                ...o,
+                                productsList: data.comanda[1],
+                            })
+                        })
+                        .catch((err) => err)
+                })
+            )
+            setCompleteOrdersList(arr)
+            setLoading(true)
+        }
+
+        if (orders && orders.length > 0) fetch()
+    }, [orders])
+
     return (
         <div className="ordersContainer">
             {confirm && (
@@ -104,20 +158,100 @@ function Comenzi({ setData }) {
                         ? '1 Comanda'
                         : orders && orders.length + ' Comenzi'}
                 </h1>
-                <Link
-                    to={`/${
-                        currentUser && currentUser.administrator === 'N'
-                            ? 'employee'
-                            : 'admin'
-                    }/dashboard/produse`}
+
+                <div className="center">
+                    <div className="center-box">
+                        <span>Incepand de la: </span>
+                        <input
+                            type="date"
+                            defaultValue="2018-07-22"
+                            max="2018-12-31"
+                            onChange={handleMinDateChange}
+                        />
+                    </div>
+                    <div className="center-box">
+                        <span>Pana la: </span>
+                        <input
+                            type="date"
+                            defaultValue="2022-01-22"
+                            max="2022-01-22"
+                            onChange={handleMaxDateChange}
+                        />
+                    </div>
+
+                    <div className="center-box">
+                        <span>Pret minim: (LEI) </span>
+                        <input
+                            type="text"
+                            defaultValue="0"
+                            onChange={handleMinPriceChange}
+                        />
+                    </div>
+                    <div className="center-box">
+                        <span>Pret maxim: (LEI) </span>
+                        <input
+                            type="text"
+                            defaultValue="9999"
+                            onChange={handleMaxPriceChange}
+                        />
+                    </div>
+                    <div className="center-box">
+                        <span>Sortati dupa: </span>
+                        <select onChange={handleSortBy}>
+                            <option value="c.data_comanda">Data</option>
+                            <option value="total">Pret total</option>
+                        </select>
+                    </div>
+                    <div className="center-box">
+                        <span>Ordine sortare: </span>
+                        <select onChange={handleSortDirection}>
+                            <option value="desc">Descrescator</option>
+                            <option value="asc">Crescator</option>
+                        </select>
+                    </div>
+                    <div className="center-box">
+                        <span style={{ marginBottom: '-10px' }}>
+                            Cu Factura{' '}
+                        </span>
+                        <Checkbox
+                            sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                            checked={checked}
+                            onChange={handleCheckbox}
+                        />
+                    </div>
+                </div>
+
+                <div
+                    className="btns-right"
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        columnGap: '20px',
+                    }}
                 >
-                    <div className="addNewOrder">Plasati Comanda</div>
-                </Link>
+                    <div
+                        className="addNewOrder"
+                        style={{ background: '#5150ff', color: '#e1e1e1' }}
+                        onClick={sort}
+                    >
+                        Sortati
+                    </div>
+                    <Link
+                        to={`/${
+                            currentUser && currentUser.administrator === 'N'
+                                ? 'employee'
+                                : 'admin'
+                        }/dashboard/produse`}
+                    >
+                        <div className="addNewOrder">Plasati Comanda</div>
+                    </Link>
+                </div>
             </div>
             <div className="ordersInner" style={{ display: 'block' }}>
-                {orders &&
-                    orders.length &&
-                    orders.map((o, index) => (
+                {completeOrdersList &&
+                    completeOrdersList.length &&
+                    completeOrdersList.map((o, index) => (
                         <div className="order" key={o.nr_comanda}>
                             <div className="topOrderContainer">
                                 <div className="topOrderLeft">
@@ -154,35 +288,10 @@ function Comenzi({ setData }) {
                             </div>
                             <div className="middleOrderContainer">
                                 <div className="middleLeft">
-                                    <div className="image">
-                                        <svg
-                                            width="24"
-                                            height="24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                        >
-                                            <path d="M13.403 24h-13.403v-22h3c1.231 0 2.181-1.084 3-2h8c.821.916 1.772 2 3 2h3v9.15c-.485-.098-.987-.15-1.5-.15l-.5.016v-7.016h-4l-2 2h-3.897l-2.103-2h-4v18h9.866c.397.751.919 1.427 1.537 2zm5.097-11c3.035 0 5.5 2.464 5.5 5.5s-2.465 5.5-5.5 5.5c-3.036 0-5.5-2.464-5.5-5.5s2.464-5.5 5.5-5.5zm0 2c1.931 0 3.5 1.568 3.5 3.5s-1.569 3.5-3.5 3.5c-1.932 0-3.5-1.568-3.5-3.5s1.568-3.5 3.5-3.5zm2.5 4h-3v-3h1v2h2v1zm-15.151-4.052l-1.049-.984-.8.823 1.864 1.776 3.136-3.192-.815-.808-2.336 2.385zm6.151 1.052h-2v-1h2v1zm2-2h-4v-1h4v1zm-8.151-4.025l-1.049-.983-.8.823 1.864 1.776 3.136-3.192-.815-.808-2.336 2.384zm8.151 1.025h-4v-1h4v1zm0-2h-4v-1h4v1zm-5-6c0 .552.449 1 1 1 .553 0 1-.448 1-1s-.447-1-1-1c-.551 0-1 .448-1 1z" />
-                                        </svg>
-                                        {/* <svg
-                                            width="24"
-                                            height="24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                        >
-                                            <path d="M3 18h-2c-.552 0-1-.448-1-1v-2h15v-9h4.667c1.117 0 1.6.576 1.936 1.107.594.94 1.536 2.432 2.109 3.378.188.312.288.67.288 1.035v4.48c0 1.121-.728 2-2 2h-1c0 1.656-1.344 3-3 3s-3-1.344-3-3h-6c0 1.656-1.344 3-3 3s-3-1.344-3-3zm3-1.2c.662 0 1.2.538 1.2 1.2 0 .662-.538 1.2-1.2 1.2-.662 0-1.2-.538-1.2-1.2 0-.662.538-1.2 1.2-1.2zm12 0c.662 0 1.2.538 1.2 1.2 0 .662-.538 1.2-1.2 1.2-.662 0-1.2-.538-1.2-1.2 0-.662.538-1.2 1.2-1.2zm-4-2.8h-14v-10c0-.552.448-1 1-1h12c.552 0 1 .448 1 1v10zm3-6v3h4.715l-1.427-2.496c-.178-.312-.509-.504-.868-.504h-2.42z" />
-                                        </svg> */}
-                                        {/* <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path d="M22 4h-20c-1.104 0-2 .896-2 2v12c0 1.104.896 2 2 2h20c1.104 0 2-.896 2-2v-12c0-1.104-.896-2-2-2zm-19 5.78c0-.431.349-.78.78-.78h.428v1.125h-1.208v-.345zm0 .764h1.208v.968h-1.208v-.968zm0 1.388h1.208v1.068h-.428c-.431 0-.78-.349-.78-.78v-.288zm3 5.068h-3v-1h3v1zm1-4.78c0 .431-.349.78-.78.78h-.429v-1.068h1.209v.288zm0-.708h-1.209v-.968h1.209v.968zm0-1.387h-1.629v2.875h-.743v-4h1.592c.431 0 .78.349.78.78v.345zm4 6.875h-3v-1h3v1zm1-6.5c0-1.381 1.119-2.5 2.5-2.5.484 0 .937.138 1.32.377-.531.552-.857 1.3-.857 2.123 0 .824.327 1.571.857 2.123-.383.239-.836.377-1.32.377-1.381 0-2.5-1.119-2.5-2.5zm4 6.5h-3v-1h3v1zm5 0h-3v-1h3v1zm-2.5-4c-1.38 0-2.5-1.119-2.5-2.5s1.12-2.5 2.5-2.5c1.381 0 2.5 1.119 2.5 2.5s-1.119 2.5-2.5 2.5z" />
-                                        </svg> */}
-                                    </div>
-                                    <div className="text">
+                                    <div
+                                        className="text"
+                                        style={{ marginLeft: '40px' }}
+                                    >
                                         <h1>Detalii Furnizor</h1>
 
                                         <p
@@ -200,6 +309,57 @@ function Comenzi({ setData }) {
                                             - Strada {o.strada}, nr.{o.numar}
                                         </p>
                                         <p>- Nr. Telefon: {o.nr_telefon}</p>
+                                    </div>
+                                    <div
+                                        className="text"
+                                        style={{
+                                            marginLeft: '40px',
+                                            width: 'calc(100% - 300px)',
+                                        }}
+                                    >
+                                        <h1>Detalii Produse</h1>
+
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexWrap: 'wrap',
+                                                rowGap: '10px',
+                                            }}
+                                        >
+                                            {o.productsList &&
+                                                o.productsList.map(
+                                                    (m, index) => (
+                                                        <p
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems:
+                                                                    'center',
+                                                                columnGap:
+                                                                    '10px',
+                                                                marginRight:
+                                                                    '20px',
+                                                            }}
+                                                        >
+                                                            {`${m.cantitate}${m.unitate_masura}`}
+                                                            <img
+                                                                src={
+                                                                    m.imagine_produs
+                                                                }
+                                                                alt={
+                                                                    m.nume_produs
+                                                                }
+                                                                style={{
+                                                                    width: '40px',
+                                                                }}
+                                                            />
+                                                            {index !==
+                                                                o.productsList
+                                                                    .length -
+                                                                    1 && ','}
+                                                        </p>
+                                                    )
+                                                )}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="middleRight">

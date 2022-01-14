@@ -241,3 +241,30 @@ exports.updateOrder = async (req, res) => {
     status: 200,
   });
 };
+
+exports.filterOrders = (req, res) => {
+  const { minD, maxD, minP, maxP, dir, sortBy, checked } = req.params;
+
+  let query = `select distinct c.nr_comanda, c.data_comanda, c.data_livrare, c.nr_factura, f.*, (select sum(p.pret * pc.cantitate) from produse p inner join produsecomenzi pc on p.cod_produs = pc.cod_produs where nr_comanda = c.nr_comanda ) as total from comenzi c inner join produsecomenzi pc on c.nr_comanda = pc.nr_comanda inner join furnizori f on f.cod_furnizor = c.cod_furnizor where c.data_comanda between ? and ? and c.nr_factura ${
+    checked === "true" ? "is not null" : "is null"
+  } having total between ? and ? order by ${sortBy} ${dir}`;
+
+  db.query(query, [minD, maxD, minP, maxP], async (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+
+    if (results.length > 0) {
+      return res.json({
+        message: "Orders fetched successfully!",
+        status: 200,
+        orders: results,
+      });
+    } else {
+      return res.send({
+        message: "No orders in database!",
+        status: 409,
+      });
+    }
+  });
+};

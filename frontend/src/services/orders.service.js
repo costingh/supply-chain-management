@@ -19,6 +19,22 @@ const getAllOrders = () => {
     return axios.get(API_URL + 'all', { headers: authHeader() })
 }
 
+const filterOrders = (
+    minDate,
+    maxDate,
+    minPrice,
+    maxPrice,
+    sortDirection,
+    sortBy,
+    checked
+) => {
+    return axios.get(
+        API_URL +
+            `all/${minDate}/${maxDate}/${minPrice}/${maxPrice}/${sortDirection}/${sortBy}/${checked}`,
+        { headers: authHeader() }
+    )
+}
+
 const getOrderByNumber = (number) => {
     return axios
         .get(API_URL + number, { headers: authHeader() })
@@ -53,4 +69,5 @@ export default {
     deleteOrder,
     getOrderByNumber,
     updateOrder,
+    filterOrders,
 }

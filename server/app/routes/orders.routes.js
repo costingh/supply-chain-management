@@ -14,6 +14,12 @@ module.exports = function (app) {
   app.get("/api/comenzi/all", [authJwt.verifyToken], controller.getAllOrders);
 
   app.get(
+    "/api/comenzi/all/:minD/:maxD/:minP/:maxP/:dir/:sortBy/:checked",
+    [authJwt.verifyToken],
+    controller.filterOrders
+  );
+
+  app.get(
     "/api/comenzi/:number",
     [authJwt.verifyToken],
     controller.getOrderByNumber

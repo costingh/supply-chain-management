@@ -166,12 +166,14 @@ function Facturi({ setData }) {
                                         <p>Telefon: {i.nr_telefon}</p>
                                     </div>
                                     <div className="productsList">
-                                        {i.listaProduse.map((p) => (
-                                            <div>
-                                                {p.nume_produs}, {p.cantitate}
-                                                {p.unitate_masura}
-                                            </div>
-                                        ))}
+                                        {i.listaProduse &&
+                                            i.listaProduse.map((p) => (
+                                                <div>
+                                                    {p.nume_produs},{' '}
+                                                    {p.cantitate}
+                                                    {p.unitate_masura}
+                                                </div>
+                                            ))}
                                     </div>
                                     <p
                                         className="total"

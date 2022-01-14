@@ -1820,7 +1820,6 @@ input::placeholder {
 }
 
 .ordersContainer .middleOrderContainer .middleLeft .image svg {
-    /* transform: scale(10); */
     transform: scale(8);
     fill: #111;
 }
@@ -2356,6 +2355,40 @@ input::placeholder {
 .confirmPanel > div > div div:last-child:hover {
     background: transparent;
 }
+
+.ordersContainer .nav .center {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 30px;
+}
+
+.ordersContainer .nav .center .center-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.ordersContainer .nav .center .center-box span {
+    color: #8491a2;
+    font-size: 13px;
+}
+
+.ordersContainer .nav .center .center-box input,
+.ordersContainer .nav .center .center-box select {
+    color: #8491a2;
+    font-size: 16px;
+    background-color: #273444;
+    outline: none;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    max-width: 120px;
+}
+
+.ordersContainer .nav .center .center-box select {
+    padding: 8px;
+}
+
 /* ##############################################
 ################ EDITARE COMANDA ################
 ################################################# */
