@@ -4,6 +4,7 @@ const dbConfig = require("../config/db.config");
 // connect to database
 const db = mysql.createConnection(dbConfig);
 
+// adaugare comanda
 exports.addOrder = (req, res) => {
   const { cod_furnizor, data_livrare, listaProduse } = req.body;
 
@@ -67,6 +68,7 @@ exports.addOrder = (req, res) => {
   });
 };
 
+// returnare toate comenzile
 exports.getAllOrders = (req, res) => {
   let query =
     "select distinct c.nr_comanda, c.data_comanda, c.data_livrare, c.nr_factura, f.*, " +
@@ -95,6 +97,7 @@ exports.getAllOrders = (req, res) => {
   });
 };
 
+// gasire comanda dupa numar
 exports.getOrderByNumber = (req, res) => {
   let orderNumber = req.params.number;
 
@@ -138,6 +141,7 @@ exports.getOrderByNumber = (req, res) => {
   });
 };
 
+// stergere comanda
 exports.deleteOrder = (req, res) => {
   const nr_comanda = req.params.nr;
   // daca anulam o comanda, trebuie sa updatam stoc_initial din produse folosind cantitatea comandata din produsecomenzi
@@ -187,6 +191,7 @@ exports.deleteOrder = (req, res) => {
   );
 };
 
+// modificare comanda
 exports.updateOrder = async (req, res) => {
   const { produseLista, produseSterse } = req.body;
   const { orderNumber } = req.params;
@@ -242,6 +247,7 @@ exports.updateOrder = async (req, res) => {
   });
 };
 
+// filtrare comenzi dupa pret, data, etc.
 exports.filterOrders = (req, res) => {
   const { minD, maxD, minP, maxP, dir, sortBy, checked } = req.params;
 

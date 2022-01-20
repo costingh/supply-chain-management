@@ -4,6 +4,7 @@ const dbConfig = require("../config/db.config");
 // connect to database
 const db = mysql.createConnection(dbConfig);
 
+// adaugare produs in BD
 exports.addProduct = (req, res) => {
   const {
     nume_produs,
@@ -53,6 +54,7 @@ exports.addProduct = (req, res) => {
   );
 };
 
+// returnare toate produsele
 exports.getAllProducts = (req, res) => {
   const queryString =
     "SELECT produse.*, categorii.*, furnizori.nume_furnizor " +
@@ -98,6 +100,7 @@ exports.getAllProducts = (req, res) => {
   });
 };
 
+// cautare produs dupa pret, nume, categorie, furnizor
 exports.searchForProduct = (req, res) => {
   const { category, name, supplier, minPrice, maxPrice, order } = req.query;
 
@@ -149,6 +152,7 @@ exports.searchForProduct = (req, res) => {
   );
 };
 
+// stergere produs
 exports.deleteProduct = (req, res) => {
   const productToDelete = req.params.name;
 
@@ -168,6 +172,7 @@ exports.deleteProduct = (req, res) => {
   );
 };
 
+// actualizare date produs
 exports.updateProduct = (req, res) => {
   const {
     nume_produs,

@@ -4,6 +4,7 @@ const dbConfig = require("../config/db.config");
 // connect to database
 const db = mysql.createConnection(dbConfig);
 
+// adaugare categorie
 exports.addCategory = (req, res) => {
   const { nume_categorie, descriere_categorie } = req.body;
 
@@ -41,6 +42,7 @@ exports.addCategory = (req, res) => {
   );
 };
 
+// toate categoriile
 exports.getAllCategories = (req, res) => {
   db.query("SELECT * FROM categorii", async (error, results) => {
     if (error) {
@@ -62,6 +64,7 @@ exports.getAllCategories = (req, res) => {
   });
 };
 
+// setegere categorie
 exports.deleteCategory = (req, res) => {
   const categoryToDelete = req.params.name;
 
@@ -81,6 +84,7 @@ exports.deleteCategory = (req, res) => {
   );
 };
 
+// actualizare categorie
 exports.updateCategory = (req, res) => {
   const { nume_categorie, descriere_categorie } = req.body;
 

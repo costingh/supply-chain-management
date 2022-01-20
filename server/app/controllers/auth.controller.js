@@ -109,6 +109,7 @@ exports.signup = (req, res) => {
       if (sex) User.sex = sex;
       if (birthDate) User.data_nastere = birthDate;
 
+      // inserare angajat in baza de date cu parola criptata
       db.query("INSERT INTO angajati SET ?", User, (error, results) => {
         if (error) console.log(error);
         else {

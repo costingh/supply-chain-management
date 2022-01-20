@@ -4,6 +4,7 @@ const dbConfig = require("../config/db.config");
 // connect to database
 const db = mysql.createConnection(dbConfig);
 
+// adaugare factura
 exports.addInvoice = (req, res) => {
   const { nrComanda } = req.body;
 
@@ -64,6 +65,7 @@ exports.addInvoice = (req, res) => {
   });
 };
 
+// gasirea tuturor facturilor
 exports.getAllInvoices = (req, res) => {
   let query =
     "select fa.nr_factura, fa.data_factura, fa.total, fu.nume_furnizor, fu.strada, fu.numar, fu.oras, fu.judet, fu.nr_telefon, d.nume_departament " +
@@ -91,6 +93,7 @@ exports.getAllInvoices = (req, res) => {
   });
 };
 
+// returnare factura dupa nr
 exports.getAnInvoice = (req, res) => {
   let query =
     "select p.nume_produs, p.pret, p.unitate_masura, pc.cantitate " +
@@ -122,6 +125,7 @@ exports.getAnInvoice = (req, res) => {
   });
 };
 
+// stergere factura
 exports.deleteInvoice = (req, res) => {
   const numarFactura = req.params.id;
 

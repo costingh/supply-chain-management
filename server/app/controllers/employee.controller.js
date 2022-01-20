@@ -4,6 +4,7 @@ const dbConfig = require("../config/db.config");
 // connect to database
 const db = mysql.createConnection(dbConfig);
 
+// toti angajatii din BD
 exports.getAllEmployees = (req, res) => {
   db.query(
     "SELECT *, d.nume_departament, d.id_manager FROM angajati a inner join departamente d on a.id_departament=d.id_departament ",
@@ -28,6 +29,7 @@ exports.getAllEmployees = (req, res) => {
   );
 };
 
+// profil angajat
 exports.getProfile = (req, res) => {
   const { email } = req.params;
 
@@ -55,6 +57,7 @@ exports.getProfile = (req, res) => {
   );
 };
 
+// actualizare profil
 exports.updateProfile = (req, res) => {
   const {
     firstname,
@@ -141,6 +144,7 @@ exports.updateProfile = (req, res) => {
   );
 };
 
+// actualizare salariu
 exports.updateSalary = (req, res) => {
   const newSalary = req.body.salary;
   const email = req.params.email;

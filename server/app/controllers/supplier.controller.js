@@ -4,6 +4,7 @@ const dbConfig = require("../config/db.config");
 // connect to database
 const db = mysql.createConnection(dbConfig);
 
+// adaugare furnizor
 exports.addSupplier = (req, res) => {
   const { nume_furnizor, strada, numar, oras, judet, nr_telefon } = req.body;
 
@@ -50,6 +51,7 @@ exports.addSupplier = (req, res) => {
   );
 };
 
+// actualizare informatii furnizor
 exports.updateSupplier = (req, res) => {
   const { nume_furnizor, strada, numar, oras, judet, nr_telefon } = req.body;
   const cod_furnizor = req.params.id;
@@ -91,6 +93,7 @@ exports.updateSupplier = (req, res) => {
   );
 };
 
+// returnare toti furnizorii din BD
 exports.getAllSuppliers = (req, res) => {
   db.query("SELECT * FROM furnizori", async (error, results) => {
     if (error) {
@@ -112,6 +115,7 @@ exports.getAllSuppliers = (req, res) => {
   });
 };
 
+// stergere furnizor dupa nume
 exports.deleteSupplier = (req, res) => {
   const supplierToDeleteName = req.params.name;
   db.query(
@@ -134,6 +138,7 @@ exports.deleteSupplier = (req, res) => {
   );
 };
 
+// toate numele furnizorilor
 exports.getAllSupplierNames = (req, res) => {
   db.query("SELECT nume_furnizor FROM furnizori", async (error, results) => {
     if (error) {
@@ -155,6 +160,7 @@ exports.getAllSupplierNames = (req, res) => {
   });
 };
 
+// gasire furnizor dupa nume
 exports.getSupplierByName = (req, res) => {
   db.query(
     "SELECT * FROM furnizori where nume_furnizor = ?",

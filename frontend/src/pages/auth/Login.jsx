@@ -55,35 +55,6 @@ function Login() {
                 setData(data)
             }
         })
-
-        /* await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.status !== 200) {
-                    setData(data)
-                } else {
-                    console.log(data)
-                    const user = {
-                        token: data.token,
-                        created_at: data.user.created_at,
-                        email: data.user.email,
-                        first_name: data.user.first_name,
-                        last_name: data.user.last_name,
-                        phone_number: data.user.phone_number,
-                    }
-                    localStorage.setItem('user', JSON.stringify(user))
-                    history.push('/dashboard')
-                }
-            }) */
     }
 
     const closeAlert = () => {
@@ -112,7 +83,6 @@ function Login() {
     return (
         <div
             className="login-container"
-            /* style={{ backgroundImage: 'url(/images/background.png)' }} */
         >
             <Navbar />
             <div
