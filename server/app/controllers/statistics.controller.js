@@ -219,8 +219,7 @@ exports.suppliersWIthNoProductsBought = (req, res) => {
 // orasul cu cei mai multi furnizori
 exports.mostSupplierInACity = (req, res) => {
   let query =
-    "SELECT MAX(f.nr_furnizori) as furnizori_in_oras, f.oras " +
-    "FROM (SELECT COUNT(*) AS nr_furnizori, f.oras FROM furnizori f group by f.oras) f";
+    "select count(f1.oras) as furnizori_in_oras, f1.oras from furnizori f1 group by f1.oras having count(f1.oras) in ( select max(f.nr_furnizori) as furnizori_in_oras from (select count(*) as nr_furnizori, f.oras from furnizori f group by f.oras) f );";
 
   db.query(query, async (error, results) => {
     if (error) {
@@ -231,7 +230,7 @@ exports.mostSupplierInACity = (req, res) => {
       return res.json({
         message: "Success!",
         status: 200,
-        result: results[0],
+        result: results,
       });
     } else {
       return res.send({

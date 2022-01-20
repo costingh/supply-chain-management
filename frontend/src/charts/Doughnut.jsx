@@ -14,7 +14,11 @@ const BarChart = () => {
         let title = ''
         await StatisticsService.mostSupplierInACity()
             .then((data) => {
-                title = data.result.oras
+                data.result.map((item, index) => {
+                    return (title +=
+                        item.oras +
+                        (index !== data.result.length - 1 ? ', ' : ''))
+                })
             })
             .catch((err) => console.log(err))
 
@@ -89,6 +93,9 @@ const BarChart = () => {
                     title: {
                         display: true,
                         text: 'Orasul cu cei mai multi furnizori: ' + title,
+                        font: {
+                            size: 17,
+                        },
                     },
                 },
             },
